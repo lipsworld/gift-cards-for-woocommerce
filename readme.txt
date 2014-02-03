@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 3.8
-Stable tag: 1.2.3
+Stable tag: 1.2.5
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -32,6 +32,9 @@ If you have a feature that you would like let me know.
 
 
 == Changelog ==
+= 1.2.5 =
+* FIX: Display of giftcard paymnt on email reciept will now display
+
 = 1.2.4 =
 * FIX: Removed a var_dump accidentally left in the code
 
