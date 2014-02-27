@@ -102,27 +102,25 @@ function rpgc_add_card_data( $cart_item_key, $product_id, $quantity ) {
 
 	if ( $is_giftcard ) {
 
-
-
-		$rpgc_to = woocommerce_clean( $_POST['rpgc_to'] );
-		$rpgc_to_email = woocommerce_clean( $_POST['rpgc_to_email'] );
-		$rpgc_note = woocommerce_clean( $_POST['rpgc_note'] );
-
-
-		if ( $rpgc_to == '' ) { $rpgc_to = 'NA'; }
-		if ( $rpgc_to_email == '' ) { $rpgc_to_email = 'NA'; }
-		if ( $rpgc_note == '' ) { $rpgc_note = 'NA'; }
-
 		$giftcard_data = array(
-			'To'    => $rpgc_to,
-			'To Email'   => $rpgc_to_email,
-			'Note'   => $rpgc_note,
+			'To'    	=> 'NA',
+			'To Email'  => 'NA',
+			'Note'   	=> 'NA',
 		);
 
-		$woocommerce->cart->cart_contents[$cart_item_key]["variation"] = $giftcard_data;
+		if ( isset( $_POST['rpgc_to'] ) )
+			$giftcard_data['To'] = woocommerce_clean( $_POST['rpgc_to'] );
 
+		if ( isset( $_POST['rpgc_to_email'] ) )
+			$giftcard_data['To Email'] = woocommerce_clean( $_POST['rpgc_to_email'] );
+
+		if ( isset( $_POST['rpgc_note'] ) )
+			$giftcard_data['Note'] = woocommerce_clean( $_POST['rpgc_note'] );
+
+		$woocommerce->cart->cart_contents[$cart_item_key]["variation"] = $giftcard_data;
 		return $woocommerce;
 	}
+	
 }
 add_action( 'woocommerce_add_to_cart', 'rpgc_add_card_data', 10, 3 );
 
@@ -219,32 +217,94 @@ add_action( 'wp_ajax_woocommerce_apply_giftcard', 'woocommerce_ajax_apply_giftca
 add_action( 'wp_ajax_nopriv_woocommerce_apply_giftcard', 'woocommerce_ajax_apply_giftcard' );
 
 /**
+ * Function to decrease the cart amount by the amount in the giftcard
+ *
+ */
+function subtract_giftcard( $wc_cart ) {
+	global $woocommerce;
+
+	$wc_cart->cart_contents_total = $wc_cart->cart_contents_total - $woocommerce->session->giftcard_payment;
+}
+add_action( 'woocommerce_calculate_totals', 'subtract_giftcard' );
+
+/**
+ * Function to add the giftcard data to the cart display
+ *
+ */
+function rpgc_order_giftcard( ) {
+	global $woocommerce;
+
+	if ( isset( $_GET['remove_giftcards'] ) ) {
+		$type = $_GET['remove_giftcards'];
+
+		if ( 1 == $type )
+			unset( $woocommerce->session->giftcard_payment, $woocommerce->session->giftcard_id, $woocommerce->session->giftcard_post, $woocommerce->session->giftcard_balance );
+	}
+
+	if ( isset( $woocommerce->session->giftcard_payment ) ) {
+
+		$currency_symbol = get_woocommerce_currency_symbol();
+		$price = $woocommerce->session->giftcard_payment;
+		?>
+
+		<tr class="giftcard">
+			<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
+			<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a alt="<?php echo $woocommerce->session->giftcard_id; ?>" href="<?php echo add_query_arg( 'remove_giftcards', '1', $woocommerce->cart->get_checkout_url() ) ?>">[<?php _e( 'Remove Gift Card', RPWCGC_CORE_TEXT_DOMAIN ); ?>]</a></td>
+		</tr>
+
+		<?php
+	}
+}
+add_action( 'woocommerce_review_order_before_order_total', 'rpgc_order_giftcard' );
+
+
+/**
+ * Function to add the giftcard data to the cart display
+ *
+ */
+function rpgc_cart_giftcard( $order ) {
+	global $woocommerce;
+
+	$thePayment = get_post_meta( $order->id, 'rpgc_payment', true );
+	?>
+
+	<tr class="giftcard">
+		<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
+		<td style="font-size:0.85em;">-<?php echo woocommerce_price( $thePayment ); ?> </td>
+	</tr>
+
+	<?php
+}
+add_action( 'woocommerce_order_items_table', 'rpgc_cart_giftcard' );
+
+/**
  * Displays the giftcard data on the order thank you page
  *
  */
 function rpgc_display_giftcard( $order ) {
 	global $woocommerce;
 
-	$theIDNum =  get_post_meta( $order->id, 'rpgc_id' );
-	$theBalance = get_post_meta( $order->id, 'rpgc_balance' );
+	
+	$theIDNum =  get_post_meta( $order->id, 'rpgc_id', true );
+	$theBalance = get_post_meta( $order->id, 'rpgc_balance', true );
 
-	if( empty( $theIDNum[0] ) ) {
-		if ( $theIDNum[0] <> '' ) {
+	if( isset( $theIDNum ) ) {
+		if ( $theIDNum <> '' ) {
 		?>
-			<h4><?php _e( 'Remaining Gift Card Balance:', RPWCGC_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance[0] ); ?> </h4>
+			<h4><?php _e( 'Remaining Gift Card Balance:', RPWCGC_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance ); ?> </h4>
 			<?php
 		}
 	}
 
-	$theGiftCardData = get_post_meta( $order->id, 'rpgc_data' );
-	if( isset( $theGiftCardData[0] ) ) {
-		if ( $theGiftCardData[0] <> '' ) {
+	$theGiftCardData = get_post_meta( $order->id, 'rpgc_data', true );
+	if( isset( $theGiftCardData ) ) {
+		if ( $theGiftCardData <> '' ) {
 	?>
 			<h4><?php _e( 'Gift Card Informaion:', RPWCGC_CORE_TEXT_DOMAIN ); ?></h4>
 			<?php
 			$i = 1;
 
-			foreach ( $theGiftCardData[0] as $giftcard ) {
+			foreach ( $theGiftCardData as $giftcard ) {
 				if ( $i % 2 ) echo '<div style="margin-bottom: 10px;">';
 				echo '<div style="float: left; width: 45%; margin-right: 2%;>';
 				echo '<h6"><strong>Giftcard ' . $i . '</strong></h6>';
@@ -267,9 +327,3 @@ function rpgc_display_giftcard( $order ) {
 }
 add_action( 'woocommerce_order_details_after_order_table', 'rpgc_display_giftcard' );
 add_action( 'woocommerce_email_after_order_table', 'rpgc_display_giftcard' );
-
-
-
-
-
-

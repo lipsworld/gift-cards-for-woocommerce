@@ -342,50 +342,6 @@ function rpgc_refund_order( $order_id ) {
 }
 add_action( 'woocommerce_order_status_refunded', 'rpgc_refund_order' );
 
-/**
- * Function to decrease the cart amount by the amount in the giftcard
- *
- */
-function subtract_giftcard( $wc_cart ) {
-	global $woocommerce;
-
-	$wc_cart->cart_contents_total = $wc_cart->cart_contents_total - $woocommerce->session->giftcard_payment;
-}
-add_action( 'woocommerce_calculate_totals', 'subtract_giftcard' );
-
-/**
- * Function to add the giftcard data to the cart display
- *
- */
-function rpgc_order_giftcard( ) {
-	global $woocommerce;
-
-	if ( isset( $_GET['remove_giftcards'] ) ) {
-		$type = $_GET['remove_giftcards'];
-
-		if ( 1 == $type )
-			unset( $woocommerce->session->giftcard_payment, $woocommerce->session->giftcard_id, $woocommerce->session->giftcard_post, $woocommerce->session->giftcard_balance );
-	}
-
-	if ( isset( $woocommerce->session->giftcard_payment ) ) {
-
-		$currency_symbol = get_woocommerce_currency_symbol();
-		$price = $woocommerce->session->giftcard_payment;
-		?>
-
-		<tr class="giftcard">
-			<th><?php _e( 'Giftcard Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
-			<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a alt="<?php echo $woocommerce->session->giftcard_id; ?>" href="<?php echo add_query_arg( 'remove_giftcards', '1', $woocommerce->cart->get_checkout_url() ) ?>">[<?php _e( 'Remove Gift Card', RPWCGC_CORE_TEXT_DOMAIN ); ?>]</a></td>
-		</tr>
-
-		<?php
-
-	}
-}
-add_action( 'woocommerce_cart_totals_before_order_total', 'rpgc_order_giftcard' );
-add_action( 'woocommerce_review_order_before_order_total', 'rpgc_order_giftcard' );
-
-
 function rpgc_add_order_giftcard( $total_rows ) {
 	global $woocommerce;
 
@@ -434,10 +390,6 @@ add_action( 'woocommerce_order_status_pending', 'rpgc_update_card' );
 add_action( 'woocommerce_order_status_on-hold', 'rpgc_update_card' );
 add_action( 'woocommerce_order_status_completed', 'rpgc_update_card' );
 add_action( 'woocommerce_order_status_processing', 'rpgc_update_card' );
-
-
-
-
 
 
 

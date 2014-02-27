@@ -52,7 +52,6 @@ function rpgc_cart_fields( ) {
 	global $post;
 
 	$is_giftcard = get_post_meta( $post->ID, '_giftcard', true );
-	
 	if ( $is_giftcard ) {
 ?>
 		<div>
