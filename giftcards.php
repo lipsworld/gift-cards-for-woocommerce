@@ -78,16 +78,16 @@ function rpgc_woocommerce() {
 	}
 	add_action( 'init', 'rpgc_create_post_type' );
 
-/**	
- * Add the required scripts to the plugin.
- *
- */
-function rpgc_enqueue() {
-	global $woocommerce, $post;
-	$rpgc_url = plugins_url() . '/woocommerce-gift-cards';
-	wp_enqueue_style( 'rpgc_style', RPWCGC_URL . '/style/style.css' );
-}
-add_action( 'wp_enqueue_scripts', 'rpgc_enqueue' );
+	/**	
+	 * Add the required scripts to the plugin.
+	 *
+	 */
+	function rpgc_enqueue() {
+		global $woocommerce, $post;
+		$rpgc_url = plugins_url() . '/woocommerce-gift-cards';
+		wp_enqueue_style( 'rpgc_style', RPWCGC_URL . '/style/style.css' );
+	}
+	add_action( 'wp_enqueue_scripts', 'rpgc_enqueue' );
 
 
 }

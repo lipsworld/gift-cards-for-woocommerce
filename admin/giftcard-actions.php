@@ -30,6 +30,7 @@ function rpgc_admin_enqueue() {
 		
 		wp_enqueue_style( 'jquery-ui-style', RPWCGC_URL . '/style/jquery-ui.css' );
 		wp_enqueue_style( 'font-awesome_styles', RPWCGC_URL . '/style/font-awesome/css/font-awesome.min.css' ); // Adds the custom icon style
+		wp_enqueue_style( 'farbtastic' );
 
 		wp_enqueue_script( 'woocommerce_writepanel' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -37,52 +38,6 @@ function rpgc_admin_enqueue() {
 		wp_enqueue_script( 'chosen' );
 		wp_enqueue_script( 'plupload-all' );
 
-		/*	$woocommerce_witepanel_params = array(
-				'remove_item_notice'    => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'i18n_select_items'    => __( 'Please select some items.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'remove_item_meta'    => __( 'Remove this item meta?', RPWCGC_CORE_TEXT_DOMAIN ),
-				'remove_attribute'    => __( 'Remove this attribute?', RPWCGC_CORE_TEXT_DOMAIN ),
-				'name_label'     => __( 'Name', RPWCGC_CORE_TEXT_DOMAIN ),
-				'remove_label'     => __( 'Remove', RPWCGC_CORE_TEXT_DOMAIN ),
-				'click_to_toggle'    => __( 'Click to toggle', RPWCGC_CORE_TEXT_DOMAIN ),
-				'values_label'     => __( 'Value(s)', RPWCGC_CORE_TEXT_DOMAIN ),
-				'text_attribute_tip'   => __( 'Enter some text, or some attributes by pipe (|) separating values.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'visible_label'     => __( 'Visible on the product page', RPWCGC_CORE_TEXT_DOMAIN ),
-				'used_for_variations_label'  => __( 'Used for variations', RPWCGC_CORE_TEXT_DOMAIN ),
-				'new_attribute_prompt'   => __( 'Enter a name for the new attribute term:', RPWCGC_CORE_TEXT_DOMAIN ),
-				'calc_totals'      => __( 'Calculate totals based on order items, discounts, and shipping?', RPWCGC_CORE_TEXT_DOMAIN ),
-				'calc_line_taxes'     => __( 'Calculate line taxes? This will calculate taxes based on the customers country. If no billing/shipping is set it will use the store base country.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'copy_billing'      => __( 'Copy billing information to shipping information? This will remove any currently entered shipping information.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'load_billing'      => __( 'Load the customer\'s billing information? This will remove any currently entered billing information.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'load_shipping'     => __( 'Load the customer\'s shipping information? This will remove any currently entered shipping information.', RPWCGC_CORE_TEXT_DOMAIN ),
-				'featured_label'    => __( 'Featured', RPWCGC_CORE_TEXT_DOMAIN ),
-				'prices_include_tax'    => esc_attr( get_option( 'woocommerce_prices_include_tax' ) ),
-				'round_at_subtotal'    => esc_attr( get_option( 'woocommerce_tax_round_at_subtotal' ) ),
-				'no_customer_selected'   => __( 'No customer selected', RPWCGC_CORE_TEXT_DOMAIN ),
-				'plugin_url'      => $woocommerce->plugin_url(),
-				'ajax_url'       => admin_url( 'admin-ajax.php' ),
-				'order_item_nonce'     => wp_create_nonce( "order-item" ),
-				'add_attribute_nonce'    => wp_create_nonce( "add-attribute" ),
-				'save_attributes_nonce'   => wp_create_nonce( "save-attributes" ),
-				'calc_totals_nonce'    => wp_create_nonce( "calc-totals" ),
-				'get_customer_details_nonce'  => wp_create_nonce( "get-customer-details" ),
-				'search_products_nonce'   => wp_create_nonce( "search-products" ),
-				'calendar_image'    => $woocommerce->plugin_url().'/assets/images/calendar.png',
-				'apply_giftcard_nonce'          => wp_create_nonce( "apply-giftcard" ),
-				'base_country'     => $woocommerce->countries->get_base_country(),
-				'currency_format_num_decimals' => absint( get_option( 'woocommerce_price_num_decimals' ) ),
-				'currency_format_symbol'  => get_woocommerce_currency_symbol(),
-				'currency_format_decimal_sep' => esc_attr( stripslashes( get_option( 'woocommerce_price_decimal_sep' ) ) ),
-				'currency_format_thousand_sep' => esc_attr( stripslashes( get_option( 'woocommerce_price_thousand_sep' ) ) ),
-				'currency_format'    => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-				'product_types'     => array_map( 'sanitize_title', get_terms( 'product_type', array( 'hide_empty' => false, 'fields' => 'names' ) ) ),
-				'default_attribute_visibility'  => apply_filters( 'default_attribute_visibility', false ),
-				'default_attribute_variation'   => apply_filters( 'default_attribute_variation', false )
-			);*/
-
-		//wp_localize_script( 'woocommerce_writepanel', 'woocommerce_writepanel_params', $woocommerce_witepanel_params );
-
-		wp_enqueue_style( 'farbtastic' );
 	}
 
 	do_action( 'rpgc_admin_css' );
@@ -392,11 +347,6 @@ add_action( 'woocommerce_order_status_completed', 'rpgc_update_card' );
 add_action( 'woocommerce_order_status_processing', 'rpgc_update_card' );
 
 
-
-
-
-
-
 	
 /**
  */
@@ -427,7 +377,6 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 			AND $wpdb->posts.post_status = 'publish'
 			AND $wpdb->posts.post_title = '%s'
 		", $post->post_title ) );
-
 
 		if ( isset( $_POST['rpgc_description'] ) ) {
 			$description = woocommerce_clean( $_POST['rpgc_description'] );
@@ -713,7 +662,6 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 	do_action( 'woocommerce_rpgc_options' );
 	do_action( 'woocommerce_rpgc_options_save' );
 }
-
 add_action( 'save_post', 'rpgc_process_giftcard_meta', 10, 2 );
 
 
@@ -725,3 +673,10 @@ function rpgc_mail_from_name( ) {
 function rpgc_html_content_type() {
 	return 'text/html';
 }
+
+function rpgc_add_settings_page( $settings ) {
+	$settings[] = include( RPWCGC_PATH . 'admin/giftcard-settings.php' );
+
+	return $settings;
+}
+add_filter('woocommerce_get_settings_pages','rpgc_add_settings_page', 10, 1);

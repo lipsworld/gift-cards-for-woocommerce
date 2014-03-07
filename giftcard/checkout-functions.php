@@ -190,6 +190,11 @@ function woocommerce_ajax_apply_giftcard() {
 				//  Giftcard Balance is more than the order total.
 				//  Subtract the order from the card
 				$woocommerce->session->giftcard_payment = $orderTotal;
+
+				if( get_option( 'woocommerce_enable_giftcard_process' ) == 'no' )
+					$woocommerce->session->giftcard_payment = $woocommerce->session->giftcard_payment - $woocommerce->cart->shipping_total;
+
+
 				$woocommerce->session->giftcard_balance = $oldGiftcardValue - $orderTotal;
 				$msg = __( 'Gift card applied successfully.', RPWCGC_CORE_TEXT_DOMAIN );
 				$woocommerce->add_message(  __( 'Gift card applied successfully.', RPWCGC_CORE_TEXT_DOMAIN ) );
@@ -197,16 +202,24 @@ function woocommerce_ajax_apply_giftcard() {
 			} elseif ( $oldGiftcardValue < $orderTotal ) {
 				//  Giftcard Balance is less than the order total.
 				//  Subtract the giftcard from the order total
+				
 				$woocommerce->session->giftcard_payment = $oldGiftcardValue;
 				$woocommerce->session->giftcard_balance = 0;
-				$woocommerce->add_message(  __( 'Gift card applied successfully.', RPWCGC_CORE_TEXT_DOMAIN ) );
+				
+				if( get_option( 'woocommerce_enable_giftcard_process' ) == 'no' ) {
+					$cartSubtotal = $orderTotal - $woocommerce->cart->shipping_total;
+					if ( $oldGiftcardValue > $cartSubtotal ) {
+						$woocommerce->session->giftcard_balance = $oldGiftcardValue - $cartSubtotal;
+						$woocommerce->session->giftcard_payment = $cartSubtotal;
+					}
+				}
 
+				$woocommerce->add_message(  __( 'Gift card applied successfully.', RPWCGC_CORE_TEXT_DOMAIN ) );
 			}
 		} else {
 			// Giftcard Entered does not exist
 			$woocommerce->add_error( __( 'Gift Card does not exist!', RPWCGC_CORE_TEXT_DOMAIN ) );
 		}
-
 	}
 
 	$woocommerce->show_messages();
@@ -240,19 +253,22 @@ function rpgc_order_giftcard( ) {
 		if ( 1 == $type )
 			unset( $woocommerce->session->giftcard_payment, $woocommerce->session->giftcard_id, $woocommerce->session->giftcard_post, $woocommerce->session->giftcard_balance );
 	}
+	var_dump($woocommerce->session->giftcard_payment);
 
 	if ( isset( $woocommerce->session->giftcard_payment ) ) {
+		if ( $woocommerce->session->giftcard_payment > 0 ){
 
-		$currency_symbol = get_woocommerce_currency_symbol();
-		$price = $woocommerce->session->giftcard_payment;
-		?>
+			$currency_symbol = get_woocommerce_currency_symbol();
+			$price = $woocommerce->session->giftcard_payment;
+			?>
 
-		<tr class="giftcard">
-			<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
-			<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a alt="<?php echo $woocommerce->session->giftcard_id; ?>" href="<?php echo add_query_arg( 'remove_giftcards', '1', $woocommerce->cart->get_checkout_url() ) ?>">[<?php _e( 'Remove Gift Card', RPWCGC_CORE_TEXT_DOMAIN ); ?>]</a></td>
-		</tr>
+			<tr class="giftcard">
+				<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
+				<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a alt="<?php echo $woocommerce->session->giftcard_id; ?>" href="<?php echo add_query_arg( 'remove_giftcards', '1', $woocommerce->cart->get_checkout_url() ) ?>">[<?php _e( 'Remove Gift Card', RPWCGC_CORE_TEXT_DOMAIN ); ?>]</a></td>
+			</tr>
 
-		<?php
+			<?php
+		}
 	}
 }
 add_action( 'woocommerce_review_order_before_order_total', 'rpgc_order_giftcard' );
@@ -266,14 +282,17 @@ function rpgc_cart_giftcard( $order ) {
 	global $woocommerce;
 
 	$thePayment = get_post_meta( $order->id, 'rpgc_payment', true );
-	?>
+	
+	if ( $thePayment  > 0 ){
+		?>
 
-	<tr class="giftcard">
-		<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
-		<td style="font-size:0.85em;">-<?php echo woocommerce_price( $thePayment ); ?> </td>
-	</tr>
+		<tr class="giftcard">
+			<th><?php _e( 'Gift Card Payment', RPWCGC_CORE_TEXT_DOMAIN ); ?> </th>
+			<td style="font-size:0.85em;"> - <?php echo woocommerce_price( $thePayment ); ?> </td>
+		</tr>
 
 	<?php
+	}
 }
 add_action( 'woocommerce_order_items_table', 'rpgc_cart_giftcard' );
 
