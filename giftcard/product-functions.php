@@ -56,13 +56,20 @@ function rpgc_cart_fields( ) {
 ?>
 		<div>
 			<div><?php _e('All fields are Optional', RPWCGC_CORE_TEXT_DOMAIN ); ?></div>
+			<?php  do_action( 'rpgc_before_product_fields' ); ?>
 			<input type="hidden" id="rpgc_description" name="rpgc_description" value="<?php _e('Generated from the website.', RPWCGC_CORE_TEXT_DOMAIN ); ?>" />
 			<input name="rpgc_to" id="rpgc_to" placeholder="<?php _e('To', RPWCGC_CORE_TEXT_DOMAIN ); ?>" class="input-text" style="margin-bottom:5px;">
-			<input type="email" name="rpgc_to_email" id="rpgc_to_email" placeholder="S<?php _e('Send To', RPWCGC_CORE_TEXT_DOMAIN ); ?>" class="input-text" style="margin-bottom:5px;">
-			<textarea class="input-text" id="rpgc_note" name="rpgc_note" placeholder="<?php _e('Enter your note here.', RPWCGC_CORE_TEXT_DOMAIN ); ?>" rows="2"></textarea>
+			<input type="email" name="rpgc_to_email" id="rpgc_to_email" placeholder="<?php _e('Send To', RPWCGC_CORE_TEXT_DOMAIN ); ?>" class="input-text" style="margin-bottom:5px;">
+			<textarea class="input-text" id="rpgc_note" name="rpgc_note" placeholder="<?php _e('Enter your note here.', RPWCGC_CORE_TEXT_DOMAIN ); ?>" rows="2" style="margin-bottom:5px;"></textarea>
+			<?php  do_action( 'rpgc_before_product_fields' ); ?>
 		</div>
-
 		<?php
+
+		echo '
+	          <script>
+	          	jQuery( document ).ready( function( $ ){ $( ".quantity" ).hide( ); });
+	          </script>
+	    ';
 	}
 }
 add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' );
