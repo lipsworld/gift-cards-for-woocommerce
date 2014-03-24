@@ -53,15 +53,18 @@ function rpgc_cart_fields( ) {
 
 	$is_giftcard = get_post_meta( $post->ID, '_giftcard', true );
 	if ( $is_giftcard == "yes" ) {
+
+		do_action( 'rpgc_before_all_giftcard_fields' );
 ?>
+
 		<div>
-			<div><?php _e('All fields are Optional', RPWCGC_CORE_TEXT_DOMAIN ); ?></div>
+			<div><?php _e('All fields below are optional', RPWCGC_CORE_TEXT_DOMAIN ); ?></div>
 			<?php  do_action( 'rpgc_before_product_fields' ); ?>
 			<input type="hidden" id="rpgc_description" name="rpgc_description" value="<?php _e('Generated from the website.', RPWCGC_CORE_TEXT_DOMAIN ); ?>" />
 			<input name="rpgc_to" id="rpgc_to" placeholder="<?php _e('To', RPWCGC_CORE_TEXT_DOMAIN ); ?>" class="input-text" style="margin-bottom:5px;">
 			<input type="email" name="rpgc_to_email" id="rpgc_to_email" placeholder="<?php _e('Send To', RPWCGC_CORE_TEXT_DOMAIN ); ?>" class="input-text" style="margin-bottom:5px;">
 			<textarea class="input-text" id="rpgc_note" name="rpgc_note" placeholder="<?php _e('Enter your note here.', RPWCGC_CORE_TEXT_DOMAIN ); ?>" rows="2" style="margin-bottom:5px;"></textarea>
-			<?php  do_action( 'rpgc_before_product_fields' ); ?>
+			<?php  do_action( 'rpgc_after_product_fields' ); ?>
 		</div>
 		<?php
 
