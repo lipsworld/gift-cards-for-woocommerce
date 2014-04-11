@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 3.8
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -28,6 +28,16 @@ Q: I want to be able to do ______ with my gift card but you dont have the featur
 A: You can find more pluins at <a href="http://wp-ronin.com">wp-ronin.com</a>.
 
 == Changelog ==
+= 1.3.5 =
+* FIX: Creation of Zerobalance orders created
+* ADD: Ability to resend Gift Card Email
+* ADD: Ability to regenerate the card number
+* UPDATE: Style change of gift card section on order page
+
+= 1.3.4.1 =
+* FIX: Fixed issue with gift cards being changed to zero balance no matter the balance.
+* FIX: Display of giftcard information on all products has been limited to just products that are gift cardss
+
 = 1.3.4 =
 * ADD: Experation date is checked when using the card
 * ADD: Ability to regenerate the card number if needed

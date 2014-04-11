@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: default\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/gift-cards-for-woocommerce\n"
 "POT-Creation-Date: 2014-03-24 16:53:21+00:00\n"
-"PO-Revision-Date: 2014-03-24 09:53-0700\n"
+"PO-Revision-Date: 2014-03-25 18:54-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WP-Ronin <ryan@wp-ronin.com>\n"
 "Language: es_ES\n"
@@ -21,20 +21,19 @@ msgstr "Datos de la tarjeta de regalo"
 
 #: admin/giftcard-actions.php:72
 msgid "Additional Card Options"
-msgstr ""
+msgstr "Opciones adicionales de la tarjeta"
 
 #: admin/giftcard-actions.php:101
-#, fuzzy
 msgid "Send Gift Card Email"
-msgstr "Añadir Tarjeta de Regalo"
+msgstr "Enviar Tarjeta de Regalo por Email"
 
 #: admin/giftcard-actions.php:104
 msgid "Regenerate Card Number"
-msgstr ""
+msgstr "Regenerar Número de tarjeta"
 
 #: admin/giftcard-actions.php:109
 msgid "No additional options available. Zero balance"
-msgstr ""
+msgstr "No hay opciones adicionales disponibles. Balance cero"
 
 #: admin/giftcard-actions.php:142
 msgid "Gift Card description"
@@ -122,16 +121,12 @@ msgid "Never expire"
 msgstr "Nunca expira"
 
 #: admin/giftcard-actions.php:233
-#, fuzzy
 msgid "The date this Gift Card will expire, <code>YYYY-MM-DD</code>."
-msgstr ""
-"La fecha en que esta Tarjeta Regalo caduca, <code> DD/MM/YYYY </ code>. (No "
-"disponible)"
+msgstr "La fecha en que esta Tarjeta Regalo caduca, <code>DD/MM/YYYY</code>."
 
 #: admin/giftcard-actions.php:259
-#, fuzzy
 msgid "Giftcard Number"
-msgstr "Tarjeta de Regalo"
+msgstr "Numero Tarjeta de Regalo"
 
 #: admin/giftcard-actions.php:260
 msgid "Giftcard Amount"
@@ -151,16 +146,15 @@ msgstr "Beneficiario"
 
 #: admin/giftcard-actions.php:267
 msgid "Creation Date"
-msgstr ""
+msgstr "Fecha de creación"
 
 #: admin/giftcard-actions.php:354
 msgid "Gift Card Payment:"
 msgstr "Pago con tarjeta Regalo"
 
 #: admin/giftcard-actions.php:490
-#, fuzzy
 msgid "Gift Card Information"
-msgstr "Información de la tarjeta de regalo:"
+msgstr "Información de la tarjeta de regalo"
 
 #: admin/giftcard-actions.php:497
 msgid "New gift card from "
@@ -168,16 +162,17 @@ msgstr "Nueva tarjeta de regalo de"
 
 #: admin/giftcard-actions.php:530
 msgid "Dear"
-msgstr ""
+msgstr "Querido"
 
 #: admin/giftcard-actions.php:532
 msgid "Gift Card for you! This card can be used for online purchases at"
 msgstr ""
+"Tarjeta de regalo para usted! Esta tarjeta se puede utilizar para compras en "
+"línea en"
 
 #: admin/giftcard-actions.php:535
-#, fuzzy
 msgid "Gift Card Number"
-msgstr "Nota de la Tarjeta Regalo"
+msgstr "Numero Tarjeta de Regalo"
 
 #: admin/giftcard-actions.php:542
 #, fuzzy
@@ -186,20 +181,20 @@ msgstr "Fecha de caducidad"
 
 #: admin/giftcard-actions.php:552
 msgid "Using your Gift Card is easy"
-msgstr ""
+msgstr "El uso de su tarjeta de regalo es fácil"
 
 #: admin/giftcard-actions.php:555
 msgid "Shop at"
-msgstr ""
+msgstr "Haga sus compras en"
 
 #: admin/giftcard-actions.php:556
 msgid "Select \\\"Pay with a Gift Card\\\" during checkout."
 msgstr ""
+"Seleccione \\\"paga con tarjeta de regalo\\\" durante el proceso de pago."
 
 #: admin/giftcard-actions.php:557
-#, fuzzy
 msgid "Enter your card number."
-msgstr "Introduce su nota aquí."
+msgstr "Introduce su numero de tarjeta aquí."
 
 #: admin/giftcard-settings.php:21 giftcards.php:55
 msgid "Gift Cards"
@@ -220,7 +215,7 @@ msgstr "Permitir a los clientes pagar el envío con su tarjeta de regalo."
 
 #: admin/giftcard-settings.php:57
 msgid "Premium features available"
-msgstr ""
+msgstr "Características premium disponibles"
 
 #: admin/giftcard-settings.php:59
 msgid ""
@@ -231,6 +226,12 @@ msgid ""
 "premium plugins and the ones offered on Wordpress.org.  Please let me know "
 "if I can help with anything."
 msgstr ""
+"Ahora puede agregar funcionabilidad adicional para el plugin tarjeta de "
+"regalo usando algunos de mis plugins premium ofrecidos a través de %s. Si "
+"usted está buscando algunas funciones que no he creado hágamelo saber y yo "
+"estaría feliz de mirar en ofrecerlo en el futuro. También tengo un foro de "
+"soporte para mis plugins ofrecidos en Wordpress.org. Por favor, hágamelo "
+"saber si puedo ayudarle con cualquier cosa."
 
 #: admin/order-functions.php:27
 msgid "Giftcard Information"
@@ -278,9 +279,8 @@ msgid "Gift card applied successfully."
 msgstr "La tarjeta de regalo se aplica con éxito."
 
 #: giftcard/checkout-functions.php:227
-#, fuzzy
 msgid "Gift Card has expired!"
-msgstr "¡Tarjeta de Regalo no existe!"
+msgstr "¡Tarjeta de Regalo ha caducado!"
 
 #: giftcard/checkout-functions.php:233
 msgid "Gift Card does not exist!"
@@ -333,7 +333,7 @@ msgstr "Haga producto una tarjeta de regalo."
 
 #: giftcard/product-functions.php:61
 msgid "All fields below are optional"
-msgstr ""
+msgstr "Todos los campos siguientes son opcionales"
 
 #: giftcard/product-functions.php:63
 msgid "Generated from the website."
@@ -393,15 +393,14 @@ msgid "Parent Gift Card"
 msgstr "Tarjeta de Regalo padre"
 
 #: giftcards.php:79 giftcards.php:98 giftcards.php:105
-#, fuzzy
 msgid "Zero Balance"
-msgstr "Saldo"
+msgstr "Balance Cero"
 
 #: giftcards.php:84
 msgid "Zero Balance <span class=\"count\">(%s)</span>"
 msgid_plural "Zero Balance <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Balance Cero <span class=\"count\">(%s)</span>"
+msgstr[1] "Balance Cero <span class=\"count\">(%s)</span>"
 
 #~ msgid "Gift card information"
 #~ msgstr "Información Tarjeta Regalo"

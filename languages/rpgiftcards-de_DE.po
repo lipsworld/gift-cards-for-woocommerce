@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: default\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/gift-cards-for-woocommerce\n"
 "POT-Creation-Date: 2014-03-24 16:53:21+00:00\n"
-"PO-Revision-Date: 2014-03-24 09:55-0700\n"
+"PO-Revision-Date: 2014-03-25 18:54-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WP-Ronin <ryan@wp-ronin.com>\n"
 "Language: de_DE\n"
@@ -21,20 +21,19 @@ msgstr "Geschenkkartendaten"
 
 #: admin/giftcard-actions.php:72
 msgid "Additional Card Options"
-msgstr ""
+msgstr "Zusätzliche Karten-Optionen"
 
 #: admin/giftcard-actions.php:101
-#, fuzzy
 msgid "Send Gift Card Email"
-msgstr "Geschenkkarte hinzufügen"
+msgstr "Geschenkkartenmail versenden"
 
 #: admin/giftcard-actions.php:104
 msgid "Regenerate Card Number"
-msgstr ""
+msgstr "Kartennummer wiederherstellen"
 
 #: admin/giftcard-actions.php:109
 msgid "No additional options available. Zero balance"
-msgstr ""
+msgstr "Keine zusätzlichen Optionen. Saldo Null"
 
 #: admin/giftcard-actions.php:142
 msgid "Gift Card description"
@@ -121,16 +120,12 @@ msgid "Never expire"
 msgstr "Verfällt nicht"
 
 #: admin/giftcard-actions.php:233
-#, fuzzy
 msgid "The date this Gift Card will expire, <code>YYYY-MM-DD</code>."
-msgstr ""
-"Diese  Geschenkkarte verfällt am, <code>MM.DD. YYYY</ code>. (Derzeit nicht "
-"verfügbar)"
+msgstr "Diese  Geschenkkarte verfällt am, <code>MM.DD. YYYY</ code>."
 
 #: admin/giftcard-actions.php:259
-#, fuzzy
 msgid "Giftcard Number"
-msgstr "Geschenkkarte"
+msgstr "Geschenkkartennummer"
 
 #: admin/giftcard-actions.php:260
 msgid "Giftcard Amount"
@@ -150,16 +145,15 @@ msgstr "Empfänger"
 
 #: admin/giftcard-actions.php:267
 msgid "Creation Date"
-msgstr ""
+msgstr "Erstellungsdatum"
 
 #: admin/giftcard-actions.php:354
 msgid "Gift Card Payment:"
 msgstr "Geschenkkartenzahlung:"
 
 #: admin/giftcard-actions.php:490
-#, fuzzy
 msgid "Gift Card Information"
-msgstr "Geschenkkarten information:"
+msgstr "Geschenkkarten Information:"
 
 #: admin/giftcard-actions.php:497
 msgid "New gift card from "
@@ -167,16 +161,16 @@ msgstr "Neue Geschenkkarte von:"
 
 #: admin/giftcard-actions.php:530
 msgid "Dear"
-msgstr ""
+msgstr "Sehr geehrte(r)"
 
 #: admin/giftcard-actions.php:532
 msgid "Gift Card for you! This card can be used for online purchases at"
 msgstr ""
+"Geschenkkarte für Sie! Diese Karte kann für Online-Käufe verwendet werden bei"
 
 #: admin/giftcard-actions.php:535
-#, fuzzy
 msgid "Gift Card Number"
-msgstr "Anmerkung zur Geschenkkarte"
+msgstr "Geschenkkartennummer"
 
 #: admin/giftcard-actions.php:542
 #, fuzzy
@@ -185,20 +179,19 @@ msgstr "Verfallsdatum"
 
 #: admin/giftcard-actions.php:552
 msgid "Using your Gift Card is easy"
-msgstr ""
+msgstr "Ihre Geschenkkarte zu verwenden ist einfach"
 
 #: admin/giftcard-actions.php:555
 msgid "Shop at"
-msgstr ""
+msgstr "Kaufen im"
 
 #: admin/giftcard-actions.php:556
 msgid "Select \\\"Pay with a Gift Card\\\" during checkout."
-msgstr ""
+msgstr "Wählen Sie \\\"Bezahlen mit einer Geschenkkarte \\\" an der Kasse."
 
 #: admin/giftcard-actions.php:557
-#, fuzzy
 msgid "Enter your card number."
-msgstr "Geben Sie hier Ihre Nachricht ein."
+msgstr "Geben Sie Ihre Geschenkkartennummer ein."
 
 #: admin/giftcard-settings.php:21 giftcards.php:55
 msgid "Gift Cards"
@@ -218,7 +211,7 @@ msgstr "Kunden erlauben den Versand mit Geschenkkarte zu zahlen."
 
 #: admin/giftcard-settings.php:57
 msgid "Premium features available"
-msgstr ""
+msgstr "Es stehen Premiumfunktionen zur Verfügung"
 
 #: admin/giftcard-settings.php:59
 msgid ""
@@ -229,6 +222,13 @@ msgid ""
 "premium plugins and the ones offered on Wordpress.org.  Please let me know "
 "if I can help with anything."
 msgstr ""
+"Sie können nun zusätzliche Eigenschaften zum Geschenkkarte Plugin "
+"hinzufügen, indem Sie einige meiner Premium-Plugins, durch %s angeboten, "
+"nutzen. Wenn Sie nach Funktionen suchen, die ich noch nicht erstellt habe, "
+"lassen Sie es mich bitte wissen. Ich würde diese gern in der Zukunft "
+"integrieren. Ich habe auch ein Support-Forum für meine Premium-Plugins, die "
+"ich auf Wordpress.org anbiete. Bitte lassen Sie mich wissen, wenn ich Ihnen "
+"mit irgendetwas helfen kann."
 
 #: admin/order-functions.php:27
 msgid "Giftcard Information"
@@ -276,9 +276,8 @@ msgid "Gift card applied successfully."
 msgstr "Geschenkarge erfolgreich angewendet."
 
 #: giftcard/checkout-functions.php:227
-#, fuzzy
 msgid "Gift Card has expired!"
-msgstr "Geschenkkarte existiert nicht!"
+msgstr "Geschenkkarte ist abgelaufen!"
 
 #: giftcard/checkout-functions.php:233
 msgid "Gift Card does not exist!"
@@ -330,7 +329,7 @@ msgstr "Ein Produkt zu einer Geschenkkarte machen."
 
 #: giftcard/product-functions.php:61
 msgid "All fields below are optional"
-msgstr ""
+msgstr "Alle folgenden Felder sind optional"
 
 #: giftcard/product-functions.php:63
 msgid "Generated from the website."
@@ -386,20 +385,18 @@ msgid "No Gift Cards found in trash"
 msgstr "Keine Geschenkkarten im Papierkorb gefunden"
 
 #: giftcards.php:68
-#, fuzzy
 msgid "Parent Gift Card"
-msgstr "Neue Geschenkkarte"
+msgstr "Übergeordnete Geschenkkarte"
 
 #: giftcards.php:79 giftcards.php:98 giftcards.php:105
-#, fuzzy
 msgid "Zero Balance"
-msgstr "Betrag"
+msgstr "Kein Saldo"
 
 #: giftcards.php:84
 msgid "Zero Balance <span class=\"count\">(%s)</span>"
 msgid_plural "Zero Balance <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kein Saldo <span class=\"count\">(%s)</span>"
+msgstr[1] "Kein Saldo <span class=\"count\">(%s)</span>"
 
 #~ msgid "Gift card information"
 #~ msgstr "Geschenkkarteninformation"
