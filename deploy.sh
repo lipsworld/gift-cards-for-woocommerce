@@ -7,7 +7,7 @@
 # main config
 PLUGINSLUG=${PWD##*/} # returns basename of current directory
 CURRENTDIR=`pwd`
-MAINFILE="tablerates.php" # this should be the name of your main php file in the wordpress plugin
+MAINFILE="giftcards.php" # this should be the name of your main php file in the wordpress plugin
 
 # git config
 GITPATH="$CURRENTDIR/" # this file should be in the base of your git repository
