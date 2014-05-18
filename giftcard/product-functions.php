@@ -77,3 +77,22 @@ function rpgc_cart_fields( ) {
 	}
 }
 add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' );
+
+
+//  Sets a unique ID for gift cards so that multiple giftcards can be purchased (Might move to the main gift card Plugin)
+function wpr_uniqueID($cart_item_data, $product_id) {
+	$is_giftcard = get_post_meta( $product_id, '_giftcard', true );
+
+	if ( $is_giftcard == "yes" ) {
+
+		$unique_cart_item_key = md5("gc" . microtime().rand());
+		$cart_item_data['unique_key'] = $unique_cart_item_key;
+
+	}
+	
+	return $cart_item_data;
+}
+add_filter('woocommerce_add_cart_item_data','wpr_uniqueID',10,2);
+
+
+
