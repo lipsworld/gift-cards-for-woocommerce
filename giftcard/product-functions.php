@@ -19,7 +19,7 @@ function rpgc_extra_check( $product_type_options ) {
 	$giftcard = array(
 		'giftcard' => array(
 			'id' => '_giftcard',
-			'wrapper_class' => 'show_if_simple',
+			'wrapper_class' => 'show_if_simple show_if_variable',
 			'label' => __( 'Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
 			'description' => __( 'Make product a gift card.', RPWCGC_CORE_TEXT_DOMAIN )
 		),
