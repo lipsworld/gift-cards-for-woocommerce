@@ -34,15 +34,15 @@ Q: The gift card is not sent automaticly when the customer purchases it.  Why no
 A: This is a feature that is not included in the free version of the gift card.  You can get this option <a href="https://wp-ronin.com/downloads/auto-send-email-woocommerce-gift-cards/">here</a>.
 
 Q: Is there a way to create an option for my customers to specify the value on the gift card?
-A: You can do this with one of my premium plugins that I offer on my site <a href="https://wp-ronin.com">here</a> very soon.
+A: You can do this with one of my premium plugins that I offer on my site <a href="https://wp-ronin.com">here</a>
 
 == Changelog ==
 = 1.3.6 =
 * ADD: Ability to change placeholder information on products page
 * ADD: Ability to add multiple gift cards to the cart
 * ADD: Edit a gift cards already in the cart
+* ADD: Customization of button to buy gift card
 * ADD: Created more Q&A information on Wordpress.org
-
 
 = 1.3.5 =
 * FIX: Creation of Zerobalance orders created
