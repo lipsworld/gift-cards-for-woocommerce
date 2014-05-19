@@ -96,3 +96,19 @@ add_filter('woocommerce_add_cart_item_data','wpr_uniqueID',10,2);
 
 
 
+
+function wpr_change_add_to_cart_button ( $link ) {
+	global $product;
+
+	$is_giftcard = get_post_meta( $product->id, '_giftcard', true );
+	$giftCardText = get_option( "woocommerce_giftcard_button" );
+
+	if ( $is_giftcard == "yes" )
+		$link = '<a href="' . esc_url( $product->get_permalink( $product->id ) ) . '" rel="nofollow" data-product_id="' . esc_attr( $product->id ) . '" data-product_sku="' . esc_attr( $product->get_sku() ) . '" class="button product_type_' . esc_attr( $product->product_type ) . '">' . $giftCardText . '</a>';
+
+	return $link;
+}
+
+
+add_filter( 'woocommerce_loop_add_to_cart_link', 'wpr_change_add_to_cart_button' );
+
