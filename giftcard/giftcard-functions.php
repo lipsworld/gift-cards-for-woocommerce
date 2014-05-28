@@ -27,7 +27,7 @@ function rpgc_create_number( $data , $postarr ) {
 
 	return apply_filters('rpgc_create_number', $data);
 }
-add_filter( 'wp_insert_post_data' , 'rpgc_create_number' , '99', 2 );
+add_filter( 'wp_insert_post_data' , 'rpgc_create_number' , 10, 2 );
 
 
 function rpgc_generate_number( ) {
