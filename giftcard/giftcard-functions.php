@@ -35,3 +35,4 @@ function rpgc_generate_number( ) {
 
 	return apply_filters('rpgc_generate_number', $randomNumber);
 }
+

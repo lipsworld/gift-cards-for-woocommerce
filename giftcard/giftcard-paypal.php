@@ -26,5 +26,3 @@ function rpgc_add_giftcard_to_paypal( $paypal_args ) {
 	return $paypal_args;
 }
 add_filter( 'woocommerce_paypal_args', 'rpgc_add_giftcard_to_paypal');
-
-

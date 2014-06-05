@@ -168,3 +168,4 @@ class WPR_Giftcard_Admin_CPT_Shop_Giftcard extends WC_Admin_CPT {
 endif;
 
 return new WPR_Giftcard_Admin_CPT_Shop_Giftcard();
+

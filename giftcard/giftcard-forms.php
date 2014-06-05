@@ -167,3 +167,4 @@ function rpgc_cart_fields( ) {
 	}
 }
 add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' );
+

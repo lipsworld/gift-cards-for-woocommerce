@@ -256,3 +256,4 @@ function rpgc_refund_order( $order_id ) {
 	}
 }
 add_action( 'woocommerce_order_status_refunded', 'rpgc_refund_order' );
+

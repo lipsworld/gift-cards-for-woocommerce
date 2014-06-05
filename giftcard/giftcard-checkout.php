@@ -431,5 +431,6 @@ function wpr_apply_giftcard( $giftCardNumber ) {
 
 	//wc_print_notices();
 
+
 }
 

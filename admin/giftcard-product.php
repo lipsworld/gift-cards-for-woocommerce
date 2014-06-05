@@ -79,3 +79,4 @@ function wpr_change_add_to_cart_button ( $link ) {
 
 add_filter( 'woocommerce_loop_add_to_cart_link', 'wpr_change_add_to_cart_button' );
 
+
