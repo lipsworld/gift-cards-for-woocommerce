@@ -38,6 +38,7 @@ function rpgc_woocommerce() {
 		return;
 
 	if ( is_admin() ) {
+<<<<<<< HEAD
 		// Create all admin functions and pages
 		require_once RPWCGC_PATH . 'admin/gift-type.php';  
 		require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
@@ -49,6 +50,15 @@ function rpgc_woocommerce() {
 	require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
 	require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
 	require_once RPWCGC_PATH . 'admin/giftcard-product.php';
+=======
+		require_once RPWCGC_PATH . 'admin/giftcard-actions.php';
+		require_once RPWCGC_PATH . 'admin/order-functions.php';
+	}
+
+	require_once RPWCGC_PATH . 'giftcard/giftcard-functions.php';
+	require_once RPWCGC_PATH . 'giftcard/product-functions.php';
+	require_once RPWCGC_PATH . 'giftcard/checkout-functions.php';
+>>>>>>> FETCH_HEAD
 
 	function rpgc_create_post_type() {
 		$show_in_menu = current_user_can( 'manage_woocommerce' ) ? 'woocommerce' : true;
@@ -92,6 +102,7 @@ function rpgc_woocommerce() {
 	add_action( 'init', 'rpgc_create_post_type' );
 
 
+<<<<<<< HEAD
 
 	function rpgc_add_settings_page( $settings ) {
 		$settings[] = include( RPWCGC_PATH . 'admin/giftcard-settings.php' );
@@ -115,3 +126,52 @@ function rpwcgc_loaddomain() {
 	load_plugin_textdomain( RPWCGC_CORE_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'plugins_loaded', 'rpwcgc_loaddomain' );
+=======
+	function rp_append_post_status_list(){
+	     global $post;
+	     $complete = '';
+	     $label = '';
+	     if($post->post_type == 'rp_shop_giftcard'){
+	          if($post->post_status == 'zerobalance'){
+	               $complete = ' selected=\"selected\"';
+	               $label = '<span id=\"post-status-display\">' . _e( 'Zero Balanace', RPWCGC_CORE_TEXT_DOMAIN ) . '</span>';
+	          }
+
+	          echo '
+	          <script>
+	          jQuery(document).ready(function($){
+	               $("select#post_status").append("<option value=\"zerobalance\" '.$complete.'>';
+	               	_e( 'Zero Balanace', RPWCGC_CORE_TEXT_DOMAIN );
+	           echo '</option>");
+	               $(".misc-pub-section label").append("'.$label.'");
+	          });
+	          </script>
+	          ';
+	     }
+	}
+	add_action('admin_footer-post.php', 'rp_append_post_status_list');
+
+	/**	
+	 * Add the required scripts to the plugin.
+	 *
+	 */
+	function rpgc_enqueue() {
+		global $woocommerce, $post;
+		$rpgc_url = plugins_url() . '/gift-cards-for-woocommerce';
+		wp_enqueue_style( 'rpgc_style', RPWCGC_URL . '/style/style.css' );
+	}
+	add_action( 'wp_enqueue_scripts', 'rpgc_enqueue' );
+
+	/**
+	 * Load the Text Domain for i18n
+	 * @return void
+	 * @access public
+	 */
+	function rpwcgc_loaddomain() {
+		load_plugin_textdomain( RPWCGC_CORE_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+	add_action( 'plugins_loaded', 'rpwcgc_loaddomain' );
+
+}
+add_action( 'plugins_loaded', 'rpgc_woocommerce', 30 );
+>>>>>>> FETCH_HEAD
