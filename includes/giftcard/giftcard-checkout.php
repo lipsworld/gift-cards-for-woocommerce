@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @access public
  * @return void
  */
-function woocommerce_ajax_apply_giftcard($coupon_code) {
+function woocommerce_ajax_apply_giftcard($giftcard_code) {
 	global $woocommerce, $wpdb;
 
 	if ( ! empty( $_POST['giftcard_code'] ) ) {

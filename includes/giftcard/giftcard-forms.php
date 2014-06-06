@@ -12,12 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 function rpgc_cart_form() {
 	global $woocommerce;
 	
-	$showCartPage = 'yes';
-
-	if ( get_option( 'woocommerce_enable_giftcard_cartpage' ) == 'yes' || get_option( 'woocommerce_enable_giftcard_cartpage' ) == 'no' )
-		$showCartPage = get_option( 'woocommerce_enable_giftcard_cartpage' );
-
-	if( $showCartPage == 'yes' ){
+	if( get_option( 'woocommerce_enable_giftcard_cartpage' ) == 'yes' ){
 		do_action( 'wpr_before_cart_form' );
 	?>
 		<div class="giftcard" style="float: left;">
@@ -50,12 +45,7 @@ if ( ! function_exists( 'rpgc_checkout_form' ) ) {
 	function rpgc_checkout_form() {
 		global $woocommerce;
 
-		$showCheckoutPage = 'yes';
-
-		if ( get_option( 'woocommerce_enable_giftcard_checkoutpage' ) == 'yes' || get_option( 'woocommerce_enable_giftcard_checkoutpage' ) == 'no' )
-			$showCheckoutPage = get_option( 'woocommerce_enable_giftcard_checkoutpage' );
-
-		if( $showCheckoutPage == 'yes' ){
+		if( get_option( 'woocommerce_enable_giftcard_checkoutpage' ) == 'yes' ){
 
 			$info_message = apply_filters( 'woocommerce_checkout_giftcaard_message', __( 'Have a giftcard?', RPWCGC_CORE_TEXT_DOMAIN ) );
 			do_action( 'wpr_before_checkout_form' );

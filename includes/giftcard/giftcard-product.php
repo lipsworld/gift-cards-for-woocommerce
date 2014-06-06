@@ -59,19 +59,12 @@ add_filter('woocommerce_add_cart_item_data','wpr_uniqueID',10,2);
 
 function wpr_change_add_to_cart_button ( $link ) {
 	global $post;
-	var_dump($post);
-	$giftCardText = get_option( "woocommerce_giftcard_button" );
 
+	$giftCardText = get_option( "woocommerce_giftcard_button" );
 	$is_giftcard = get_post_meta( $post->ID, '_giftcard', true );
 	
-	
-	if ( $is_giftcard == "yes" ) {
-	
-
-
-		$link = '<a href="' . esc_url( get_permalink( $post->ID ) ) . '" rel="nofollow" data-product_id="' . esc_attr( $post->ID ) . '" data-product_sku="' . esc_attr( $post->get_sku() ) . '" class="button product_type_' . esc_attr( $post->product_type ) . '">' . $giftCardText . '</a>';
-
-	}
+	if ( $is_giftcard == "yes" && get_option( 'woocommerce_enable_addtocart' ) == "yes" )
+		$link = '<a href="' . esc_url( get_permalink( $post->ID ) ) . '" rel="nofollow" data-product_id="' . esc_attr( $post->ID ) . '" data-product_sku="' . esc_attr( $post->ID ) . '" class="button product_type_' . esc_attr( $post->product_type ) . '">' . $giftCardText . '</a>';
 
 	return $link;
 }
