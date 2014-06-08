@@ -162,4 +162,3 @@ class WPRWooGiftcards {
 
 $wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
 
-
