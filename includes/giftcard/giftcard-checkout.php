@@ -264,9 +264,9 @@ function rpgc_add_order_giftcard( $total_rows,$order ) {
 
 	$order_id = $order->id;
 
-	$giftCardPayment = get_post_meta( $order_id, 'rpgc_payment');
+	$giftCardPayment = get_post_meta( $order_id, 'rpgc_payment', true);
 
-	if ($giftCardPayment[0] <> 0 ) {
+	if ($giftCardPayment <> 0 ) {
 		$newRow['rpgc_data'] = array(
 			'label' => __( 'Gift Card Payment:', 'woocommerce' ),
 			'value'	=> woocommerce_price( -1 * $giftCardPayment[0] )
