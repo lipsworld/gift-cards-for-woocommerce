@@ -49,16 +49,16 @@ class WPRWooGiftcards {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
 			
 			// Create all admin functions and pages
-			require_once RPWCGC_PATH . 'includes/admin/giftcard-columns.php';  
-			require_once RPWCGC_PATH . 'includes/admin/giftcard-metabox.php';  
-			require_once RPWCGC_PATH . 'includes/admin/giftcard-functions.php';
+			require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
+			require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
+			require_once RPWCGC_PATH . 'admin/giftcard-functions.php';
 			
 		}
 
-		require_once RPWCGC_PATH . 'includes/giftcard/giftcard-product.php';
-		require_once RPWCGC_PATH . 'includes/giftcard/giftcard-forms.php';
-		require_once RPWCGC_PATH . 'includes/giftcard/giftcard-checkout.php';
-		require_once RPWCGC_PATH . 'includes/giftcard/giftcard-paypal.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-product.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
 		
 	}
 
@@ -104,7 +104,7 @@ class WPRWooGiftcards {
 	}
 
 	public function rpgc_add_settings_page( $settings ) {
-		$settings[] = include( RPWCGC_PATH . 'includes/admin/giftcard-settings.php' );
+		$settings[] = include( RPWCGC_PATH . 'admin/giftcard-settings.php' );
 
 		return apply_filters( 'rpgc_setting_classes', $settings );
 	}
