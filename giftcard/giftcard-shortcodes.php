@@ -16,7 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function wpr_check_giftcard( $atts ) {
 	global $wpdb, $woocommerce;
 
-	$giftCardNumber = sanitize_text_field( $_POST['giftcard_code'] );
+
+	if ( $_POST['giftcard_code'] )
+		$giftCardNumber = sanitize_text_field( $_POST['giftcard_code'] );
 
 	$return = '';
 
@@ -46,7 +48,7 @@ function wpr_check_giftcard( $atts ) {
 			AND $wpdb->posts.post_title = '%s'
 		", $giftCardNumber ) );
 
-		if ( $giftCardNumber ) {
+		if ( $giftcard_found ) {
 			$current_date = date("Y-m-d");
 			$cardExperation = get_post_meta( $giftcard_found, 'rpgc_expiry_date', true );
 
@@ -55,10 +57,17 @@ function wpr_check_giftcard( $atts ) {
 
 				$oldBalance = get_post_meta( $giftcard_found, 'rpgc_balance', true );
 				$GiftcardBalance = (float) $oldBalance;
+
+				$return .= '<h3>' . __('Remaining Balance', RPWCGC_CORE_TEXT_DOMAIN ) . ': ' . woocommerce_price( $GiftcardBalance ) . '</h3>';
+			} else {
+				$return .= '<h3>' . __('Gift Card Has Expired', RPWCGC_CORE_TEXT_DOMAIN ) . '</h3>';
 			}
+		} else {
+			$return .= '<h3>' . __( 'Gift Card Does Not Exist', RPWCGC_CORE_TEXT_DOMAIN ) . '</h3>';
+
 		}
 
-		$return .= '<h3>Remaining Balance: ' . woocommerce_price( $GiftcardBalance ) . '</h3>';
+		
 	}
 
 	return $return;
