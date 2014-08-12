@@ -18,7 +18,7 @@ You can now add additional functionallity to the gift card plugin using some of 
 If you have an interest in translating this plugin please let me know.
 
 == Installation ==
-1. Install the WooCommerce Gift Cards plugin
+1. Install the WooCommerce Gift Cards plugin <a href="http://wordpress.org/plugins/woocommerce/">Here</a>
 2. Activate the plugin
 3. Create Giftcard Products (Static price only - must set Giftcard as a single product)
 

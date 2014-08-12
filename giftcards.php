@@ -59,6 +59,7 @@ class WPRWooGiftcards {
 		require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
 		require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
 		require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
 		
 	}
 
@@ -160,5 +161,6 @@ class WPRWooGiftcards {
 
 }
 
-$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
+//if ( class_exists( 'WooCommerce' ) )
+	$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
 

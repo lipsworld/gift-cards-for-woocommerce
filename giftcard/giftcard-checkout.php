@@ -1,6 +1,6 @@
 <?php
 /**
- * Product Functions
+ * Checkout Functions
  *
  * @package     Woocommerce
  * @subpackage  Giftcards
