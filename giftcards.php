@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Gift Cards
 Plugin URI: http://wp-ronin.com
 Description: WooCommerce - Gift Cards allows you to offer gift cards to your customer and allow them to place orders using them.
-Version: 1.4.1
+Version: 1.5
 Author: Ryan Pletcher
 Author URI: http://ryanpletcher.com
 License: GPL2
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 // Plugin version
 if ( ! defined( 'RPWCGC_VERSION' ) )
-	define( 'RPWCGC_VERSION', '1.4.1' );
+	define( 'RPWCGC_VERSION', '1.5' );
 
 // Plugin Folder Path
 if ( ! defined( '' ) )
@@ -37,29 +37,32 @@ class WPRWooGiftcards {
 	private static $wpr_wg_instance;
 
 	private function __construct() {
-		global $wpr_woo_giftcard_settings;
-		$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
+		if ( class_exists( 'WooCommerce' ) ) {
 
-		add_action( 'init', array( $this, 'rpwcgc_loaddomain' ), 1 );
-		add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
-		add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
-		add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
+			global $wpr_woo_giftcard_settings;
+			$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
 
-		if( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
-			
-			// Create all admin functions and pages
-			require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
-			require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
-			require_once RPWCGC_PATH . 'admin/giftcard-functions.php';
-			
+			add_action( 'init', array( $this, 'rpwcgc_loaddomain' ), 1 );
+			add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
+			add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
+			add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
+
+			if( is_admin() ) {
+				add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
+				
+				// Create all admin functions and pages
+				require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
+				require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
+				require_once RPWCGC_PATH . 'admin/giftcard-functions.php';
+				
+			}
+
+			require_once RPWCGC_PATH . 'giftcard/giftcard-product.php';
+			require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
+			require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
+			require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
+			require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
 		}
-
-		require_once RPWCGC_PATH . 'giftcard/giftcard-product.php';
-		require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
-		require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
-		require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
-		require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
 		
 	}
 

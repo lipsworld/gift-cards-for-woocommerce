@@ -70,6 +70,14 @@ if ( ! class_exists( 'RPGC_Settings' ) ) :
 					'type'          => 'checkbox',
 					'autoload'      => false
 				),
+				array(
+					'title'         => __( 'Physical Card?',  RPWCGC_CORE_TEXT_DOMAIN  ),
+					'desc'          => __( 'Select this if you would like to offer physical gift cards.',  RPWCGC_CORE_TEXT_DOMAIN  ),
+					'id'            => 'woocommerce_enable_physical',
+					'default'       => 'no',
+					'type'          => 'checkbox',
+					'autoload'      => false
+				),
 
 				array( 'type' => 'sectionend', 'id' => 'account_registration_options'),
 

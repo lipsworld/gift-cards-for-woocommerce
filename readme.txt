@@ -37,6 +37,11 @@ Q: Is there a way to create an option for my customers to specify the value on t
 A: You can do this with one of my premium plugins that I offer on my site <a href="https://wp-ronin.com">here</a>
 
 == Changelog ==
+= 1.5 =
+* FIX: Removing array index on gift card variable
+* ADD: Ability to choose if the gift card is a virtual product or physical product.
+* ADD: Check to ensure that WooCommerce is installed
+
 = 1.4 =
 * FIX: Change to a sigleton file format
 * FIX: Paypal calculation
