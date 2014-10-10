@@ -17,7 +17,7 @@ function wpr_check_giftcard( $atts ) {
 	global $wpdb, $woocommerce;
 
 
-	if ( $_POST['giftcard_code'] )
+	if ( isset( $_POST['giftcard_code'] ) )
 		$giftCardNumber = sanitize_text_field( $_POST['giftcard_code'] );
 
 	$return = '';
@@ -37,7 +37,7 @@ function wpr_check_giftcard( $atts ) {
 	$return .= '<div id="theBalance"></div>';
 
 
-	if ( $_POST['giftcard_code'] ) {
+	if ( isset( $_POST['giftcard_code'] ) ) {
 
 		// Check for Giftcard
 		$giftcard_found = $wpdb->get_var( $wpdb->prepare( "
