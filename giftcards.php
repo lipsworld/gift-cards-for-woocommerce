@@ -4,8 +4,8 @@ Plugin Name: WooCommerce - Gift Cards
 Plugin URI: http://wp-ronin.com
 Description: WooCommerce - Gift Cards allows you to offer gift cards to your customer and allow them to place orders using them.
 Version: 1.5
-Author: Ryan Pletcher
-Author URI: http://ryanpletcher.com
+Author: WP Ronin
+Author URI: http://wp-ronin.com
 License: GPL2
 */
 
@@ -37,7 +37,7 @@ class WPRWooGiftcards {
 	private static $wpr_wg_instance;
 
 	private function __construct() {
-		if ( class_exists( 'WooCommerce' ) ) {
+		//if ( class_exists( 'WooCommerce' ) ) {
 
 			global $wpr_woo_giftcard_settings;
 			$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
@@ -62,7 +62,7 @@ class WPRWooGiftcards {
 			require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
 			require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
 			require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
-		}
+		//}
 		
 	}
 
@@ -91,7 +91,7 @@ class WPRWooGiftcards {
 		if ( 'rp_shop_giftcard' != $hook && 'post-new.php' != $hook && 'post.php' != $hook )
 			return;
 
-		wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
+		wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css' );
 		$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
 		wp_enqueue_script( 'woocommerce_writepanel' );
@@ -133,7 +133,7 @@ class WPRWooGiftcards {
 					'not_found'    			=> __( 'No Gift Cards found', RPWCGC_CORE_TEXT_DOMAIN ),
 					'not_found_in_trash'	=> __( 'No Gift Cards found in trash', RPWCGC_CORE_TEXT_DOMAIN ),
 					'parent'     			=> __( 'Parent Gift Card', RPWCGC_CORE_TEXT_DOMAIN )
-				),
+					),
 				'public'  		=> true,
 				'has_archive' 	=> true,
 				'show_in_menu'  => $show_in_menu,
