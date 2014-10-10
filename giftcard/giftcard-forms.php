@@ -120,8 +120,8 @@ function rpgc_cart_fields( ) {
 	$is_giftcard = get_post_meta( $post->ID, '_giftcard', true );
 	if ( $is_giftcard == 'yes' ) {
 
-		do_action( 'rpgc_before_all_giftcard_fields' );
-
+		do_action( 'rpgc_before_all_giftcard_fields', $post );
+		
 		$rpw_to 		= get_option( 'woocommerce_giftcard_to' );
 		$rpw_toEmail 	= get_option( 'woocommerce_giftcard_toEmail' );
 		$rpw_note 		= get_option( 'woocommerce_giftcard_note' );
@@ -149,5 +149,14 @@ function rpgc_cart_fields( ) {
 	    ';
 	}
 }
-add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' );
+add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' ); //woocommerce_before_add_to_cart_button
 
+function giftcard_is_purchasable( $is_purchasable, $object ) {
+
+    // this is a field added using 'Advance Custom Fields' plugin 
+	$is_giftcard = get_post_meta( $object->id, '_giftcard', true );
+	
+    if( $is_giftcard )
+        return true;
+}
+add_filter('woocommerce_is_purchasable', 'giftcard_is_purchasable', 10, 2);
