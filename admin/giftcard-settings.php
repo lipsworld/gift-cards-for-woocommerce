@@ -130,13 +130,13 @@ if ( ! class_exists( 'RPGC_Settings' ) ) :
 
 			$extensions = array( 
 				array (
-					'title' => __( 'Premium features available', RPWCGC_CORE_TEXT_DOMAIN),
-					'type' => 'title', 
-					'desc' => sprintf(__( 'You can now add additional functionallity to the gift card plugin using some of my premium plugins offered through %s.  If you are looking for some functionality that I have not created let me know and I would be happy to look into offering it in the future.  I also have a support forum for my premium plugins and the ones offered on Wordpress.org.  Please let me know if I can help with anything.', RPWCGC_CORE_TEXT_DOMAIN ), '<a href="wp-ronin.com">wp-ronin.com</a>'), 
-					'id' => 'rpgc_extra_features' 
+					'title' 	=> __( 'Premium features available', RPWCGC_CORE_TEXT_DOMAIN),
+					'type' 		=> 'title', 
+					'desc' 		=> sprintf(__( 'You can now add additional functionallity to the gift card plugin using some of my premium plugins offered through %s.  If you are looking for some functionality that I have not created let me know and I would be happy to look into offering it in the future.  I also have a support forum for my premium plugins and the ones offered on Wordpress.org.  Please let me know if I can help with anything.', RPWCGC_CORE_TEXT_DOMAIN ), '<a href="wp-ronin.com">wp-ronin.com</a>'), 
+					'id' 		=> 'rpgc_extra_features' 
 				),
 
-				array( 'type' 		=> 'sectionend', 'id' => 'giftcard_extensions' ),
+				array( 'type' 	=> 'sectionend', 'id' => 'giftcard_extensions' ),
 
 			); // End pages settings
 
