@@ -70,7 +70,7 @@ function wpr_check_giftcard( $atts ) {
 		
 	}
 
-	return $return;
+	return apply_filters( 'wpr_check_giftcard', $return) ;
 
 }
 add_shortcode( 'giftcardbalance', 'wpr_check_giftcard' );
