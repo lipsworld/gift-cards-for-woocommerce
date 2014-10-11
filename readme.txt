@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 3.9
-Stable tag: 1.4.1
+Stable tag: 1.5
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -43,12 +43,12 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 == Changelog ==
 = 1.5 =
 * FIX: Removing array index on gift card variable
+* FIX: Variable refrences
 * ADD: Ability to choose if the gift card is a virtual product or physical product.
 * ADD: Check to ensure that WooCommerce is installed
 * ADD: Filter and Action hooks to numerous locations
 * ADD: Link to Gift card product from the order page
 * UPDATE: Changed $woocommerce variable to WC()
-*
 
 
 = 1.4 =
