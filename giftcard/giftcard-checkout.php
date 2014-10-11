@@ -269,7 +269,7 @@ function rpgc_add_order_giftcard( $total_rows,$order ) {
 	if ($giftCardPayment <> 0 ) {
 		$newRow['rpgc_data'] = array(
 			'label' => __( 'Gift Card Payment:', 'woocommerce' ),
-			'value'	=> woocommerce_price( -1 * $giftCardPayment[0] )
+			'value'	=> woocommerce_price( -1 * $giftCardPayment )
 		);
 
 		if( get_option( 'woocommerce_enable_giftcard_process' ) == 'no' ){
