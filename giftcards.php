@@ -45,6 +45,9 @@ class WPRWooGiftcards {
 		add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
 		add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
 
+		if ( ! class_exists( 'WooCommerce' ) )
+			add_action( 'admin_notices', array( $this, 'no_woo_nag' ) );
+
 		if( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
 			
@@ -155,32 +158,32 @@ class WPRWooGiftcards {
 	 * @return void
 	 * @access public
 	 */
-	function rpwcgc_loaddomain() {
+	public function rpwcgc_loaddomain() {
 		load_plugin_textdomain( RPWCGC_CORE_TEXT_DOMAIN, false, 'gift-cards-for-woocommerce/languages/' );
 	}
 
+	/**
+	 * If no license key is saved, show a notice
+	 * @return void
+	 */
+	public function no_woo_nag() {
+		?>
+		<div class="updated">
+			<p><?php printf( __( 'WooCommerce - Gift Cards requires that you have WooCommerce Installed and Activated. <a href="%s">Activate Now</a>.', RPWCGC_CORE_TEXT_DOMAIN ), admin_url( 'plugins.php' ) ); ?></p>
+		</div>
+		<?php
+	}
+
 }
 
 
-/**
- * If no license key is saved, show a notice
- * @return void
- */
-function no_woo_nag() {
-	?>
-	<div class="updated">
-		<p><?php printf( __( 'WooCommerce - Gift Cards requires that you have WooCommerce Installed and Activated. <a href="%s">Activate Now</a>.', RPWCGC_CORE_TEXT_DOMAIN ), admin_url( 'plugins.php' ) ); ?></p>
-	</div>
-	<?php
-}
+
 
 function createGiftcard () {
 
-	if (  class_exists( 'WooCommerce' ) ) {
-		$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
-	} else {
-		no_woo_nag();
-	}
+
+	$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
+
 
 }
 add_action( 'plugins_loaded', 'createGiftcard', 12 );
