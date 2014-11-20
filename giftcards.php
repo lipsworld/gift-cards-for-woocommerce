@@ -32,38 +32,35 @@ if ( ! defined( 'RPWCGC_CORE_TEXT_DOMAIN' ) )
 	define( 'RPWCGC_CORE_TEXT_DOMAIN', 'rpgiftcards');
 
 
-
 class WPRWooGiftcards {
 	private static $wpr_wg_instance;
 
 	private function __construct() {
-		//if ( class_exists( 'WooCommerce' ) ) {
 
-			global $wpr_woo_giftcard_settings;
-			$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
+		global $wpr_woo_giftcard_settings;
+		$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
 
-			add_action( 'init', array( $this, 'rpwcgc_loaddomain' ), 1 );
-			add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
-			add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
-			add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
+		add_action( 'init', array( $this, 'rpwcgc_loaddomain' ), 1 );
+		add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
+		add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
+		add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
 
-			if( is_admin() ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
-				
-				// Create all admin functions and pages
-				require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
-				require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
-				require_once RPWCGC_PATH . 'admin/giftcard-functions.php';
-				
-			}
+		if( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
+			
+			// Create all admin functions and pages
+			require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
+			require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
+			require_once RPWCGC_PATH . 'admin/giftcard-functions.php';
+			
+		}
 
-			require_once RPWCGC_PATH . 'giftcard/giftcard-product.php';
-			require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
-			require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
-			require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
-			require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
-		//}
-		
+		require_once RPWCGC_PATH . 'giftcard/giftcard-product.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-forms.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-checkout.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
+		require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
+
 	}
 
 	/**
@@ -164,6 +161,27 @@ class WPRWooGiftcards {
 
 }
 
-//if ( class_exists( 'WooCommerce' ) )
-	$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
+
+/**
+ * If no license key is saved, show a notice
+ * @return void
+ */
+function no_woo_nag() {
+	?>
+	<div class="updated">
+		<p><?php printf( __( 'WooCommerce - Gift Cards requires that you have WooCommerce Installed and Activated. <a href="%s">Activate Now</a>.', RPWCGC_CORE_TEXT_DOMAIN ), admin_url( 'plugins.php' ) ); ?></p>
+	</div>
+	<?php
+}
+
+function createGiftcard () {
+
+	if (  class_exists( 'WooCommerce' ) ) {
+		$wpr_woo_gift_loaded = WPRWooGiftcards::getInstance();
+	} else {
+		no_woo_nag();
+	}
+
+}
+add_action( 'plugins_loaded', 'createGiftcard', 12 );
 
