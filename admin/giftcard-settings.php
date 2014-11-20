@@ -6,31 +6,96 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( ! class_exists( 'RPGC_Settings' ) ) :
+/**
+ * WC_Settings_Accounts
+ */
+class RPGC_Settings extends WC_Settings_Page {
 
 	/**
-	 * WC_Settings_Accounts
+	 * Constructor.
 	 */
-	class RPGC_Settings extends WC_Settings_Page {
+	public function __construct() {
+		$this->id    = 'giftcard';
+		$this->label = __( 'Gift Cards',  RPWCGC_CORE_TEXT_DOMAIN  );
 
-		/**
-		 * Constructor.
-		 */
-		public function __construct() {
-			$this->id    = 'giftcard';
-			$this->label = __( 'Gift Cards',  RPWCGC_CORE_TEXT_DOMAIN  );
+		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+		add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
+		add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+		
+		add_action( 'woocommerce_admin_field_addon_settings', array( $this, 'addon_setting' ) );
+	}
+
+
+	/**
+	 * Get sections
+	 *
+	 * @return array
+	 */
+	public function get_sections() {
+
+		$sections = array(
+			''          => __( 'Gift Card Options', 'woocommerce' ),
+			'extensions' => __( 'Premium Extensions', 'woocommerce' )
+		);
+
+
+		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+	}
+
+	/**
+	 * Output sections
+	 */
+	public function output_sections() {
+		global $current_section;
+
+		$sections = $this->get_sections();
+
+		if ( empty( $sections ) ) {
+			return;
 		}
 
-		/**
-		 * Get settings array
-		 *
-		 * @return array
-		 */
-		public function get_settings() {
+		echo '<ul class="subsubsub">';
+
+		$array_keys = array_keys( $sections );
+
+		foreach ( $sections as $id => $label ) {
+			echo '<li><a href="' . admin_url( 'admin.php?page=wc-settings&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . $label . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
+		}
+
+		echo '</ul><br class="clear" />';
+	}
+
+	/**
+	 * Output the settings
+	 */
+	public function output() {
+		global $current_section;
+
+		$settings = $this->get_settings( $current_section );
+
+ 		WC_Admin_Settings::output_fields( $settings );
+	}
+
+	/**
+	 * Save settings
+	 */
+	public function save() {
+		global $current_section;
+
+		$settings = $this->get_settings( $current_section );
+		WC_Admin_Settings::save_fields( $settings );
+	}
+
+
+	/**
+	 * Get settings array
+	 *
+	 * @return array
+	 */
+	public function get_settings( $current_section = '' ) {
+		if( $current_section == '' ) {
 
 			$options = apply_filters( 'woocommerce_giftcard_settings', array(
 
@@ -126,9 +191,9 @@ if ( ! class_exists( 'RPGC_Settings' ) ) :
 				array( 'type' => 'sectionend', 'id' => 'account_registration_options'),
 
 			));
+		} else {
 
-
-			$extensions = array( 
+			$options = array( 
 				array (
 					'title' 	=> __( 'Premium features available', RPWCGC_CORE_TEXT_DOMAIN),
 					'type' 		=> 'title', 
@@ -138,15 +203,96 @@ if ( ! class_exists( 'RPGC_Settings' ) ) :
 
 				array( 'type' 	=> 'sectionend', 'id' => 'giftcard_extensions' ),
 
+				array( 'type' => 'addon_settings' ),
+
 			); // End pages settings
 
-			$options = array_merge ($options, $extensions);
-
-			return $options;
-
 		}
+
+		return $options;
+
 	}
 
-endif;
+
+
+
+
+	/**
+	 * Output the frontend styles settings.
+	 */
+	public function addon_setting() {
+		
+		if( defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) { ?>
+
+			<h3>Activate Extensions</h3> 
+			<?php do_action( 'wpr_add_license_field' ); ?>
+			<br class="clear" />
+		
+		<?php } ?>
+		
+		<h3>Premium features available</h3>
+		<p>
+		You can now add additional functionallity to the gift card plugin using some of my premium plugins offered through <a href="wp-ronin.com">wp-ronin.com</a>.
+		</p>
+		<br class="clear" />
+		<div class='wc_addons_wrap' style="margin-top:10px;">
+		<ul class="products" style="overflow:hidden;">
+		<?php
+
+			$i = 0;
+
+			if( defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) ) {
+				$addons[$i]["title"] = "Custom Price";
+				$addons[$i]["image"] = "";
+				$addons[$i]["excerpt"] = "Dont want to have to create multiple products to offer Gift Cards on your site.  Use this plugin to create a single product that allows your customers to put in the price.  Select 10 – 10000000 it wont matter.";
+				$addons[$i]["link"] = "https://wp-ronin.com/downloads/woocommerce-gift-cards-custom-price/";
+				$i++;
+			}
+
+			if( defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) {
+				$addons[$i]["title"] = "Customize Card Number";
+				$addons[$i]["image"] = "";
+				$addons[$i]["excerpt"] = "Want to be able to customize the gift card number when it is created, this plugin will do it.";
+				$addons[$i]["link"] = "https://wp-ronin.com/downloads/woocommerce-gift-cards-customize-gift-card/";
+				$i++;
+			}
+
+			if( defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) ) {
+				$addons[$i]["title"] = "Auto Send Card";
+				$addons[$i]["image"] = "";
+				$addons[$i]["excerpt"] = "Save time creating gift cards by using this plugin.  Enable it and customers will have their gift card sent out directly upon purchase or payment.";
+				$addons[$i]["link"] = "https://wp-ronin.com/downloads/auto-send-email-woocommerce-gift-cards/";
+				$i++;
+			}
+
+			$addons[$i]["title"] = "Bundle Package";
+			$addons[$i]["image"] = "";
+			$addons[$i]["excerpt"] = "Want to add all the plugins I have created to extend Woocommerce Gift Cards this is the right product to choose.";
+			$addons[$i]["link"] = "https://wp-ronin.com/downloads/gift-card-premium-upgrade/";
+			$i++;
+			
+
+
+			
+			foreach ( $addons as $addon ) {
+				echo '<li class="product" style="float:left; margin:0 1em 1em 0 !important; padding:0; vertical-align:top; width:300px;">';
+				echo '<a href="' . $addon['link'] . '">';
+				if ( ! empty( $addon['image'] ) ) {
+					echo '<img src="' . $addon['image'] . '"/>';
+				} else {
+					echo '<h3>' . $addon['title'] . '</h3>';
+				}
+				echo '<p>' . $addon['excerpt'] . '</p>';
+				echo '</a>';
+				echo '</li>';
+			}
+		?>
+		</ul>
+		</div>
+		<?php
+	}
+
+}
+
 
 return new RPGC_Settings();
