@@ -31,6 +31,10 @@ if ( ! defined( 'RPWCGC_FILE' ) )
 if ( ! defined( 'RPWCGC_CORE_TEXT_DOMAIN' ) )
 	define( 'RPWCGC_CORE_TEXT_DOMAIN', 'rpgiftcards');
 
+// Premium Plugin Store
+if ( ! defined( 'WPR_STORE_URL' ) )
+	define( 'WPR_STORE_URL', 'https://wp-ronin.com' );
+
 
 class WPRWooGiftcards {
 	private static $wpr_wg_instance;
