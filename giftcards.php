@@ -12,49 +12,68 @@ License: GPL2
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 // Plugin version
-if ( ! defined( 'RPWCGC_VERSION' ) )
-	define( 'RPWCGC_VERSION', '1.5.1' );
-
-// Plugin Folder Path
-if ( ! defined( '' ) )
-	define( 'RPWCGC_PATH', plugin_dir_path( __FILE__ ) );
-
-// Plugin Folder URL
-if ( ! defined( 'RPWCGC_URL' ) )
-	define( 'RPWCGC_URL', plugins_url( 'gift-cards-for-woocommerce', 'giftcards.php' ) );
-
-// Plugin Root File
-if ( ! defined( 'RPWCGC_FILE' ) )
-	define( 'RPWCGC_FILE', plugin_basename( __FILE__ )  );
-
-// Plugin Text Domian
-if ( ! defined( 'RPWCGC_CORE_TEXT_DOMAIN' ) )
-	define( 'RPWCGC_CORE_TEXT_DOMAIN', 'rpgiftcards');
-
-// Premium Plugin Store
-if ( ! defined( 'WPR_STORE_URL' ) )
-	define( 'WPR_STORE_URL', 'https://wp-ronin.com' );
-
 
 class WPRWooGiftcards {
 	private static $wpr_wg_instance;
 
-	private function __construct() {
+	/**
+	 * Get the singleton instance of our plugin
+	 * @return class The Instance
+	 * @access public
+	 */
+	public static function getInstance() {
 
-		global $wpr_woo_giftcard_settings;
-		$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
+		if ( !self::$wpr_wg_instance ) {
+			self::$wpr_wg_instance = new WPRWooGiftcards();
+			self::$wpr_wg_instance->setup_constants();
+            self::$wpr_wg_instance->includes();
+            self::$wpr_wg_instance->rpwcgc_loaddomain();
+            self::$wpr_wg_instance->hooks();
+		}
 
-		add_action( 'init', array( $this, 'rpwcgc_loaddomain' ), 1 );
-		add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
-		add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
-		add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
+		return self::$wpr_wg_instance;
+	}
 
-		if ( ! class_exists( 'WooCommerce' ) )
-			add_action( 'admin_notices', array( $this, 'no_woo_nag' ) );
+    /**
+     * Setup plugin constants
+     *
+     * @access      private
+     * @since       1.0.0
+     * @return      void
+     */
+    private function setup_constants() {
 
+		define( 'RPWCGC_VERSION', '1.5.1' );
+
+		// Plugin Folder Path
+		define( 'RPWCGC_PATH', plugin_dir_path( __FILE__ ) );
+
+		// Plugin Folder URL
+		define( 'RPWCGC_URL', plugins_url( 'gift-cards-for-woocommerce', 'giftcards.php' ) );
+
+		// Plugin Root File
+		define( 'RPWCGC_FILE', plugin_basename( __FILE__ )  );
+
+		// Plugin Text Domian
+		define( 'WPR_CORE_TEXT_DOMAIN', 'rpgiftcards');
+		
+		if ( ! defined( 'WPR_STORE_URL' ) )
+			// Premium Plugin Store
+			define( 'WPR_STORE_URL', 'https://wp-ronin.com' );
+
+	}
+
+
+    /**
+     * Include necessary files
+     *
+     * @access      private
+     * @since       1.0.0
+     * @return      void
+     */
+    private function includes() {
+        // Include scripts
 		if( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
-			
 			// Create all admin functions and pages
 			require_once RPWCGC_PATH . 'admin/giftcard-columns.php';  
 			require_once RPWCGC_PATH . 'admin/giftcard-metabox.php';  
@@ -68,20 +87,50 @@ class WPRWooGiftcards {
 		require_once RPWCGC_PATH . 'giftcard/giftcard-paypal.php';
 		require_once RPWCGC_PATH . 'giftcard/giftcard-shortcodes.php';
 
-	}
+    }
 
-	/**
-	 * Get the singleton instance of our plugin
-	 * @return class The Instance
-	 * @access public
-	 */
-	public static function getInstance() {
-		if ( !self::$wpr_wg_instance ) {
-			self::$wpr_wg_instance = new WPRWooGiftcards();
+
+    /**
+     * Run action and filter hooks
+     *
+     * @access      private
+     * @since       1.0.0
+     * @return      void
+     *
+     * @todo        The hooks listed in this section are a guideline, and
+     *              may or may not be relevant to your particular extension.
+     *              Please remove any unnecessary lines, and refer to the
+     *              WordPress codex and EDD documentation for additional
+     *              information on the included hooks.
+     *
+     *              This method should be used to add any filters or actions
+     *              that are necessary to the core of your extension only.
+     *              Hooks that are relevant to meta boxes, widgets and
+     *              the like can be placed in their respective files.
+     *
+     *              IMPORTANT! If you are releasing your extension as a
+     *              commercial extension in the EDD store, DO NOT remove
+     *              the license check!
+     */
+    private function hooks() {
+
+    	global $wpr_woo_giftcard_settings;
+		$wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
+
+		add_action( 'init', array( $this, 'rpgc_create_post_type' ) );
+		add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
+		add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
+
+		if ( ! class_exists( 'WooCommerce' ) )
+			add_action( 'admin_notices', array( $this, 'no_woo_nag' ) );
+
+		if( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
+				
 		}
 
-		return self::$wpr_wg_instance;
-	}
+
+    }
 
 	/**
 	 * Queue up the JavaScript file for the admin page, only on our admin page
@@ -123,20 +172,20 @@ class WPRWooGiftcards {
 		register_post_type( 'rp_shop_giftcard',
 			array(
 				'labels' => array(
-					'name'      			=> __( 'Gift Cards', RPWCGC_CORE_TEXT_DOMAIN ),
-					'singular_name'			=> __( 'Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'menu_name'    			=> _x( 'Gift Cards', 'Admin menu name', RPWCGC_CORE_TEXT_DOMAIN ),
-					'add_new'     			=> __( 'Add Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'add_new_item'    		=> __( 'Add New Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'edit'      			=> __( 'Edit', RPWCGC_CORE_TEXT_DOMAIN ),
-					'edit_item'    			=> __( 'Edit Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'new_item'     			=> __( 'New Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'view'      			=> __( 'View Gift Cards', RPWCGC_CORE_TEXT_DOMAIN ),
-					'view_item'    			=> __( 'View Gift Card', RPWCGC_CORE_TEXT_DOMAIN ),
-					'search_items'    		=> __( 'Search Gift Cards', RPWCGC_CORE_TEXT_DOMAIN ),
-					'not_found'    			=> __( 'No Gift Cards found', RPWCGC_CORE_TEXT_DOMAIN ),
-					'not_found_in_trash'	=> __( 'No Gift Cards found in trash', RPWCGC_CORE_TEXT_DOMAIN ),
-					'parent'     			=> __( 'Parent Gift Card', RPWCGC_CORE_TEXT_DOMAIN )
+					'name'      			=> __( 'Gift Cards', WPR_CORE_TEXT_DOMAIN ),
+					'singular_name'			=> __( 'Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'menu_name'    			=> _x( 'Gift Cards', 'Admin menu name', WPR_CORE_TEXT_DOMAIN ),
+					'add_new'     			=> __( 'Add Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'add_new_item'    		=> __( 'Add New Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'edit'      			=> __( 'Edit', WPR_CORE_TEXT_DOMAIN ),
+					'edit_item'    			=> __( 'Edit Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'new_item'     			=> __( 'New Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'view'      			=> __( 'View Gift Cards', WPR_CORE_TEXT_DOMAIN ),
+					'view_item'    			=> __( 'View Gift Card', WPR_CORE_TEXT_DOMAIN ),
+					'search_items'    		=> __( 'Search Gift Cards', WPR_CORE_TEXT_DOMAIN ),
+					'not_found'    			=> __( 'No Gift Cards found', WPR_CORE_TEXT_DOMAIN ),
+					'not_found_in_trash'	=> __( 'No Gift Cards found in trash', WPR_CORE_TEXT_DOMAIN ),
+					'parent'     			=> __( 'Parent Gift Card', WPR_CORE_TEXT_DOMAIN )
 					),
 				'public'  		=> true,
 				'has_archive' 	=> true,
@@ -147,7 +196,7 @@ class WPRWooGiftcards {
 		);
 	
 		register_post_status( 'zerobalance', array(
-			'label'                     => __( 'Zero Balance', RPWCGC_CORE_TEXT_DOMAIN ),
+			'label'                     => __( 'Zero Balance', WPR_CORE_TEXT_DOMAIN ),
 			'public'                    => true,
 			'exclude_from_search'       => false,
 			'show_in_admin_all_list'    => true,
@@ -163,7 +212,7 @@ class WPRWooGiftcards {
 	 * @access public
 	 */
 	public function rpwcgc_loaddomain() {
-		load_plugin_textdomain( RPWCGC_CORE_TEXT_DOMAIN, false, 'gift-cards-for-woocommerce/languages/' );
+		load_plugin_textdomain( WPR_CORE_TEXT_DOMAIN, false, 'gift-cards-for-woocommerce/languages/' );
 	}
 
 	/**
@@ -173,7 +222,7 @@ class WPRWooGiftcards {
 	public function no_woo_nag() {
 		?>
 		<div class="updated">
-			<p><?php printf( __( 'WooCommerce - Gift Cards requires that you have WooCommerce Installed and Activated. <a href="%s">Activate Now</a>.', RPWCGC_CORE_TEXT_DOMAIN ), admin_url( 'plugins.php' ) ); ?></p>
+			<p><?php printf( __( 'WooCommerce - Gift Cards requires that you have WooCommerce Installed and Activated. <a href="%s">Activate Now</a>.', WPR_CORE_TEXT_DOMAIN ), admin_url( 'plugins.php' ) ); ?></p>
 		</div>
 		<?php
 	}
