@@ -216,7 +216,7 @@ class RPGC_Settings extends WC_Settings_Page {
 	public function addon_setting() {
 		
 		if( defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) { 
-			register_setting( 'wpr_options', 'wpr_options' );
+			register_setting( 'wpr-options', 'wpr_options' );
 
 			?>
 
