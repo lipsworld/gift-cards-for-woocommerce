@@ -132,6 +132,8 @@ function sendGiftcardEmail ( $giftCard ) {
 	?>
 
 	<div class="message">
+
+
 		<?php _e( 'Dear', WPR_CORE_TEXT_DOMAIN ); ?> <?php echo get_post_meta( $giftCard->ID, 'rpgc_to', true); ?>,<br /><br />
 			
 		<?php echo get_post_meta( $giftCard->ID, 'rpgc_from', true); ?> has selected a <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you! This card can be used for online purchases at', WPR_CORE_TEXT_DOMAIN ); ?> <?php bloginfo( 'name' ); ?>. <br />

@@ -186,13 +186,13 @@ function rpgc_add_card_data( $cart_item_key, $product_id, $quantity ) {
 			'Note'   	=> 'NA',
 		);
 
-		if ( isset( $_POST['rpgc_to'] ) )
+		if ( isset( $_POST['rpgc_to'] ) && ( $_POST['rpgc_to'] <> '' ) ) 
 			$giftcard_data['To'] = woocommerce_clean( $_POST['rpgc_to'] );
 
-		if ( isset( $_POST['rpgc_to_email'] ) )
+		if ( isset( $_POST['rpgc_to_email'] ) && ( $_POST['rpgc_to_email'] <> '' ) ) 
 			$giftcard_data['To Email'] = woocommerce_clean( $_POST['rpgc_to_email'] );
 
-		if ( isset( $_POST['rpgc_note'] ) )
+		if ( isset( $_POST['rpgc_note'] ) && ( $_POST['rpgc_note'] <> '' ) ) 
 			$giftcard_data['Note'] = woocommerce_clean( $_POST['rpgc_note'] );
 
 		$giftcard_data = apply_filters( 'rpgc_giftcard_data', $giftcard_data, $_POST );

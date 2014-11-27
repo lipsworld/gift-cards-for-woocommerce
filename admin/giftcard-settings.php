@@ -199,11 +199,8 @@ class RPGC_Settings extends WC_Settings_Page {
 				array( 'type' => 'addon_settings' ),
 
 			); // End pages settings
-
 		}
-
 		return $options;
-
 	}
 
 
@@ -217,9 +214,7 @@ class RPGC_Settings extends WC_Settings_Page {
 		
 		if( defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) { 
 			register_setting( 'wpr-options', 'wpr_options' );
-
 			?>
-
 			<h3><?php _e('Activate Extensions', WPR_CORE_TEXT_DOMAIN ); ?></h3> 
 			<table>
 			<?php do_action( 'wpr_add_license_field' ); ?>
@@ -238,6 +233,7 @@ class RPGC_Settings extends WC_Settings_Page {
 		<?php
 
 			$i = 0;
+			$addons = array();
 
 			if( ! defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) ) {
 				$addons[$i]["title"] = __(' Custom Price', WPR_CORE_TEXT_DOMAIN );
