@@ -324,10 +324,11 @@ function rpgc_update_card( $order_id ) {
 	}
 
 }
-add_action( 'woocommerce_order_status_pending', 'rpgc_update_card' );
-add_action( 'woocommerce_order_status_on-hold', 'rpgc_update_card' );
-add_action( 'woocommerce_order_status_completed', 'rpgc_update_card' );
-add_action( 'woocommerce_order_status_processing', 'rpgc_update_card' );
+//add_action( 'woocommerce_order_status_pending', 'rpgc_update_card' );
+//add_action( 'woocommerce_order_status_on-hold', 'rpgc_update_card' );
+//add_action( 'woocommerce_order_status_completed', 'rpgc_update_card' );
+//add_action( 'woocommerce_order_status_processing', 'rpgc_update_card' );
+add_action( 'woocommerce_payment_complete', 'rpgc_update_card' );
 
 
 function wpr_update_cart ( $cart_updated ) {
