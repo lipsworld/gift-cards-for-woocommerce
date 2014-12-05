@@ -136,7 +136,7 @@ function sendGiftcardEmail ( $giftCard ) {
 
 		<?php _e( 'Dear', WPR_CORE_TEXT_DOMAIN ); ?> <?php echo get_post_meta( $giftCard->ID, 'rpgc_to', true); ?>,<br /><br />
 			
-		<?php echo get_post_meta( $giftCard->ID, 'rpgc_from', true); ?> has selected a <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you! This card can be used for online purchases at', WPR_CORE_TEXT_DOMAIN ); ?> <?php bloginfo( 'name' ); ?>. <br />
+		<?php echo get_post_meta( $giftCard->ID, 'rpgc_from', true); ?> <?php _e('has selected a', WPR_CORE_TEXT_DOMAIN ); ?> <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you! This card can be used for online purchases at', WPR_CORE_TEXT_DOMAIN ); ?> <?php bloginfo( 'name' ); ?>. <br />
 
 		<h4><?php _e( 'Gift Card Amount', WPR_CORE_TEXT_DOMAIN ); ?>: <?php echo woocommerce_price( get_post_meta( $giftCard->ID, 'rpgc_balance', true) ); ?></h4>
 		<h4><?php _e( 'Gift Card Number', WPR_CORE_TEXT_DOMAIN ); ?>: <?php echo $giftCard->post_title; ?></h4>

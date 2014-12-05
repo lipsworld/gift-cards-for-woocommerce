@@ -129,7 +129,7 @@ function rpgc_cart_fields( ) {
 		$rpw_to_check 		= ( $rpw_to <> NULL ? $rpw_to : __('To', WPR_CORE_TEXT_DOMAIN ) );
 		$rpw_toEmail_check 	= ( $rpw_toEmail <> NULL ? $rpw_toEmail : __('To Email', WPR_CORE_TEXT_DOMAIN )  );
 		$rpw_note_check		= ( $rpw_note <> NULL ? $rpw_note : __('Note', WPR_CORE_TEXT_DOMAIN )  );
-?>
+		?>
 
 		<div>
 			<div class="rpw_product_message"><?php _e('All fields below are optional', WPR_CORE_TEXT_DOMAIN ); ?></div>
