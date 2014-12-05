@@ -212,7 +212,7 @@ class RPGC_Settings extends WC_Settings_Page {
 	 */
 	public function addon_setting() {
 		
-		if( defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) { 
+		if( defined( 'WPR_GC_PRO_TEXT' ) ||defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) ) { 
 			register_setting( 'wpr-options', 'wpr_options' );
 			?>
 			<h3><?php _e('Activate Extensions', WPR_CORE_TEXT_DOMAIN ); ?></h3> 
@@ -235,8 +235,16 @@ class RPGC_Settings extends WC_Settings_Page {
 			$i = 0;
 			$addons = array();
 
+			if( ! defined( 'WPR_GC_PRO_TEXT' ) ) {
+				$addons[$i]["title"] = __('Woocommerce Giftcards Pro', WPR_CORE_TEXT_DOMAIN );
+				$addons[$i]["image"] = "";
+				$addons[$i]["excerpt"] = __( 'Get all the added features of the Pro gift card addon in this one package.', WPR_CORE_TEXT_DOMAIN );
+				$addons[$i]["link"] = "https://wp-ronin.com/downloads/";
+				$i++;
+			}
+
 			if( ! defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) ) {
-				$addons[$i]["title"] = __(' Custom Price', WPR_CORE_TEXT_DOMAIN );
+				$addons[$i]["title"] = __('Custom Price', WPR_CORE_TEXT_DOMAIN );
 				$addons[$i]["image"] = "";
 				$addons[$i]["excerpt"] = __( 'Dont want to have to create multiple products to offer Gift Cards on your site.  Use this plugin to create a single product that allows your customers to put in the price.  Select 10 – 10000000 it wont matter.', WPR_CORE_TEXT_DOMAIN );
 				$addons[$i]["link"] = "https://wp-ronin.com/downloads/woocommerce-gift-cards-custom-price/";
