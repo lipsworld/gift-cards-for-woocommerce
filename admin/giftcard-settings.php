@@ -105,7 +105,7 @@ class RPGC_Settings extends WC_Settings_Page {
 					'title'         => __( 'Display on Cart?',  WPR_CORE_TEXT_DOMAIN  ),
 					'desc'          => __( 'Display the giftcard form on the cart page.',  WPR_CORE_TEXT_DOMAIN  ),
 					'id'            => 'woocommerce_enable_giftcard_cartpage',
-					'default'       => 'yes',
+					'default'       => 'no',
 					'type'          => 'checkbox',
 					'autoload'      => false
 				),
@@ -114,7 +114,7 @@ class RPGC_Settings extends WC_Settings_Page {
 					'title'         => __( 'Display on Checkout?',  WPR_CORE_TEXT_DOMAIN  ),
 					'desc'          => __( 'Display the giftcard form on the checkout page.',  WPR_CORE_TEXT_DOMAIN  ),
 					'id'            => 'woocommerce_enable_giftcard_checkoutpage',
-					'default'       => 'no',
+					'default'       => 'yes',
 					'type'          => 'checkbox',
 					'autoload'      => false
 				),
@@ -125,7 +125,15 @@ class RPGC_Settings extends WC_Settings_Page {
 					'id'            => 'woocommerce_enable_giftcard_process',
 					'default'       => 'no',
 					'type'          => 'checkbox',
-					'autoload'      => false
+					'autoload'      => true
+				),
+				array(
+					'title'         => __( 'Require Recipient Information?',  WPR_CORE_TEXT_DOMAIN  ),
+					'desc'          => __( 'Requires that your customers enter a name and email when purchasing a Gift Card.',  WPR_CORE_TEXT_DOMAIN  ),
+					'id'            => 'woocommerce_enable_giftcard_info_requirements',
+					'default'       => 'no',
+					'type'          => 'checkbox',
+					'autoload'      => true
 				),
 				array(
 					'title'         => __( 'Customize Add to Cart?',  WPR_CORE_TEXT_DOMAIN  ),
