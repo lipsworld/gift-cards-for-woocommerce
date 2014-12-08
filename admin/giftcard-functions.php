@@ -88,7 +88,7 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 
 	if( ( ( $sendTheEmail == 1 ) && ( $balance <> 0 ) ) || isset( $_POST['rpgc_resend_email'] ) ) {
 		$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
-		$subject = apply_filters( 'woocommerce_email_subject_gift_card', sprintf( '[%s] %s', $blogname, __( 'Gift Card Information', 'woocommerce' ) ), $post->post_title );
+		$subject = apply_filters( 'woocommerce_email_subject_gift_card', sprintf( '[%s] %s', $blogname, __( 'Gift Card Information', WPR_CORE_TEXT_DOMAIN ) ), $post->post_title );
 		$sendEmail = get_bloginfo( 'admin_email' );
 
 		ob_start();
@@ -98,7 +98,7 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 
 		$theMessage 	= apply_filters( 'rpgc_emailContents', $theMessage );
 
-	  	$email_heading = __( 'New gift card from ', 'woocommerce' ) . $blogname;
+	  	$email_heading = __( 'New gift card from ', WPR_CORE_TEXT_DOMAIN ) . $blogname;
 	  	$email_heading = apply_filters( 'rpgc_emailSubject', $email_heading );
 
 	  	echo $mailer->wrap_message( $email_heading, $theMessage );
