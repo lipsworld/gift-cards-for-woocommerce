@@ -151,12 +151,7 @@ function rpgc_cart_fields( ) {
 }
 add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' ); //woocommerce_before_add_to_cart_button
 
-function giftcard_is_purchasable( $is_purchasable, $object ) {
 
-    // this is a field added using 'Advance Custom Fields' plugin 
-	$is_giftcard = get_post_meta( $object->id, '_giftcard', true );
-	
-    if( $is_giftcard )
-        return true;
-}
-//add_filter('woocommerce_is_purchasable', 'giftcard_is_purchasable', 10, 2);
+
+
+

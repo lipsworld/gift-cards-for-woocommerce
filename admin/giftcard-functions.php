@@ -184,7 +184,8 @@ function rpgc_res_fromname($email){
  *
  */
 function rpgc_create_number( $data , $postarr ) {
-	if ( ( $data['post_type'] == 'rp_shop_giftcard' ) && ( ( $data['post_title'] == "" ) || ( $data['post_title'] == "Auto Draft" ) ) ) {
+	
+	if ( ( $data['post_type'] == 'rp_shop_giftcard' ) && ( $_POST["original_publish"] == "Publish" ) ) {
 
 		$myNumber = rpgc_generate_number( );		
 		
@@ -226,13 +227,33 @@ function rpgc_refund_order( $order_id ) {
 
 	if ( $giftcard_found ) {
 
-		$oldBalance = get_post_meta( $giftcard_found, 'rpgc_balance' );
-		$refundAmount = get_post_meta( $order_id, 'rpgc_payment' );
+		$oldBalance = get_post_meta( $giftcard_found, 'rpgc_balance', true );
+		$refundAmount = get_post_meta( $order_id, 'rpgc_payment', true );
 
-		$giftcard_balance = (float) $oldBalance[0] + (float) $refundAmount[0];
+		$giftcard_balance = (float) $oldBalance + (float) $refundAmount;
 
 		update_post_meta( $giftcard_found, 'rpgc_balance', $giftcard_balance ); // Update balance of Giftcard
 	}
 }
 add_action( 'woocommerce_order_status_refunded', 'rpgc_refund_order' );
+
+
+function wpr_display_giftcard_on_order ( $order_id ) {
+	
+	$giftPayment = get_post_meta( $order_id, 'rpgc_payment', true );
+
+	if( $giftPayment > 0 ) {
+		?>
+		<tr>
+			<td class="label"><?php _e( 'Gift Card Payment', 'woocommerce' ); ?>:</td>
+			<td class="giftcardTotal">
+				<div class="view"><?php echo wc_price( $giftPayment ); ?></div>
+			</td>
+		</tr>
+		<?php
+	}
+
+}
+add_action ( 'woocommerce_admin_order_totals_after_discount', 'wpr_display_giftcard_on_order' );
+
 

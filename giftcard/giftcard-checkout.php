@@ -206,18 +206,23 @@ function rpgc_add_card_data( $cart_item_key, $product_id, $quantity ) {
 }
 add_action( 'woocommerce_add_to_cart', 'rpgc_add_card_data', 10, 3 );
 
-
 function wpr_validate_form_complete( $passed, $product_id, $quantity, $variation_id = '', $variations= '' ) {
 
 	$passed = true;
 
-	if ( $_POST["rpgc_to"] == '' ) { $passed = false; }
-	if ( $_POST["rpgc_to_email"] == '' ) { $passed = false; }
+	$is_giftcard = get_post_meta( $product_id, '_giftcard', true );
+	$is_required_field_giftcard = get_option( 'woocommerce_enable_giftcard_info_requirements' );
 
-	if ( $passed == false ) {
-        wc_add_notice( __( 'Please complete form.', WPR_CORE_TEXT_DOMAIN ), 'error' );
+	if ( ( $is_giftcard == "yes" ) && ( $is_required_field_giftcard == "yes" ) ) {
+
+		if ( $_POST["rpgc_to"] == '' ) { $passed = false; }
+		if ( $_POST["rpgc_to_email"] == '' ) { $passed = false; }
+
+		if ( $passed == false ) {
+	        wc_add_notice( __( 'Please complete form.', WPR_CORE_TEXT_DOMAIN ), 'error' );
+		}
 	}
-
+	
     return $passed;
 
 }
@@ -342,12 +347,8 @@ function rpgc_update_card( $order_id ) {
 	}
 
 }
-//add_action( 'woocommerce_order_status_pending', 'rpgc_update_card' );
-//add_action( 'woocommerce_order_status_on-hold', 'rpgc_update_card' );
-//add_action( 'woocommerce_order_status_completed', 'rpgc_update_card' );
-//add_action( 'woocommerce_order_status_processing', 'rpgc_update_card' );
 add_action( 'woocommerce_payment_complete', 'rpgc_update_card' );
-
+add_action( 'woocommerce_thankyou_paypal', 'rpgc_update_card' );
 
 function wpr_update_cart ( $cart_updated ) {
 	// Add Discount
@@ -449,9 +450,6 @@ function wpr_apply_giftcard( $giftCardNumber ) {
 			wc_add_notice( __( 'Gift Card does not exist!', WPR_CORE_TEXT_DOMAIN ), 'error' );
 		}
 	}
-
-	//wc_print_notices();
-
 
 }
 
