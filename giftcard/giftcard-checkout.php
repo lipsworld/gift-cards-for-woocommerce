@@ -242,10 +242,10 @@ function rpgc_display_giftcard( $order ) {
 	if( isset( $theIDNum ) ) {
 		if ( $theIDNum <> '' ) {
 		?>
-			<h4><?php _e( 'Remaining Gift Card Balance:', WPR_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance ); ?> </h4>
+			<h4><?php _e( 'Remaining Gift Card Balance:', WPR_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance ); ?> <?php do_action('wpr_after_remaining_balance', $theIDNum, $theBalance ); ?></h4>
 
 			<?php
-			do_action('wpr_after_remaining_balance');
+			
 		}
 	}
 
