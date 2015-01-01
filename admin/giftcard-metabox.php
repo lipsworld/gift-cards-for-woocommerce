@@ -202,8 +202,7 @@ function rpgc_meta_box( $post ) {
 function rpgc_options_meta_box( $post ) {
 	global $woocommerce;
 
-	wp_nonce_field( 'woocommerce_save_data', 'woocommerce_meta_nonce' );
-	
+	wp_nonce_field( 'woocommerce_save_data', 'woocommerce_meta_nonce' );	
 	
 	echo '<div id="giftcard_regenerate" class="panel woocommerce_options_panel">';
 	echo '    <div class="options_group">';
