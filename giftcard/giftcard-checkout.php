@@ -351,13 +351,12 @@ add_action( 'woocommerce_payment_complete', 'rpgc_update_card' );
 add_action( 'woocommerce_thankyou_paypal', 'rpgc_update_card' );
 
 function wpr_update_cart ( $cart_updated ) {
-	// Add Discount
-		if ( ! empty( $_POST['giftcard_code'] ) ) {
-			wpr_apply_giftcard( sanitize_text_field( $_POST['giftcard_code'] ) );
-		}
+	// Update Gift Card Value
+	if ( ! empty( WC()->session->giftcard_id ) )
+		wpr_apply_giftcard( WC()->session->giftcard_id );
 
 }
-add_filter( 'woocommerce_update_cart_action_cart_updated', 'wpr_update_cart', 10, 1 );
+add_action( 'woocommerce_cart_updated', 'wpr_update_cart', 10, 1 );
 
 
 
@@ -374,6 +373,8 @@ function wpr_apply_giftcard( $giftCardNumber ) {
 		WC()->cart->total = WC()->session->giftcard_payment + WC()->cart->total;
 
 		unset( WC()->session->giftcard_payment, WC()->session->giftcard_id, WC()->session->giftcard_post, WC()->session->giftcard_balance );
+
+		WC()->cart->calculate_totals();
 
 		// Check for Giftcard
 		$giftcard_found = $wpdb->get_var( $wpdb->prepare( "
@@ -419,8 +420,6 @@ function wpr_apply_giftcard( $giftCardNumber ) {
 
 
 					WC()->session->giftcard_balance = $oldGiftcardValue - $orderTotal;
-					$msg = __( 'Gift card applied successfully.', WPR_CORE_TEXT_DOMAIN );
-					wc_add_notice(  __( 'Gift card applied successfully.', WPR_CORE_TEXT_DOMAIN ), 'success' );
 
 				} elseif ( $oldGiftcardValue < $orderTotal ) {
 					//  Giftcard Balance is less than the order total.
@@ -436,14 +435,10 @@ function wpr_apply_giftcard( $giftCardNumber ) {
 							WC()->session->giftcard_payment = $cartSubtotal;
 						}
 					}
-
-					wc_add_notice(  __( 'Gift card applied successfully.', WPR_CORE_TEXT_DOMAIN ), 'success' );
 				}
 			} else {
 				// Giftcard Entered has expired
 				wc_add_notice( __( 'Gift Card has expired!', WPR_CORE_TEXT_DOMAIN ), 'error' );
-
-
 			}
 		} else {
 			// Giftcard Entered does not exist
