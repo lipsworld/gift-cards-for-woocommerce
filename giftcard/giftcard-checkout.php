@@ -59,9 +59,6 @@ function woocommerce_ajax_apply_giftcard($giftcard_code) {
 					WC()->session->giftcard_post = $giftcard_found;
 					WC()->session->giftcard_id = $giftCardNumber;
 
-
-
-
 					if ( $oldGiftcardValue == 0 ) {
 						// Giftcard Entered does not have a balance
 						wc_add_notice( __( 'Gift Card does not have a balance!', WPR_CORE_TEXT_DOMAIN ), 'error' );
@@ -263,12 +260,12 @@ function rpgc_display_giftcard( $order ) {
 				echo '<div style="float: left; width: 45%; margin-right: 2%;>';
 				echo '<h6><strong> ' . __('Giftcard',  WPR_CORE_TEXT_DOMAIN ) . ' ' . $i . '</strong></h6>';
 				echo '<ul style="font-size: 0.85em; list-style: none outside none;">';
-				if ( $giftcard[rpgc_product_num] ) echo '<li>' . __('Card', WPR_CORE_TEXT_DOMAIN) . ': ' . get_the_title( $giftcard[rpgc_product_num] ) . '</li>';
-				if ( $giftcard[rpgc_to] ) echo  '<li>' . __('To',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_to] . '</li>';
-				if ( $giftcard[rpgc_to_email] ) echo  '<li>' . __('Send To',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_to_email] . '</li>';
-				if ( $giftcard[rpgc_balance] ) echo  '<li>' . __('Balance',  WPR_CORE_TEXT_DOMAIN ) . ': ' . woocommerce_price( $giftcard[rpgc_balance] ) . '</li>';
-				if ( $giftcard[rpgc_note] ) echo  '<li>' . __('Note',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_note] . '</li>';
-				if ( $giftcard[rpgc_quantity] ) echo  '<li>' . __('Quantity',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_quantity] . '</li>';
+				if ( $giftcard[rpgc_product_num] ) 	echo '<li>' . __('Card', WPR_CORE_TEXT_DOMAIN) . ': ' . get_the_title( $giftcard[rpgc_product_num] ) . '</li>';
+				if ( $giftcard[rpgc_to] ) 			echo '<li>' . __('To',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_to] . '</li>';
+				if ( $giftcard[rpgc_to_email] ) 	echo '<li>' . __('Send To',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_to_email] . '</li>';
+				if ( $giftcard[rpgc_balance] ) 		echo '<li>' . __('Balance',  WPR_CORE_TEXT_DOMAIN ) . ': ' . woocommerce_price( $giftcard[rpgc_balance] ) . '</li>';
+				if ( $giftcard[rpgc_note] ) 		echo '<li>' . __('Note',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_note] . '</li>';
+				if ( $giftcard[rpgc_quantity] ) 	echo '<li>' . __('Quantity',  WPR_CORE_TEXT_DOMAIN ) . ': ' . $giftcard[rpgc_quantity] . '</li>';
 				echo '</ul>';
 				echo '</div>';
 				if ( !( $i % 2 ) ) echo '</div>';

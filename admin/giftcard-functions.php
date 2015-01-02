@@ -33,31 +33,31 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 	", $post->post_title ) );
 
 	if ( isset( $_POST['rpgc_description'] ) ) {
-		$description = woocommerce_clean( $_POST['rpgc_description'] );
+		$description 	= woocommerce_clean( $_POST['rpgc_description'] );
 		update_post_meta( $post_id, 'rpgc_description', $description );
 	}
 	if ( isset( $_POST['rpgc_to'] ) ) {
-		$to    = woocommerce_clean( $_POST['rpgc_to'] );
+		$to    			= woocommerce_clean( $_POST['rpgc_to'] );
 		update_post_meta( $post_id, 'rpgc_to', $to );
 	}
 	if ( isset( $_POST['rpgc_email_to'] ) ) {
-		$toEmail  = woocommerce_clean( $_POST['rpgc_email_to'] );
+		$toEmail  		= woocommerce_clean( $_POST['rpgc_email_to'] );
 		update_post_meta( $post_id, 'rpgc_email_to', $toEmail );
 	}
 	if ( isset( $_POST['rpgc_from'] ) ) {
-		$from    = woocommerce_clean( $_POST['rpgc_from'] );
+		$from 			= woocommerce_clean( $_POST['rpgc_from'] );
 		update_post_meta( $post_id, 'rpgc_from', $from );
 	}
 	if ( isset( $_POST['rpgc_email_from'] ) ) {
-		$fromEmail  = woocommerce_clean( $_POST['rpgc_email_from'] );
+		$fromEmail 		= woocommerce_clean( $_POST['rpgc_email_from'] );
 		update_post_meta( $post_id, 'rpgc_email_from', $fromEmail );
 	}
 	if ( isset( $_POST['rpgc_amount'] ) ) {
-		$amount   = woocommerce_clean( $_POST['rpgc_amount'] );
+		$amount 		= woocommerce_clean( $_POST['rpgc_amount'] );
 		update_post_meta( $post_id, 'rpgc_amount', $amount );
 
 		if ( ! isset( $_POST['rpgc_balance'] ) ) {
-			$balance   = woocommerce_clean( $_POST['rpgc_amount'] );
+			$balance 	= woocommerce_clean( $_POST['rpgc_amount'] );
 			update_post_meta( $post_id, 'rpgc_balance', $balance );
 			$sendTheEmail = 1;
 		}
@@ -87,27 +87,27 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 	}
 
 	if( ( ( $sendTheEmail == 1 ) && ( $balance <> 0 ) ) || isset( $_POST['rpgc_resend_email'] ) ) {
-		$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
-		$subject = apply_filters( 'woocommerce_email_subject_gift_card', sprintf( '[%s] %s', $blogname, __( 'Gift Card Information', WPR_CORE_TEXT_DOMAIN ) ), $post->post_title );
-		$sendEmail = get_bloginfo( 'admin_email' );
+		$blogname 		= wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+		$subject 		= apply_filters( 'woocommerce_email_subject_gift_card', sprintf( '[%s] %s', $blogname, __( 'Gift Card Information', WPR_CORE_TEXT_DOMAIN ) ), $post->post_title );
+		$sendEmail 		= get_bloginfo( 'admin_email' );
 
 		ob_start();
 
-		$mailer        = WC()->mailer();
+		$mailer 		= WC()->mailer();
 		$theMessage 	= sendGiftcardEmail ( $post );
 
 		$theMessage 	= apply_filters( 'rpgc_emailContents', $theMessage );
 
-	  	$email_heading = __( 'New gift card from ', WPR_CORE_TEXT_DOMAIN ) . $blogname;
-	  	$email_heading = apply_filters( 'rpgc_emailSubject', $email_heading );
+	  	$email_heading 	= __( 'New gift card from ', WPR_CORE_TEXT_DOMAIN ) . $blogname;
+	  	$email_heading 	= apply_filters( 'rpgc_emailSubject', $email_heading );
 
 	  	echo $mailer->wrap_message( $email_heading, $theMessage );
 
-		$message = ob_get_clean();
+		$message 		= ob_get_clean();
 		//	CC, BCC, additional headers
-		$headers = "From: " . $sendEmail . "\r\n" . " Reply-To: " . $sendEmail . "\r\n" . " Content-Type: text/html\r\n";
+		$headers 		= "From: " . $sendEmail . "\r\n" . " Reply-To: " . $sendEmail . "\r\n" . " Content-Type: text/html\r\n";
 		// Attachments
-		$attachments = apply_filters('woocommerce_email_attachments', '', 'gift_card', $post->post_title);
+		$attachments 	= apply_filters('woocommerce_email_attachments', '', 'gift_card', $post->post_title);
 
 		// Send the mail
 		add_filter('wp_mail_from', 'rpgc_res_fromemail');
