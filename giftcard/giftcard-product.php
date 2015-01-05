@@ -31,6 +31,7 @@ function rpgc_process_meta( $post_id, $post ) {
 	
 	if( $is_giftcard == 'yes' ) {
 		update_post_meta( $post_id, '_giftcard', $is_giftcard );
+		update_post_meta( $post_id, '_sold_individually', $is_giftcard );
 
 		$want_physical = get_option( 'woocommerce_enable_physical' );
 
@@ -39,7 +40,6 @@ function rpgc_process_meta( $post_id, $post ) {
 			update_post_meta( $post_id, '_virtual', $is_giftcard );
 		}
 	}
-
 }
 add_action( 'save_post', 'rpgc_process_meta', 10, 2 );
 
@@ -83,8 +83,4 @@ function wpr_change_add_to_cart_button ( $link ) {
 
 	return  apply_filters( 'wpr_change_add_to_cart_button', $link, $post);
 }
-
-
 add_filter( 'woocommerce_loop_add_to_cart_link', 'wpr_change_add_to_cart_button' );
-
-

@@ -45,6 +45,7 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 * ADD: Sales price added
 * ADD: Ability to add multiple settings pages
 * FIX: On cart update gift card recalculated
+* FIX: Fixed quantity display
 
 = 1.6.2 
 * FIX: Gift Card Number Creation for translated sites
