@@ -128,7 +128,7 @@ add_action( 'save_post', 'rpgc_process_giftcard_meta', 20, 2 );
 
 function sendGiftcardEmail ( $giftCard ) {
 	$expiry_date = get_post_meta( $giftCard->ID, 'rpgc_balance', true);
-	$date_format = get_option('date_format');//date($date_format, $expiry_date)
+	$date_format = get_option('date_format');
 	ob_start();
 	?>
 
