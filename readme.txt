@@ -44,8 +44,11 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 = 1.6.3 =
 * ADD: Sales price added
 * ADD: Ability to add multiple settings pages
+* ADD: Function look for Gift Card Values
 * FIX: On cart update gift card recalculated
 * FIX: Fixed quantity display
+* FIX: Number generation for site not using english
+* FIX: Expiration reporting on emails
 
 = 1.6.2 
 * FIX: Gift Card Number Creation for translated sites

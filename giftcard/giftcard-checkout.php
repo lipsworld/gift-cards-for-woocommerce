@@ -285,7 +285,7 @@ function rpgc_display_giftcard( $order ) {
 	if( isset( $theIDNum ) ) {
 		if ( $theIDNum <> '' ) {
 		?>
-			<h4><?php _e( 'Remaining Gift Card Balance:', WPR_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance ); ?> <?php do_action('wpr_after_remaining_balance', $theIDNum, $theBalance ); ?></h4>
+			<h4><?php _e( 'Gift Card Balance After Order:', WPR_CORE_TEXT_DOMAIN ); ?><?php echo ' ' . woocommerce_price( $theBalance ); ?> <?php do_action('wpr_after_remaining_balance', $theIDNum, $theBalance ); ?></h4>
 
 			<?php
 			
@@ -334,7 +334,7 @@ function rpgc_add_order_giftcard( $total_rows,$order ) {
 
 	$giftCardPayment = get_post_meta( $order_id, 'rpgc_payment', true);
 
-	if ($giftCardPayment <> 0 ) {
+	if ( $giftCardPayment <> 0 ) {
 		$newRow['rpgc_data'] = array(
 			'label' => __( 'Gift Card Payment:', WPR_CORE_TEXT_DOMAIN ),
 			'value'	=> woocommerce_price( -1 * $giftCardPayment )
@@ -362,25 +362,22 @@ add_filter( 'woocommerce_get_order_item_totals', 'rpgc_add_order_giftcard', 10, 
 function rpgc_update_card( $order_id ) {
 	global $woocommerce;
 
-	if ( WC()->session->giftcard_post <> '' ) {
-		// Check if the gift card ballance is 0 and if it is change the post status to zerobalance
-		if( WC()->session->giftcard_balance == 0 ) {
-			$my_post = array(
-		    	'ID'           => WC()->session->giftcard_post,
-		    	'post_status'  => 'zerobalance'
-	  		);
+	$giftCard_id = WC()->session->giftcard_post;
 
-			// Update the post into the database
-			  wp_update_post( $my_post );
-		}
+	if ( $giftCard_id <> '' ) {
+		$newBalance = wpr_get_giftcard_balance( $giftCard_id ) - WC()->session->giftcard_payment;
+
+		// Check if the gift card ballance is 0 and if it is change the post status to zerobalance
+		if( wpr_get_giftcard_balance( $giftCard_id ) == 0 )
+			wpr_update_giftcard_status( $giftCard_id, 'zerobalance' );
 		
-		update_post_meta( WC()->session->giftcard_post, 'rpgc_balance', WC()->session->giftcard_balance ); // Update balance of Giftcard
-		update_post_meta( $order_id, 'rpgc_id', WC()->session->giftcard_id );
+		update_post_meta( $giftCard_id, 'rpgc_balance', $newBalance ); // Update balance of Giftcard
+		update_post_meta( $order_id, 'rpgc_id', $giftCard_id );
 		update_post_meta( $order_id, 'rpgc_payment', WC()->session->giftcard_payment );
-		update_post_meta( $order_id, 'rpgc_balance', WC()->session->giftcard_balance );
+		update_post_meta( $order_id, 'rpgc_balance', $newBalance );
 
 		WC()->session->idForEmail = $order_id;
-		unset( WC()->session->giftcard_id, WC()->session->giftcard_payment, WC()->session->giftcard_post, WC()->session->giftcard_balance );
+		unset( WC()->session->giftcard_payment, WC()->session->giftcard_post );
 	}
 
 	if ( isset ( WC()->session->giftcard_data ) ) {
