@@ -27,7 +27,7 @@ function wpr_update_giftcard_status( $code_id = 0, $new_status = 'active' ) {
 }
 
 /**
- * Retrieve the giftcard code expiration date
+ * Retrieve the giftcard number
  *
  * @since 1.4
  * @param int $code_id Giftcard ID
@@ -40,11 +40,11 @@ function wpr_get_giftcard_number( $code_id = null ) {
 }
 
 /**
- * Retrieve the giftcard code
+ * Retrieve the giftcard to name
  *
  * @since 1.4
  * @param int $code_id
- * @return string $code Giftcard Code
+ * @return string $code Giftcard To Name
  */
 function wpr_get_giftcard_to( $code_id = null ) {
 	$to = get_post_meta( $code_id, 'rpgc_to', true );
@@ -53,11 +53,11 @@ function wpr_get_giftcard_to( $code_id = null ) {
 }
 
 /**
- * Retrieve the giftcard code
+ * Retrieve the giftcard to email
  *
  * @since 1.4
  * @param int $code_id
- * @return string $code Giftcard Code
+ * @return string $code Giftcard To Email
  */
 function wpr_get_giftcard_to_email( $code_id = null ) {
 	$toEmail = get_post_meta( $code_id, 'rpgc_email_to', true );
@@ -66,11 +66,11 @@ function wpr_get_giftcard_to_email( $code_id = null ) {
 }
 
 /**
- * Retrieve the giftcard code
+ * Retrieve the giftcard from
  *
  * @since 1.4
  * @param int $code_id
- * @return string $code Giftcard Code
+ * @return string $code Giftcard From Name
  */
 function wpr_get_giftcard_from( $code_id = null ) {
 	$from = get_post_meta( $code_id, 'rpgc_from', true );
@@ -79,11 +79,11 @@ function wpr_get_giftcard_from( $code_id = null ) {
 }
 
 /**
- * Retrieve the giftcard code
+ * Retrieve the giftcard from email
  *
  * @since 1.4
  * @param int $code_id
- * @return string $code Giftcard Code
+ * @return string $code Giftcard From Email
  */
 function wpr_get_giftcard_from_email( $code_id = null ) {
 	$fromEmail = get_post_meta( $code_id, 'rpgc_email_from', true );
@@ -92,11 +92,11 @@ function wpr_get_giftcard_from_email( $code_id = null ) {
 }
 
 /**
- * Retrieve the giftcard code
+ * Retrieve the giftcard note
  *
  * @since 1.4
  * @param int $code_id
- * @return string $code Giftcard Code
+ * @return string $code Giftcard Note
  */
 function wpr_get_giftcard_note( $code_id = null ) {
 	$note = get_post_meta( $code_id, 'rpgc_note', true );
@@ -122,7 +122,7 @@ function wpr_get_giftcard_expiration( $code_id = null ) {
  *
  * @since 1.4
  * @param int $code_id Giftcard ID
- * @return int $amount Giftcard code amounts
+ * @return int $amount Giftcard code amount
  * @return float
  */
 function wpr_get_giftcard_amount( $code_id = null ) {
@@ -136,7 +136,7 @@ function wpr_get_giftcard_amount( $code_id = null ) {
  *
  * @since 1.4
  * @param int $code_id Giftcard ID
- * @return int $amount Giftcard code amounts
+ * @return int $amount Giftcard code balance
  * @return float
  */
 function wpr_get_giftcard_balance( $code_id = null ) {
@@ -145,12 +145,44 @@ function wpr_get_giftcard_balance( $code_id = null ) {
 	return (float) apply_filters( 'wpr_get_giftcard_balance', $balance, $code_id );
 }
 
+
+/**
+ * Sets the giftcard balance
+ *
+ * @since 1.4
+ * @param int $code_id Giftcard ID
+ * @return int $amount Giftcard code amounts
+ * @return float
+ */
 function wpr_set_giftcard_balance( $code_id = null, $newBalance = null ) {
 	update_post_meta( $code_id, 'rpgc_balance', $newBalance );
 }
 
 
+// Order Gift Card Functions
+// ******************************************************************************************
+
+function wpr_get_order_card_number ( $order_id = null ) {
+	$id = get_post_meta( $order_id, 'rpgc_id', true );
+	$number = get_the_title( $id );
+
+	return apply_filters( 'wpr_get_order_card_number', $number, $order_id );
+}
+
+function wpr_get_order_card_balance ( $order_id = null ) {
+	$balance = get_post_meta( $order_id, 'rpgc_balance', true );
+
+	return apply_filters( 'wpr_get_order_card_balance', $balance, $order_id );
+}
+
+function wpr_get_order_card_payment ( $order_id = null ) {
+	$payment = get_post_meta( $order_id, 'rpgc_payment', true );
+
+	return apply_filters( 'wpr_get_order_card_payment', $payment, $order_id );
+}
 	
+
+
 
 function wpr_is_giftcard ( $giftcard_id ) {
 	$giftcard = get_post_meta( $giftcard_id, '_giftcard', true );
