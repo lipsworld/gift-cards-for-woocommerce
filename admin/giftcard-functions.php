@@ -127,7 +127,8 @@ function rpgc_process_giftcard_meta( $post_id, $post ) {
 add_action( 'save_post', 'rpgc_process_giftcard_meta', 20, 2 );
 
 function sendGiftcardEmail ( $giftCard ) {
-
+	$expiry_date = get_post_meta( $giftCard->ID, 'rpgc_balance', true);
+	$date_format = get_option('date_format');//date($date_format, $expiry_date)
 	ob_start();
 	?>
 
@@ -143,7 +144,7 @@ function sendGiftcardEmail ( $giftCard ) {
 
 		<?php
 		if ( $expiry_date != "" ) {
-			echo __( 'Expiration Date', WPR_CORE_TEXT_DOMAIN ) . ': ' . get_post_meta( $giftCard->ID, 'rpgc_expiry_date', true);
+			echo __( 'Expiration Date', WPR_CORE_TEXT_DOMAIN ) . ': ' . date_i18n( get_option( 'date_format' ), strtotime( $expiry_date ) );
 		}
 		?>
 	</div>
@@ -185,12 +186,14 @@ function rpgc_res_fromname($email){
  */
 function rpgc_create_number( $data , $postarr ) {
 	
-	if ( ( $data['post_type'] == 'rp_shop_giftcard' ) && ( $_POST["original_publish"] == "Publish" ) ) {
+	if( isset ( $_POST['original_publish'] ) ) {
+		if ( ( $data['post_type'] == 'rp_shop_giftcard' ) && ( $_POST['original_publish'] == "Publish" ) ) {
 
-		$myNumber = rpgc_generate_number( );		
-		
-		$data['post_title'] = $myNumber;
-		$data['post_name'] = $myNumber;
+			$myNumber = rpgc_generate_number( );		
+			
+			$data['post_title'] = $myNumber;
+			$data['post_name'] = $myNumber;
+		}
 	}
 
 	return apply_filters('rpgc_create_number', $data);
