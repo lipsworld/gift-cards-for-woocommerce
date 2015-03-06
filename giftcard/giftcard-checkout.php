@@ -362,8 +362,14 @@ function rpgc_update_card( $order_id ) {
 		// Check if the gift card ballance is 0 and if it is change the post status to zerobalance
 		if( wpr_get_giftcard_balance( $giftCard_id ) == 0 )
 			wpr_update_giftcard_status( $giftCard_id, 'zerobalance' );
-		
+
+
+		$giftCard_IDs = get_post_meta ( $giftCard_id, 'wpr_existingOrders_id', true );
+		$giftCard_IDs[] = $order_id;
+
+
 		update_post_meta( $giftCard_id, 'rpgc_balance', $newBalance ); // Update balance of Giftcard
+		update_post_meta( $giftCard_id, 'wpr_existingOrders_id', $giftCard_IDs ); // Saves order id to gifctard post
 		update_post_meta( $order_id, 'rpgc_id', $giftCard_id );
 		update_post_meta( $order_id, 'rpgc_payment', WC()->session->giftcard_payment );
 		update_post_meta( $order_id, 'rpgc_balance', $newBalance );
@@ -388,40 +394,38 @@ add_action( 'woocommerce_checkout_order_processed', 'rpgc_update_card' );
 
 function wpr_display_giftcard_in_cart() {
 	$cart = WC()->session->cart;
-
+	$gift = 0;
 	$card = array();
 
 	foreach( $cart as $key => $product ) {
 
-		if( wpr_is_giftcard($product['product_id'] ) ){
+		if( wpr_is_giftcard($product['product_id'] ) )
+				$card[] = $product;
 
-			$card[] = $product;
-		}
 	}
 
-	$gift = 0;
+	if( ! empty( $card ) ) {
+		echo '<h6>Gift Cards In Cart</h6>';
+		echo '<table width="100%" class="shop_table cart">';
+		echo '<thead>';
+		echo '<tr><td>' . __( 'Gift Card' ) . '</td><td>' . __( 'Name', 'rpgiftcards' ) . '</td><td>' . __( 'Email', 'rpgiftcards' ) . '</td><td>' . __( 'Price', 'rpgiftcards' ) . '</td><td>' . __( 'Note', 'rpgiftcards' ) . '</td></tr>';
+		echo '</thead>';
+		foreach( $card as $key => $information ) {
+			
+			if( wpr_is_giftcard($information['product_id'] ) ){
+				$gift += 1;
 
-	echo '<h6>Gift Cards In Cart</h6>';
-	echo '<table width="100%" class="shop_table cart">';
-	echo '<thead>';
-	echo '<tr><td>' . __( 'Gift Card' ) . '</td><td>' . __( 'Name', 'rpgiftcards' ) . '</td><td>' . __( 'Email', 'rpgiftcards' ) . '</td><td>' . __( 'Price', 'rpgiftcards' ) . '</td><td>' . __( 'Note', 'rpgiftcards' ) . '</td></tr>';
-	echo '</thead>';
-	foreach( $card as $key => $information ) {
-		
-		if( wpr_is_giftcard($information['product_id'] ) ){
-			$gift += 1;
-
-			echo '<tr style="font-size: 0.8em">';
-				echo '<td>Gift Card ' . $gift . '</td>';
-				echo '<td>' . $information["variation"]["To"] . '</td>';
-				echo '<td>' . $information["variation"]["To Email"] . '</td>';
-				echo '<td>' . woocommerce_price( $information["line_total"] ) . '</td>';
-				echo '<td>' . $information["variation"]["Note"] . '</td>';
-			echo '</tr>';
+				echo '<tr style="font-size: 0.8em">';
+					echo '<td>Gift Card ' . $gift . '</td>';
+					echo '<td>' . $information["variation"]["To"] . '</td>';
+					echo '<td>' . $information["variation"]["To Email"] . '</td>';
+					echo '<td>' . woocommerce_price( $information["line_total"] ) . '</td>';
+					echo '<td>' . $information["variation"]["Note"] . '</td>';
+				echo '</tr>';
+			}
 		}
+		echo '</table>';
 	}
-	echo '</table>';
-
 }
 add_action( 'woocommerce_after_cart_table', 'wpr_display_giftcard_in_cart' );
 
