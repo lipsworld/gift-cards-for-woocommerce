@@ -15,6 +15,7 @@ function rpgc_cart_form() {
 		do_action( 'wpr_before_cart_form' );
 		
 		?>
+		
 		<div class="giftcard" style="float: left;">
 			<label for="giftcard_code" style="display: none;"><?php _e( 'Giftcard', 'rpgiftcards' ); ?>:</label>
 			<input type="text" name="giftcard_code" class="input-text" id="giftcard_code" value="" placeholder="<?php _e( 'Gift Card', 'rpgiftcards' ); ?>" />
@@ -25,7 +26,7 @@ function rpgc_cart_form() {
 	}
 
 }
-add_action( 'woocommerce_proceed_to_checkout', 'rpgc_cart_form' );
+add_action( 'woocommerce_cart_actions', 'rpgc_cart_form' );
 
 
 function apply_cart_giftcard( ) {
@@ -140,6 +141,7 @@ function rpgc_cart_fields( ) {
 		$rpw_to_check 		= ( $rpw_to <> NULL ? $rpw_to : __('To', 'rpgiftcards' ) );
 		$rpw_toEmail_check 	= ( $rpw_toEmail <> NULL ? $rpw_toEmail : __('To Email', 'rpgiftcards' )  );
 		$rpw_note_check		= ( $rpw_note <> NULL ? $rpw_note : __('Note', 'rpgiftcards' )  );
+
 		?>
 
 		<div>
@@ -165,6 +167,6 @@ function rpgc_cart_fields( ) {
 	    ';
 	}
 }
-add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' ); //woocommerce_before_add_to_cart_buttons
+add_action( 'woocommerce_before_add_to_cart_button', 'rpgc_cart_fields' );
 
 
