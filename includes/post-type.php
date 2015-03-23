@@ -1,6 +1,6 @@
 <?php
 /**
- * Scripts
+ * Setup Post Type
  *
  * @package     Gift Cards For WooCommerce
  * @since       1.0.0

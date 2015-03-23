@@ -1,10 +1,16 @@
 <?php
-
-
-
+/**
+ * Gift Card Metabox Functions
+ *
+ * @package     Gift-Cards-for-Woocommerce
+ * @copyright   Copyright (c) 2014, Ryan Pletcher
+ *
+ */
 
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+
 
 
 if ( is_admin() ) {

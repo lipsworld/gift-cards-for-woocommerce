@@ -1,6 +1,9 @@
 <?php
 /**
- * WooCommerce Gift Card Settings
+ * Gift Card Admin Functions
+ *
+ * @package     Gift-Cards-for-Woocommerce
+ * @copyright   Copyright (c) 2014, Ryan Pletcher
  *
  */
 

@@ -1,6 +1,24 @@
 <?php
+/**
+ * Gift Card Save Functions
+ *
+ * @package     Gift-Cards-for-Woocommerce
+ * @copyright   Copyright (c) 2014, Ryan Pletcher
+ *
+ */
 
-	
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+
+
+
+
+
+
+
+
+
 /**
  */
 function rpgc_process_giftcard_meta( $post_id, $post ) {

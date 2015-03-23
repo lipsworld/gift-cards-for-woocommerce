@@ -1,10 +1,10 @@
 <?php
 /**
- * Checkout giftcard form
+ * Gift Card Forms Functions
  *
- * @author 		WooThemes
- * @package 	WooCommerce/Templates
- * @version     1.6.4
+ * @package     Gift-Cards-for-Woocommerce
+ * @copyright   Copyright (c) 2014, Ryan Pletcher
+ *
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly

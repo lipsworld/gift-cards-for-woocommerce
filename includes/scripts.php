@@ -2,7 +2,7 @@
 /**
  * Scripts
  *
- * @package     EDD\PluginName\Scripts
+ * @package     Gift-Cards-for-Woocommerce
  * @since       1.0.0
  */
 
@@ -30,7 +30,7 @@ function wpr_gift__admin_scripts( $hook ) {
      *				EDD settings page.
      */
     
-    wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css' );
+    //wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css' );
     //$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
     wp_enqueue_script( 'woocommerce_writepanel' );

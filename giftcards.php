@@ -10,7 +10,7 @@
  *
  * 
  * 
- * Text Domain:     plugin-name
+ * Text Domain:     rpgiftcards
  *
  * @package         Gift-Cards-for-Woocommerce
  * @author          Ryan Pletcher
@@ -104,7 +104,7 @@ if( !class_exists( 'WPRWooGiftcards' ) ) {
                 // Create all admin functions and pages
                 require_once RPWCGC_DIR . 'includes/admin/giftcard-columns.php';  
                 require_once RPWCGC_DIR . 'includes/admin/giftcard-metabox.php';  
-                require_once RPWCGC_DIR . 'includes/admin/giftcard-functions.php';
+                require_once RPWCGC_DIR . 'includes/admin/giftcard-save.php';
                 
             }
 
@@ -126,23 +126,12 @@ if( !class_exists( 'WPRWooGiftcards' ) ) {
          * @since       1.0.0
          * @return      void
          *
-         * @todo        The hooks listed in this section are a guideline, and
-         *              may or may not be relevant to your particular extension.
-         *              Please remove any unnecessary lines, and refer to the
-         *              WordPress codex and EDD documentation for additional
-         *              information on the included hooks.
-         *
-         *              This method should be used to add any filters or actions
-         *              that are necessary to the core of your extension only.
-         *              Hooks that are relevant to meta boxes, widgets and
-         *              the like can be placed in their respective files.
-         *
-         *              IMPORTANT! If you are releasing your extension as a
-         *              commercial extension in the EDD store, DO NOT remove
-         *              the license check!
          */
         private function hooks() {
             global $wpr_woo_giftcard_settings;
+            
+            if ( ! class_exists( 'WooCommerce' ) )
+                add_action( 'admin_notices', array( $this, 'no_woo_nag' ) );
             
             $wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
 
@@ -150,8 +139,7 @@ if( !class_exists( 'WPRWooGiftcards' ) ) {
             add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
             add_action( 'enqueue_scripts', array( $this, 'load_styes' ) );
 
-            if ( ! class_exists( 'WooCommerce' ) )
-                add_action( 'admin_notices', array( $this, 'no_woo_nag' ) );
+            
 
             if( is_admin() ) {
                 //add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_scripts' ), 99 );
@@ -247,10 +235,6 @@ if( !class_exists( 'WPRWooGiftcards' ) ) {
  * @since       1.0.0
  * @return      \WPRWooGiftcards The one true WPRWooGiftcards
  *
- * @todo        Inclusion of the activation code below isn't mandatory, but
- *              can prevent any number of errors, including fatal errors, in
- *              situations where your extension is activated but EDD is not
- *              present.
  */
 function WPRWooGiftcards_load() {
 

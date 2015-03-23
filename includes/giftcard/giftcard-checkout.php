@@ -1,12 +1,10 @@
 <?php
 /**
- * Product Functions
+ * Gift Card Checkout Functions
  *
- * @package     Woocommerce
- * @subpackage  Giftcards
+ * @package     Gift-Cards-for-Woocommerce
  * @copyright   Copyright (c) 2014, Ryan Pletcher
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.3
+ *
  */
 
 // Exit if accessed directly

@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -43,9 +43,10 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 == Changelog ==
 = 1.7.1 =
 * FIX: Positioning of gift card field for cart
-* FIX:
+* FIX: 
 * UPDATE: File Structure of plugin
-* ADD: Simple Email Editor
+* ADD: Simple email editor
+* ADD: Gift card usage display on gift card page
 
 = 1.7.0 =
 * UPDATE: Updating how options page functions for premium plugins
