@@ -191,7 +191,7 @@ class RPGC_Settings extends WC_Settings_Page {
 
 				//array( 'type' => 'excludeProduct' ),
 
-				array( 'type' => 'sectionend', 'id' => 'uses_giftcard_options'),
+				/*array( 'type' => 'sectionend', 'id' => 'uses_giftcard_options'),
 
 				array( 'title' 		=> __( 'Gift Card Email',  'rpgiftcards'  ), 'type' => 'title', 'id' => 'giftcard_email_title' ),
 
@@ -203,7 +203,7 @@ class RPGC_Settings extends WC_Settings_Page {
 					'css'     		=> 'width:100%; height: 65px;',
 					'type'          => 'textarea',
 					'autoload'      => true
-				),
+				),*/
 
 				array( 'type' => 'sectionend', 'id' => 'email_giftcard_options'),
 
