@@ -2,8 +2,8 @@
 Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 1.7.3
+Tested up to: 4.2
+Stable tag: 1.7.6.1
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -41,8 +41,27 @@ Q: Can I customize the email that is sent out?
 A: Unfortunately that is not a current feature.  The format of the email will match the email format of your site.  I will be looking into making it a feature in the future.
 
 == Changelog ==
+= 2.0.0 =
+* FIX: Payment processing through paypa l(Still working on)
+* FIX: Payment processing through Mejihan (Still working on)
+* UPDATE: Optimized code for better database management
+* ADD: Database updater (Still working on)
+* ADD: Ability to manually set Gift card number on creation
+* ADD: Short code to decrease card value Manually (Still working on)
+
+
+= 1.7.6.1 =
+* FIX: Email Error
+
+= 1.7.6 =
+* FIX: Text field options
+
+= 1.7.5 =
+* FIX: Duplicate card numbers being created
+
 = 1.7.4 =
 * FIX: Fixed plugin localization
+* FIX: Email templates
 
 = 1.7.3 =
 * FIX: Test email removed

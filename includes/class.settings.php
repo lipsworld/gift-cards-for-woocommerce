@@ -180,7 +180,8 @@ class RPGC_Settings extends WC_Settings_Page {
 					'type'          => 'checkbox',
 					'autoload'      => true
 				),
-				/*array(
+				/*
+				array(
 					'title'         => __( 'Other Gift Cards',  'rpgiftcards'  ),
 					'desc'          => __( 'Allow customers to pay for gift cards with their existing gift card.',  'rpgiftcards'  ),
 					'id'            => 'woocommerce_enable_giftcard_charge_giftcard',
@@ -189,11 +190,11 @@ class RPGC_Settings extends WC_Settings_Page {
 					'autoload'      => true
 				),*/
 
-				//array( 'type' => 'excludeProduct' ),
+				array( 'type' => 'excludeProduct' ),
 
-				/*array( 'type' => 'sectionend', 'id' => 'uses_giftcard_options'),
+				array( 'type' => 'sectionend', 'id' => 'uses_giftcard_options'),
 
-				array( 'title' 		=> __( 'Gift Card Email',  'rpgiftcards'  ), 'type' => 'title', 'id' => 'giftcard_email_title' ),
+				/*array( 'title' 		=> __( 'Gift Card Email',  'rpgiftcards'  ), 'type' => 'title', 'id' => 'giftcard_email_title' ),
 
 				array(
 					'title'         => __( 'Email Message',  'rpgiftcards'  ),
@@ -203,9 +204,9 @@ class RPGC_Settings extends WC_Settings_Page {
 					'css'     		=> 'width:100%; height: 65px;',
 					'type'          => 'textarea',
 					'autoload'      => true
-				),*/
+				),
 
-				array( 'type' => 'sectionend', 'id' => 'email_giftcard_options'),
+				array( 'type' => 'sectionend', 'id' => 'email_giftcard_options'),*/
 
 				array( 'title' 		=> __( 'Product Options',  'rpgiftcards'  ), 'type' => 'title', 'id' => 'giftcard_products_options_title' ),
 
@@ -355,7 +356,6 @@ class RPGC_Settings extends WC_Settings_Page {
 	}
 
 	public function activatedPlugins() {
-
 		if( defined( 'WPR_GC_PRO_TEXT' ) || defined( 'RPWCGC_AUTO_CORE_TEXT_DOMAIN' ) || defined( 'WPR_CP_CORE_TEXT_DOMAIN' ) || defined( 'RPWCGC_CN_CORE_TEXT_DOMAIN' ) )
 			return true;
 
@@ -368,6 +368,9 @@ class RPGC_Settings extends WC_Settings_Page {
 
 
 	public function excludeProducts() {
+		if( isset( $_POST['wpr_giftcard_exclude_product_ids'] ) ) 
+			update_option( 'wpr_giftcard_exclude_product_ids', $_POST['wpr_giftcard_exclude_product_ids'] );
+			
 		?>
 			<tr valign="top" class="">
 				<th class="titledesc" scope="row">
@@ -376,8 +379,8 @@ class RPGC_Settings extends WC_Settings_Page {
 				</th>
 					<td class="forminp forminp-checkbox">
 					<fieldset>
-						<input type="hidden" class="wc-product-search" data-multiple="true" style="width: 50%;" name="exclude_product_ids" data-placeholder="<?php _e( 'Search for a product&hellip;', 'rpgiftcards' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-selected="<?php
-							$product_ids = array_filter( array_map( 'absint', explode( ',', get_option( 'exclude_product_ids' ) ) ) );
+						<input type="hidden" class="wc-product-search" data-multiple="true" style="width: 50%;" name="wpr_giftcard_exclude_product_ids" data-placeholder="<?php _e( 'Search for a product&hellip;', 'rpgiftcards' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-selected="<?php
+							$product_ids = array_filter( array_map( 'absint', explode( ',', get_option( 'wpr_giftcard_exclude_product_ids' ) ) ) );
 							$json_ids    = array();
 
 							foreach ( $product_ids as $product_id ) {
@@ -393,8 +396,5 @@ class RPGC_Settings extends WC_Settings_Page {
 		<?php
 
 	}
-
 }
-
-
-return new RPGC_Settings();
+//return new RPGC_Settings();

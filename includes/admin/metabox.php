@@ -13,9 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
 
-if ( is_admin() ) {
+if ( is_admin()  ) {
     add_action( 'load-post.php', 'call_WPR_Gift_Card_Meta' );
     add_action( 'load-post-new.php', 'call_WPR_Gift_Card_Meta' );
+
 }
 
 /** 
@@ -29,6 +30,11 @@ class WPR_Gift_Card_Meta {
 	public function __construct() {
 		add_action( 'add_meta_boxes', array( $this, 'rpgc_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save' ) );
+		
+		if( isset( $_GET['post_type'] ) ) {
+			if ( $_GET['post_type'] == 'rp_shop_giftcard' )
+				add_action( 'post_submitbox_misc_actions', array( $this, 'wpr_giftcard_title' ) );
+		}
 	}
 
 	/**
@@ -37,17 +43,11 @@ class WPR_Gift_Card_Meta {
 	 * @param int $post_id The ID of the post being saved.
 	 */
 	public function save( $post_id ) {
-	
 		global $post, $wpdb;
-		/*
-		 * We need to verify this came from the our screen and with proper authorization,
-		 * because save_post can be triggered at other times.
-		 */
 
 		// Check if our nonce is set.
 		if ( ! isset( $_POST['woocommerce_giftcard_nonce'] ) )
 			return $post_id;
-
 
 		$nonce = $_POST['woocommerce_giftcard_nonce'];
 
@@ -74,92 +74,11 @@ class WPR_Gift_Card_Meta {
 
 		/* OK, its safe for us to save the data now. */
 
-		$description  		= '';
-		$to     			= '';
-		$toEmail   			= '';
-		$from     			= '';
-		$fromEmail   		= '';
-		$sendto_from   		= '';
-		$sendautomaticly 	= '';
-		$amount    			= '';
-		$balance   			= '';
-		$note    			= '';
-		$expiry_date   		= '';
-		$sendTheEmail  		= 0;
+		$newGift = new WPR_Giftcard();
+		$newGift->createCard( $_POST );
 
-		
-		// Ensure gift card code is correctly formatted
-		//$wpdb->update( $wpdb->posts, array( 'post_title' => $post->post_title ), array( 'ID' => $post_id ) );
-
-		if ( wpr_get_giftcard_by_code( $post->post_title ) ) {
-			$newNumber = apply_filters( 'rpgc_regen_number', rpgc_generate_number());
-
-			$wpdb->update( $wpdb->posts, array( 'post_title' => $newNumber ), array( 'ID' => $post_id ) );
-			$wpdb->update( $wpdb->posts, array( 'post_name' => $newNumber ), array( 'ID' => $post_id ) );
-		}
-
-		if ( isset( $_POST['rpgc_description'] ) ) {
-			$description 	= woocommerce_clean( $_POST['rpgc_description'] );
-			update_post_meta( $post_id, 'rpgc_description', $description );
-		}
-		if ( isset( $_POST['rpgc_to'] ) ) {
-			$to    			= woocommerce_clean( $_POST['rpgc_to'] );
-			update_post_meta( $post_id, 'rpgc_to', $to );
-		}
-		if ( isset( $_POST['rpgc_email_to'] ) ) {
-			$toEmail  		= woocommerce_clean( $_POST['rpgc_email_to'] );
-			update_post_meta( $post_id, 'rpgc_email_to', $toEmail );
-		}
-		if ( isset( $_POST['rpgc_from'] ) ) {
-			$from 			= woocommerce_clean( $_POST['rpgc_from'] );
-			update_post_meta( $post_id, 'rpgc_from', $from );
-		}
-		if ( isset( $_POST['rpgc_email_from'] ) ) {
-			$fromEmail 		= woocommerce_clean( $_POST['rpgc_email_from'] );
-			update_post_meta( $post_id, 'rpgc_email_from', $fromEmail );
-		}
-		if ( isset( $_POST['rpgc_amount'] ) ) {
-			$amount 		= woocommerce_clean( $_POST['rpgc_amount'] );
-			update_post_meta( $post_id, 'rpgc_amount', $amount );
-
-			if ( ! isset( $_POST['rpgc_balance'] ) ) {
-				$balance 	= woocommerce_clean( $_POST['rpgc_amount'] );
-				update_post_meta( $post_id, 'rpgc_balance', $balance );
-				$sendTheEmail = 1;
-			}
-		}
-		if ( isset( $_POST['rpgc_balance'] ) ) {
-			$balance   = woocommerce_clean( $_POST['rpgc_balance'] );
-			update_post_meta( $post_id, 'rpgc_balance', $balance );
-		}
-		if ( isset( $_POST['rpgc_note'] ) ) {
-			$note   = woocommerce_clean( $_POST['rpgc_note'] );
-			update_post_meta( $post_id, 'rpgc_note', $note );
-		}
-		if ( isset( $_POST['rpgc_expiry_date'] ) ) {
-			$expiry_date = woocommerce_clean( $_POST['rpgc_expiry_date'] );
-			update_post_meta( $post_id, 'rpgc_expiry_date', $expiry_date );
-		} else {
-			$expiry_date = '';
-		}
-
-		if ( isset( $_POST['rpgc_regen_number'] ) ) {
-			$newNumber = apply_filters( 'rpgc_regen_number', rpgc_generate_number());
-
-			$wpdb->update( $wpdb->posts, array( 'post_title' => $newNumber ), array( 'ID' => $post_id ) );
-			$wpdb->update( $wpdb->posts, array( 'post_name' => $newNumber ), array( 'ID' => $post_id ) );
-
-		}
-
-		if( ( ( $sendTheEmail == 1 ) && ( $balance <> 0 ) ) || isset( $_POST['rpgc_resend_email'] ) ) {
-			WPR_Giftcard_Email::sendEmail( $post );
-			//do_action( 'wpr_send_giftcard_email', $post_id );
-		}
-
-		/* Deprecated - same hook name as in the meta */
 		do_action( 'woocommerce_rpgc_options' );
-		do_action( 'woocommerce_rpgc_options_save' );
-
+		
 	}
 
 
@@ -193,8 +112,8 @@ class WPR_Gift_Card_Meta {
 					'default'
 				);
 
-		if ( ! isset( $_GET['action'] ) ) 
-			remove_post_type_support( 'rp_shop_giftcard', 'title' );
+		//if ( ! isset( $_GET['action'] ) ) 
+		//	remove_post_type_support( 'rp_shop_giftcard', 'title' );
 		
 		if ( isset ( $_GET['action'] ) ) {
 			add_meta_box(
@@ -221,8 +140,6 @@ class WPR_Gift_Card_Meta {
 		remove_meta_box( 'commentsdiv', 'rp_shop_giftcard' , 'normal' );
 		remove_meta_box( 'slugdiv', 'rp_shop_giftcard' , 'normal' );
 	}
-	//add_action( 'add_meta_boxes', 'rpgc_meta_boxes' );
-
 
 	/**
 	 * Creates the Giftcard Meta Box in the admin control panel when in the Giftcard Post Type.  Allows you to create a giftcard manually.
@@ -233,6 +150,9 @@ class WPR_Gift_Card_Meta {
 		global $woocommerce;
 
 		wp_nonce_field( 'woocommerce_save_data', 'woocommerce_giftcard_nonce' );
+
+		$giftValue = get_post_meta( $post->ID, '_wpr_giftcard', true );
+
 		?>
 		<style type="text/css">
 			#edit-slug-box, #minor-publishing-actions { display:none }
@@ -255,6 +175,7 @@ class WPR_Gift_Card_Meta {
 				'label'			=> __( 'Gift Card description', 'rpgiftcards' ),
 				'placeholder' 	=> '',
 				'description' 	=> __( 'Optionally enter a description for this gift card for your reference.', 'rpgiftcards' ),
+				'value'			=> isset( $giftValue['description'] ) ? $giftValue['description'] : ''
 			)
 		);
 		
@@ -268,6 +189,7 @@ class WPR_Gift_Card_Meta {
 				'label' 		=> __( 'To', 'rpgiftcards' ),
 				'placeholder' 	=> '',
 				'description' 	=> __( 'Who is getting this gift card.', 'rpgiftcards' ),
+				'value'			=> isset( $giftValue['to'] ) ? $giftValue['to'] : ''
 			)
 		);
 		// To Email
@@ -278,6 +200,7 @@ class WPR_Gift_Card_Meta {
 				'label' 		=> __( 'Email To', 'rpgiftcards' ),
 				'placeholder' 	=> '',
 				'description' 	=> __( 'What email should we send this gift card to.', 'rpgiftcards' ),
+				'value'			=> isset( $giftValue['toEmail'] ) ? $giftValue['toEmail'] : ''
 			)
 		);
 
@@ -288,6 +211,7 @@ class WPR_Gift_Card_Meta {
 				'label' 		=> __( 'From', 'rpgiftcards' ),
 				'placeholder' 	=> '',
 				'description' 	=> __( 'Who is sending this gift card.', 'rpgiftcards' ),
+				'value'			=> isset( $giftValue['from'] ) ? $giftValue['from'] : ''
 			)
 		);
 		// From Email
@@ -298,6 +222,7 @@ class WPR_Gift_Card_Meta {
 				'label' 		=> __( 'Email From', 'rpgiftcards' ),
 				'placeholder' 	=> '',
 				'description' 	=> __( 'What email account is sending this gift card.', 'rpgiftcards' ),
+				'value'			=> isset( $giftValue['fromEmail'] ) ? $giftValue['fromEmail'] : ''
 			)
 		);
 		
@@ -317,7 +242,8 @@ class WPR_Gift_Card_Meta {
 				'placeholder'  				=> '0.00',
 				'description'  				=> __( 'Value of the Gift Card.', 'rpgiftcards' ),
 				'type'    					=> 'number',
-				'custom_attributes' 		=> array( 'step' => 'any', 'min' => '0' )
+				'custom_attributes' 		=> array( 'step' => 'any', 'min' => '0' ),
+				'value'						=> isset( $giftValue['amount'] ) ? $giftValue['amount'] : ''
 			)
 		);
 		if ( isset( $_GET['action']  ) ) {
@@ -330,7 +256,8 @@ class WPR_Gift_Card_Meta {
 						'placeholder'  		=> '0.00',
 						'description'  		=> __( 'Remaining Balance of the Gift Card.', 'rpgiftcards' ),
 						'type'    			=> 'number',
-						'custom_attributes' => array( 'step' => 'any', 'min' => '0' )
+						'custom_attributes' => array( 'step' => 'any', 'min' => '0' ),
+						'value'				=> isset( $giftValue['balance'] ) ? $giftValue['balance'] : ''
 					)
 				);
 			}
@@ -341,7 +268,8 @@ class WPR_Gift_Card_Meta {
 				'id' 						=> 'rpgc_note',
 				'label' 					=> __( 'Gift Card Note', 'rpgiftcards' ),
 				'description' 				=> __( 'Enter a message to your customer.', 'rpgiftcards' ),
-				'class' 					=> 'short'
+				'class' 					=> 'short',
+				'value'						=> isset( $giftValue['note'] ) ? $giftValue['note'] : ''
 				
 			)
 		);
@@ -354,11 +282,11 @@ class WPR_Gift_Card_Meta {
 				'placeholder' 				=> _x( 'Never expire', 'placeholder', 'rpgiftcards' ),
 				'description' 				=> __( 'The date this Gift Card will expire, <code>YYYY-MM-DD</code>.', 'rpgiftcards' ),
 				'class' 					=> 'date-picker short',
-				'custom_attributes' 		=> array( 'pattern' => "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" )
+				'custom_attributes' 		=> array( 'pattern' => "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" ),
+				'value'						=> isset( $giftValue['expiry_date'] ) ? $giftValue['expiry_date'] : ''
 			)
 		);
 
-		do_action( 'rpgc_woocommerce_options' );
 		do_action( 'rpgc_woocommerce_options_after_personalize' );
 
 
@@ -443,6 +371,9 @@ class WPR_Gift_Card_Meta {
 		echo '</div>';
 	}
 
+	
+
+	// Meta box with gift card used on the order
 	public function wpr_giftcard_usage_data( $post ) {
 
 		$giftcardIDs = get_post_meta( $post->ID, 'wpr_existingOrders_id', true );
@@ -483,7 +414,7 @@ class WPR_Gift_Card_Meta {
 		} else {
 			?>
 			<div id="giftcard_usage" class="panel woocommerce_options_panel">
-				<div class="options_group">
+				<div class="options_group" style="text-align: center;">
 				<strong><?php _e( 'Gift card has not been used.', 'rpgiftcards' ); ?></strong>
 
 				</div>
@@ -492,11 +423,26 @@ class WPR_Gift_Card_Meta {
 		}
 	}
 
+	// Allows you to create a gift card number manually
+	public function wpr_giftcard_title( ) {
+		?>
+		<div class="misc-pub-section curtime misc-pub-cardnumber">
+			<span class="dashicons dashicons-cart" style="color: #82878c;"></span>
+			<span id="awards"><a class="showTitle" style="cursor: pointer; margin-left: 4px;">Manually Create Card Number</a></span>
+		</div>
+		<?php
+	}
+
 }
+
+
 
 /**
  * Calls the class on the post edit screen.
  */
 function call_WPR_Gift_Card_Meta() {
-    new WPR_Gift_Card_Meta();
+    	new WPR_Gift_Card_Meta();
 }
+
+
+
