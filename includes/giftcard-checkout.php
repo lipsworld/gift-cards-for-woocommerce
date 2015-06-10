@@ -304,6 +304,7 @@ function rpgc_display_giftcard( $order ) {
 add_action( 'woocommerce_order_details_after_order_table', 'rpgc_display_giftcard' );
 add_action( 'woocommerce_email_after_order_table', 'rpgc_display_giftcard' );
 
+
 // NEED TO FIGURE THIS PART OUT
 function rpgc_add_order_giftcard( $total_rows, $order ) {
 

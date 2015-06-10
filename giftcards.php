@@ -99,7 +99,7 @@ if( !class_exists( 'WPRWooGiftcards' ) ) {
 
             require_once RPWCGC_DIR . 'includes/giftcard-meta.php';
             
-            // require_once RPWCGC_DIR . 'includes/shortcodes.php';
+            require_once RPWCGC_DIR . 'includes/shortcodes.php';
             // require_once RPWCGC_DIR . 'includes/widgets.php';
         }
 

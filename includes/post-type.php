@@ -90,9 +90,10 @@ add_filter( 'manage_edit-rp_shop_giftcard_columns', 'rpgc_add_columns' );
  *
  */
 function rpgc_custom_columns( $column ) {
-    global $post, $woocommerce;
+    global $post;
 
     $giftcardInfo = get_post_meta( $post->ID, '_wpr_giftcard', true );
+
 
     switch ( $column ) {
 

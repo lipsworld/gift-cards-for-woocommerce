@@ -42,12 +42,12 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 
 == Changelog ==
 = 2.0.0 =
-* FIX: Payment processing through paypa l(Still working on)
+* FIX: Payment processing through paypal (Still working on)
 * FIX: Payment processing through Mejihan (Still working on)
 * UPDATE: Optimized code for better database management
 * ADD: Database updater (Still working on)
 * ADD: Ability to manually set Gift card number on creation
-* ADD: Short code to decrease card value Manually (Still working on)
+* ADD: Short code to decrease card value Manually
 
 
 = 1.7.6.1 =
