@@ -61,7 +61,7 @@ class WPR_Gift_Card_Meta {
 			return $post_id;
 
 		// Check the user's permissions.
-		if ( 'page' == $_POST['post_type'] ) {
+		if ( 'rp_shop_giftcard' == $_POST['post_type'] ) {
 
 			if ( ! current_user_can( 'edit_page', $post_id ) )
 				return $post_id;

@@ -26,6 +26,7 @@ class RPGC_Settings extends WC_Settings_Page {
 		add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
 		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
 
+		add_action( 'woocommerce_admin_field_wpr_upgrader', array( $this, 'wpr_upgrader' ) );
 		add_action( 'woocommerce_admin_field_addon_settings', array( $this, 'addon_setting' ) );
 		add_action( 'woocommerce_admin_field_excludeProduct', array( $this, 'excludeProducts' ) );
 	}
@@ -42,7 +43,22 @@ class RPGC_Settings extends WC_Settings_Page {
 
 		$premium = array( 'extensions' => __( 'Premium Extensions', 'rpgiftcards' ) );
 
+		$wpr_gift_version = get_option( 'wpr_gift_version' );
+
+		if ( ! $wpr_gift_version ) {
+			// 2.0.0 is the first version to use this option so we must add it
+			$wpr_gift_version = '1.9';
+		}
+
 		$sections = array_merge($sections, $premium);
+
+		$wpr_gift_version = preg_replace( '/[^0-9.].*/', '', $wpr_gift_version );
+
+		if ( version_compare( $wpr_gift_version, '2.0.0', '<' ) ) {
+			$upgrade = array( 'upgrades' => __( 'Gift Card Upgrades', 'rpgiftcards' ) );
+
+			$sections = array_merge($sections, $upgrade);
+		}
 
 		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 	}
@@ -87,8 +103,12 @@ class RPGC_Settings extends WC_Settings_Page {
 	public function save() {
 		global $current_section;
 
-		$settings = $this->get_settings( $current_section );
-		WC_Admin_Settings::save_fields( $settings );
+		if( $_GET['section'] != "upgrades" ) {
+			$settings = $this->get_settings( $current_section );
+			WC_Admin_Settings::save_fields( $settings );
+		} else {
+			$this->run_update();
+		}
 	}
 
 
@@ -261,12 +281,43 @@ class RPGC_Settings extends WC_Settings_Page {
 				array( 'type' => 'addon_settings' ),
 
 			); // End pages settings
+		} else if( $current_section == 'upgrades') {
+
+			$options = array( 
+				array( 'type' 	=> 'sectionend', 'id' => 'giftcard_upgrades' ),
+
+				array( 'type' => 'wpr_upgrader' ),
+
+			); // End pages settings
 		}
 		return apply_filters ('get_giftcard_settings', $options, $current_section );
 	}
 
 
+	public function wpr_upgrader() {
+		?>
+		<h3><?php _e('Upgrade Gift Cards', 'rpgiftcards' ); ?></h3>
+		<p><?php _e( 'With the resent update on Woocommerce - Giftcards you will need to upgrade your database. Please backup your database before upgrading. You can do this is in the tools area to the left in the Wordpress Admin.', 'rpgiftcards' ); ?></p>
+		<div style="margin: 0 0 100px 50px;">
+			<?php
+			if( isset( $updatedCards ) ) {
+				echo '<h3>Gift Cards Updated</h3>';
+				echo '<table>';
+				foreach( $updatedCards as $card ) {
+					echo '<tr>';
+					echo '<td>' . $card . '</td>';
+					echo '<td>Updated</td>';
+					echo '</tr>';
+				}
+				echo '</table>';
+			} else {
+				submit_button( 'Upgrade Now' );	
+			}
+			?>
+		</div>
+		<?php
 
+	}
 
 
 	/**
@@ -396,5 +447,70 @@ class RPGC_Settings extends WC_Settings_Page {
 		<?php
 
 	}
+
+	public function run_update() {
+		
+		if ( ! $wpr_gift_version ) {
+			// 1.3 is the first version to use this option so we must add it
+			$wpr_gift_version = '1.9';
+			add_option( 'wpr_gift_version', $wpr_gift_version );
+		}
+
+		if ( version_compare( RPWCGC_VERSION, $wpr_gift_version, '>' ) ) {
+			$this->wpr_gift_v200_upgrades();
+		}
+
+		update_option( 'wpr_gift_version', RPWCGC_VERSION );
+
+		wp_redirect( admin_url() . 'edit.php?post_type=rp_shop_giftcard' ); 
+		exit; 
+
+	}
+
+	public function wpr_gift_v200_upgrades() {
+
+		$loop = new WP_Query( array( 'post_type' => 'rp_shop_giftcard', 'posts_per_page' => -1 ) );
+		$updatedCards = array();
+
+		while ( $loop->have_posts() ) : $loop->the_post();
+
+			$id = get_the_id();
+
+			$giftcard_data = get_post_meta( $id );
+
+			if( ! isset( $giftcard_data['_wpr_giftcard'] ) ) {
+
+				$newGift['sendTheEmail'] = isset( $giftcard_data["rpgc_email_sent"][0] ) 	? $giftcard_data["rpgc_email_sent"][0] 	: '';
+				$newGift['description']  = isset( $giftcard_data["rpgc_description"][0] ) 	? $giftcard_data["rpgc_description"][0] : '';
+				$newGift['to']           = isset( $giftcard_data["rpgc_to"][0] ) 			? $giftcard_data["rpgc_to"][0] 			: '';
+				$newGift['toEmail']      = isset( $giftcard_data["rpgc_email_to"][0] ) 		? $giftcard_data["rpgc_email_to"][0] 	: '';
+				$newGift['from']         = isset( $giftcard_data["rpgc_from"][0] ) 			? $giftcard_data["rpgc_from"][0] 		: '';
+				$newGift['fromEmail']    = isset( $giftcard_data["rpgc_email_from"][0] ) 	? $giftcard_data["rpgc_email_from"][0] 	: '';
+				$newGift['amount']       = isset( $giftcard_data["rpgc_amount"][0] ) 		? $giftcard_data["rpgc_amount"][0] 		: '';
+				$newGift['balance']      = isset( $giftcard_data["rpgc_balance"][0] ) 		? $giftcard_data["rpgc_balance"][0] 	: '';
+				$newGift['note']         = isset( $giftcard_data["rpgc_note"][0] ) 			? $giftcard_data["rpgc_note"][0] 		: '';
+				$newGift['expiry_date']  = isset( $giftcard_data["rpgc_expiry_date"][0] ) 	? $giftcard_data["rpgc_expiry_date"][0] : '';
+
+				update_post_meta( $id, '_wpr_giftcard', $newGift );
+
+				delete_post_meta($id, 'rpgc_to' );
+				delete_post_meta($id, 'rpgc_email_to' );
+				delete_post_meta($id, 'rpgc_from' );
+				delete_post_meta($id, 'rpgc_email_from' );
+				delete_post_meta($id, 'rpgc_amount' );
+				delete_post_meta($id, 'rpgc_balance' );
+				delete_post_meta($id, 'rpgc_note' );	
+				delete_post_meta($id, 'rpgc_expiry_date' );
+				delete_post_meta($id, 'rpgc_description' );
+				delete_post_meta($id, 'rpgc_email_sent' );
+
+				$updatedCards[] = $id;
+			}
+
+		endwhile;
+
+		wp_reset_query();
+	}
+
 }
 //return new RPGC_Settings();

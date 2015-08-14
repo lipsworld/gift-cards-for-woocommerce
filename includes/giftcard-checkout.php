@@ -208,7 +208,7 @@ function wpr_add_giftcard_discount( $cart ) {
 	wc()->cart->discount_cart = (float) $giftcardDiscount;
 
 }
-add_action('woocommerce_calculate_totals', 'wpr_add_giftcard_discount');
+//add_action('woocommerce_calculate_totals', 'wpr_add_giftcard_discount');
 
 
 /**
@@ -336,7 +336,7 @@ function rpgc_add_order_giftcard( $total_rows, $order ) {
 			array_splice($total_rows, 2, 0, $newRow);
 		}
 	}
-var_dump( get_post_meta( $order->id ) );
+
 	return $total_rows;
 }
 //add_filter( 'woocommerce_get_order_item_totals', 'rpgc_add_order_giftcard', 10, 2);

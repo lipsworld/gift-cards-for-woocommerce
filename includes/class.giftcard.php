@@ -88,9 +88,12 @@ class WPR_Giftcard {
         }
 
         if( ( ( $giftCard['sendTheEmail'] == 1 ) && ( $giftCard['balance'] <> 0 ) ) || isset( $giftInformation['rpgc_resend_email'] ) ) {            
+
             $email = new WPR_Giftcard_Email();
             $post = get_post( $_POST['ID'] );
             $email->sendEmail ( $post );
+        
+
         }
 
         update_post_meta( $_POST['ID'], '_wpr_giftcard', $giftCard );
@@ -169,15 +172,20 @@ class WPR_Giftcard {
             }
             
             if( $charge_shipping == 'yes' ) {
-                $giftcardPayment += WC()->session->shipping_tax_total;
-                
-                if( $charge_tax == "yes" )
-                    $giftcardPayment += WC()->session->shipping_total;
+                $giftcardPayment += WC()->session->shipping_total;                
             }
 
-            if( $charge_fee == "yes" )
-                $giftcardPayment += WC()->session->fee_total;
+            if( $charge_tax == "yes" ) {
+                $giftcardPayment += WC()->session->tax_total;
 
+                if( $charge_shipping == 'yes' ) {
+                    $giftcardPayment += WC()->session->shipping_tax_total;
+                }
+            }
+
+            if( $charge_fee == "yes" ) {
+                $giftcardPayment += WC()->session->fee_total;
+            }
 
             if ( $giftcardPayment <= $balance ) {
                 $display = $giftcardPayment;
@@ -187,7 +195,7 @@ class WPR_Giftcard {
             return $display;
         }
         
-    }//apply_filter( 'woocommerce_calculated_total', 'wpr_get_payment_amount' );
+    }
 
 
     public function wpr_decrease_balance( $giftCard_id ) {

@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class WPR_Giftcard_Email {
 
 	public function sendEmail ( $post ) {
+
 		$blogname 		= wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 		$subject 		= apply_filters( 'woocommerce_email_subject_gift_card', sprintf( '[%s] %s', $blogname, __( 'Gift Card Information', 'rpgiftcards' ) ), $post->post_title );
 		$sendEmail 		= get_bloginfo( 'admin_email' );
@@ -34,6 +35,7 @@ class WPR_Giftcard_Email {
 	  	$toEmail		= wpr_get_giftcard_to_email( $post->ID );
 
 	  	$theMessage 	= $email->sendGiftcardEmail ( $post->ID );
+
 		$theMessage 	= apply_filters( 'rpgc_emailContents', $theMessage );
 
 	  	echo $mailer->wrap_message( $email_heading, $theMessage );
@@ -74,7 +76,7 @@ class WPR_Giftcard_Email {
 		</div>
 
 		<div style="padding-top: 10px; padding-bottom: 10px; border-top: 1px solid #ccc;">
-			<?php echo get_post_meta( $giftCard, 'rpgc_note', true); ?>
+			<?php echo wpr_get_giftcard_note( $giftCard ); ?>
 		</div>
 
 		<div style="padding-top: 10px; border-top: 1px solid #ccc;">
