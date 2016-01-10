@@ -44,8 +44,7 @@ class WPR_Giftcard_Email {
 
 		$attachment = '';
 
-		$email = new WC_Email();
-		$email->send( $toEmail, $subject, $message, $headers, $attachment );
+		$mailer->send( $toEmail, $subject, $message, $headers, $attachment );
 
 	}
  
@@ -62,8 +61,13 @@ class WPR_Giftcard_Email {
 
 
 			<?php _e( 'Dear', 'rpgiftcards' ); ?> <?php echo wpr_get_giftcard_to( $giftCard ); ?>,<br /><br />
-				
-			<?php echo wpr_get_giftcard_from( $giftCard ); ?> <?php _e('has selected a', 'rpgiftcards' ); ?> <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you! This card can be used for online purchases at', 'rpgiftcards' ); ?> <?php bloginfo( 'name' ); ?>. <br />
+			
+			<?php $message = wpr_get_custom_message();
+			if( $message == 'default' ) { ?>
+				<?php echo wpr_get_giftcard_from( $giftCard ); ?> <?php _e('has selected a', 'rpgiftcards' ); ?> <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you! This card can be used for online purchases at', 'rpgiftcards' ); ?> <?php bloginfo( 'name' ); ?>. <br />
+			<?php } else {
+				echo wpr_get_giftcard_from( $giftCard ); ?> <?php _e('has selected a', 'rpgiftcards' ); ?> <strong><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></strong> <?php _e( 'Gift Card for you!', 'rpgiftcards' ); ?>. <?php echo $message; ?> <br />
+			<?php } ?>
 
 			<h4><?php _e( 'Gift Card Amount', 'rpgiftcards' ); ?>: <?php echo woocommerce_price( wpr_get_giftcard_balance( $giftCard ) ); ?></h4>
 			<h4><?php _e( 'Gift Card Number', 'rpgiftcards' ); ?>: <?php echo get_the_title( $giftCard ); ?></h4>
@@ -80,6 +84,9 @@ class WPR_Giftcard_Email {
 		</div>
 
 		<div style="padding-top: 10px; border-top: 1px solid #ccc;">
+		
+		<?php $instruction = wpr_get_custom_instructions();
+		if( $instruction == 'default' ) { ?>
 			<?php _e( 'Using your Gift Card is easy', 'rpgiftcards' ); ?>:
 
 			<ol>
@@ -88,9 +95,9 @@ class WPR_Giftcard_Email {
 				<li><?php _e( 'Enter your card number.', 'rpgiftcards' ); ?></li>
 			</ol>
 		</div>
-
-		<?php
-		
+		<?php } else {
+			echo $instruction;
+		}
 
 		$return = ob_get_clean();
 		return apply_filters( 'rpgc_email_content_return', $return, $giftCard );

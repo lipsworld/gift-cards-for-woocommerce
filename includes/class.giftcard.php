@@ -36,6 +36,8 @@ class WPR_Giftcard {
     public function createCard( $giftInformation ) {
         global $wpdb;
 
+        $giftCard['sendTheEmail'] = 0;
+
         if ( isset( $giftInformation['rpgc_description'] ) ) {
             $giftCard['description']    = woocommerce_clean( $giftInformation['rpgc_description'] );
             
@@ -93,7 +95,6 @@ class WPR_Giftcard {
             $post = get_post( $_POST['ID'] );
             $email->sendEmail ( $post );
         
-
         }
 
         update_post_meta( $_POST['ID'], '_wpr_giftcard', $giftCard );
@@ -154,30 +155,39 @@ class WPR_Giftcard {
             $charge_shipping    = get_option('woocommerce_enable_giftcard_charge_shipping');
             $charge_tax         = get_option('woocommerce_enable_giftcard_charge_tax');
             $charge_fee         = get_option('woocommerce_enable_giftcard_charge_fee');
+            $charge_gifts       = get_option('woocommerce_enable_giftcard_charge_giftcard');
+
+            $exclude_product    = array();
             $exclude_product    = array_filter( array_map( 'absint', explode( ',', get_option( 'wpr_giftcard_exclude_product_ids' ) ) ) );
 
             $giftcardPayment = 0;
 
             foreach( $cart as $key => $product ) {
+                if ( isset( $product['product_id'] ) ) {
+                    if( ! in_array( $product['product_id'], $exclude_product ) ) {
 
-                if( ! in_array( $product['product_id'], $exclude_product ) ) {
-
-                    if( $charge_tax == 'yes' ){
-                        $giftcardPayment += $product['line_total'];
-                        $giftcardPayment += $product['line_tax'];
-                    } else {
-                        $giftcardPayment += $product['line_total'];
+                        if ( ! WPR_Giftcard::wpr_is_giftcard( $product['product_id'] ) ) {
+                            if( $charge_tax == 'yes' ){
+                                $giftcardPayment += $product['line_total'];
+                                $giftcardPayment += $product['line_tax'];
+                            } else {
+                                $giftcardPayment += $product['line_total'];
+                            }
+                        } else {
+                            if ( $charge_gifts == "yes" ) {
+                                $giftcardPayment += $product['line_total'];
+                            }
+                        }
                     }
                 }
+                
             }
-            
+
             if( $charge_shipping == 'yes' ) {
                 $giftcardPayment += WC()->session->shipping_total;                
             }
 
             if( $charge_tax == "yes" ) {
-                $giftcardPayment += WC()->session->tax_total;
-
                 if( $charge_shipping == 'yes' ) {
                     $giftcardPayment += WC()->session->shipping_tax_total;
                 }
@@ -186,6 +196,12 @@ class WPR_Giftcard {
             if( $charge_fee == "yes" ) {
                 $giftcardPayment += WC()->session->fee_total;
             }
+
+            if( $charge_gifts == "yes" ) {
+                $giftcardPayment += WC()->session->fee_total;
+            }
+
+            
 
             if ( $giftcardPayment <= $balance ) {
                 $display = $giftcardPayment;

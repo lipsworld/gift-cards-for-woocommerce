@@ -265,3 +265,28 @@ function wpr_get_order_refund_status ( $order_id = null ) {
 
 	return apply_filters( 'wpr_get_order_refund_status', $refunded, $order_id );
 }
+
+// Get Gift Card messages
+// ******************************************************************************************
+
+
+function wpr_get_custom_message ( ) {
+	$message = get_option( 'woocommerce_enable_giftcard_custom_message' );
+
+	if ( $message == '' ) {
+		return 'default';
+	}
+
+	return apply_filters( 'wpr_get_custom_message', $message );
+}
+
+function wpr_get_custom_instructions ( ) {
+	$instructions = get_option( 'woocommerce_enable_giftcard_redemption_info' );
+
+	if ( $instructions == '' ) {
+		return 'default';
+	}
+
+	return apply_filters( 'wpr_get_custom_instructions', $instructions );
+}
+

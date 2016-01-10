@@ -36,7 +36,6 @@ function wpr_check_giftcard( $atts ) {
 	
 	$return .= '<div id="theBalance"></div>';
 
-
 	if ( isset( $_POST['giftcard_code'] ) ) {
 
 		// Check for Giftcard
