@@ -36,3 +36,45 @@ function wpr_upgrade_notice() {
 add_action( 'admin_notices', 'wpr_upgrade_notice' );
 
 
+
+function createCardNumber($value) {
+	
+	if ( get_post_type() == "rp_shop_giftcard" ) {
+		$newGift = new WPR_Giftcard();
+		$cardnumber = $newGift->generateNumber();
+
+
+	    if ( empty($value) ) {
+	        return $cardnumber;
+	    }
+	 }
+
+	 return $value;
+}
+add_filter('pre_post_title', 'createCardNumber', 10, 3);
+
+function sendGiftCard( $giftCardNumber ) {
+    $giftCard = get_post_meta( $giftCardNumber, '_wpr_giftcard', true );
+
+    if( ( ( $giftCard['sendTheEmail'] == 1 ) && ( $giftCard['balance'] <> 0 ) ) ) {
+        $email = new WPR_Giftcard_Email();
+        $post = get_post( $giftCardNumber );
+        
+        $email->sendEmail ( $post );
+    
+    }
+}
+add_action( 'woocommerce_rpgc_after_save', 'sendGiftCard', 10, 2);
+
+function  make_gift_card_purchasable( $purchasable, $product ) {
+	$is_giftcard = get_post_meta( $product->id, '_giftcard', true );
+	$in_stock = get_post_meta( $product->id, '_stock_status', true ) ;
+
+	if ( ( $is_giftcard == 'yes') && ( $in_stock == "instock" ) ) {
+		$purchasable = true;
+	}
+
+
+	return $purchasable;
+}
+add_filter ( 'woocommerce_is_purchasable', 'make_gift_card_purchasable', 10, 2);

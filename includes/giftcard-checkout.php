@@ -24,7 +24,7 @@ function rpgc_cart_form() {
 			<input type="text" name="giftcard_code" class="input-text" id="giftcard_code" value="" placeholder="<?php _e( 'Gift Card', 'rpgiftcards' ); ?>" />
 			<input type="submit" class="button" name="update_cart" value="<?php _e( 'Apply Gift card', 'rpgiftcards' ); ?>" />
 		</div>
-<?php
+	<?php
 		do_action( 'wpr_after_cart_form' );
 	}
 
@@ -140,11 +140,23 @@ function woocommerce_apply_giftcard($giftcard_code) {
 
 		wc_print_notices();
 
-		die();
+		if ( defined('DOING_AJAX') && DOING_AJAX ) {
+			die();
+		}
+
 	}
+
 }
 add_action( 'wp_ajax_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard' );
-add_action( 'wp_ajax_nopriv_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard' );
+
+
+
+function woocommerce_apply_giftcard_ajax($giftcard_code) {
+
+	woocommerce_apply_giftcard( $giftcard_code );
+
+}
+add_action( 'wp_ajax_nopriv_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard_ajax' );
 
 
 function apply_cart_giftcard( ) {
@@ -155,6 +167,7 @@ function apply_cart_giftcard( ) {
 
 }
 add_action ( 'woocommerce_before_cart', 'apply_cart_giftcard' );
+add_action ( 'wpr_before_checkout_form', 'apply_cart_giftcard' );
 
 
 
@@ -166,7 +179,7 @@ function rpgc_order_giftcard( ) {
 	global $woocommerce;
 
 	if ( isset( $_GET['remove_giftcards'] ) ) {
-		if ( 1 == $_GET['remove_giftcards'] ) {
+		if ( wpr_get_giftcard_number( WC()->session->giftcard_post ) == $_GET['remove_giftcards'] ) {
 			unset( WC()->session->giftcard_post );
 			WC()->cart->calculate_totals();
 		}
@@ -187,7 +200,7 @@ function rpgc_order_giftcard( ) {
 			?>
 			<tr class="giftcard">
 				<th><?php _e( 'Gift Card Payment', 'rpgiftcards' ); ?> </th>
-				<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a href="<?php echo add_query_arg( 'remove_giftcards', '1', $gotoPage ) ?>">[<?php _e( 'Remove Gift Card', 'rpgiftcards' ); ?>]</a></td>
+				<td style="font-size:0.85em;"><?php echo woocommerce_price( $price ); ?> <a href="<?php echo add_query_arg( 'remove_giftcards', wpr_get_giftcard_number( WC()->session->giftcard_post ), $gotoPage ) ?>">[<?php _e( 'Remove Gift Card', 'rpgiftcards' ); ?>]</a></td>
 			</tr>
 			<?php
 
@@ -208,7 +221,7 @@ function wpr_add_giftcard_discount( $cart ) {
 	wc()->cart->discount_cart = (float) $giftcardDiscount;
 
 }
-//add_action('woocommerce_calculate_totals', 'wpr_add_giftcard_discount');
+add_action('woocommerce_calculate_totals', 'wpr_add_giftcard_discount');
 
 
 /**
@@ -339,7 +352,7 @@ function rpgc_add_order_giftcard( $total_rows, $order ) {
 
 	return $total_rows;
 }
-//add_filter( 'woocommerce_get_order_item_totals', 'rpgc_add_order_giftcard', 10, 2);
+add_filter( 'woocommerce_get_order_item_totals', 'rpgc_add_order_giftcard', 10, 2);
 
 
 function wpr_giftcard_in_order( $order_id ) {
@@ -359,12 +372,11 @@ function wpr_giftcard_in_order( $order_id ) {
 }
 add_action( 'woocommerce_admin_order_totals_after_tax', 'wpr_giftcard_in_order', 10, 1 );
 
-function test( $discount, $test2 ){
-	var_dump( $test, $test2 );
+function test( ){
+	var_dump( $_POST );
 
 }
-//add_filter( 'woocommerce_order_discount_to_display', 'test', 10, 2 );
-
+//add_action( 'wp_head', 'test');
 
 
 

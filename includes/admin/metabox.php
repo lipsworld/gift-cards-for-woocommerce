@@ -78,7 +78,7 @@ class WPR_Gift_Card_Meta {
 		$newGift->createCard( $_POST );
 
 		do_action( 'woocommerce_rpgc_options' );
-		
+		do_action( 'woocommerce_rpgc_after_save', $post_id );
 	}
 
 

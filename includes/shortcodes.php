@@ -49,15 +49,15 @@ function wpr_check_giftcard( $atts ) {
 
 		if ( $giftcard_found ) {
 			$current_date = date("Y-m-d");
-			$cardExperation = get_post_meta( $giftcard_found, 'rpgc_expiry_date', true );
+			$cardExperation = wpr_get_giftcard_expiration( $giftcard_found );
 
 			// Valid Gift Card Entered
 			if ( ( strtotime($current_date) <= strtotime($cardExperation) ) || ( strtotime($cardExperation) == '' ) ) {
 
-				$oldBalance = get_post_meta( $giftcard_found, 'rpgc_balance', true );
-				$GiftcardBalance = (float) $oldBalance;
+				$oldBalance = wpr_get_giftcard_balance( $giftcard_found );
+				$giftCardBalance = (float) $oldBalance;
 
-				$return .= '<h3>' . __('Remaining Balance', 'rpgiftcards' ) . ': ' . woocommerce_price( $GiftcardBalance ) . '</h3>';
+				$return .= '<h3>' . __('Remaining Balance', 'rpgiftcards' ) . ': ' . woocommerce_price( $giftCardBalance ) . '</h3>';
 			} else {
 				$return .= '<h3>' . __('Gift Card Has Expired', 'rpgiftcards' ) . '</h3>';
 			}

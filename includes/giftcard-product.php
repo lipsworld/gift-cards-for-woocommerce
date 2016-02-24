@@ -211,7 +211,41 @@ function rpgc_add_card_data( $cart_item_key, $product_id, $quantity ) {
 	
 }
 add_action( 'woocommerce_add_to_cart', 'rpgc_add_card_data', 10, 3 );
-//add_action( 'woocommerce_ajax_added_to_cart', 'rpgc_add_card_data', 10, 3 );
+
+
+
+function rpgc_add_card_data_ajax( $cart_item_key, $product_id, $quantity ) {
+	global $woocommerce, $post;
+
+	$is_giftcard = get_post_meta( $product_id, '_giftcard', true );
+
+	if ( $is_giftcard == "yes" ) {
+
+		$giftcard_data = array(
+			'To'    	=> 'NA',
+			'To Email'  => 'NA',
+			'Note'   	=> 'NA',
+		);
+
+		if ( isset( $_POST['rpgc_to'] ) && ( $_POST['rpgc_to'] <> '' ) ) 
+			$giftcard_data['To'] = woocommerce_clean( $_POST['rpgc_to'] );
+
+		if ( isset( $_POST['rpgc_to_email'] ) && ( $_POST['rpgc_to_email'] <> '' ) ) 
+			$giftcard_data['To Email'] = woocommerce_clean( $_POST['rpgc_to_email'] );
+
+		if ( isset( $_POST['rpgc_note'] ) && ( $_POST['rpgc_note'] <> '' ) ) 
+			$giftcard_data['Note'] = woocommerce_clean( $_POST['rpgc_note'] );
+
+		$giftcard_data = apply_filters( 'rpgc_giftcard_data', $giftcard_data, $_POST );
+
+		WC()->cart->cart_contents[$cart_item_key]["variation"] = $giftcard_data;
+		return $woocommerce;
+	}
+
+	die();	
+}
+
+add_action( 'woocommerce_ajax_added_to_cart', 'rpgc_add_card_data_ajax', 10, 3 );
 
 
 

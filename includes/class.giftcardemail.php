@@ -41,7 +41,6 @@ class WPR_Giftcard_Email {
 	  	echo $mailer->wrap_message( $email_heading, $theMessage );
 
 		$message 		= ob_get_clean();
-
 		$attachment = '';
 
 		$mailer->send( $toEmail, $subject, $message, $headers, $attachment );

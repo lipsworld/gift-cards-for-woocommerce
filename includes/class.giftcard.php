@@ -80,7 +80,8 @@ class WPR_Giftcard {
         }
         
         if ( ( $_POST['post_title'] == '' ) || isset( $giftInformation['rpgc_regen_number'] ) ){
-            if ( ( $giftInformation['rpgc_regen_number'] == 'yes' ) || ( $_POST['post_title'] == '' ) ) {
+        
+            if ( ( $giftInformation['rpgc_regen_number'] == 'yes' ) ) {
                 $newNumber = apply_filters( 'rpgc_regen_number', $this->generateNumber());
 
                 $wpdb->update( $wpdb->posts, array( 'post_title' => $newNumber ), array( 'ID' => $_POST['ID'] ) );
@@ -89,22 +90,17 @@ class WPR_Giftcard {
 
         }
 
-        if( ( ( $giftCard['sendTheEmail'] == 1 ) && ( $giftCard['balance'] <> 0 ) ) || isset( $giftInformation['rpgc_resend_email'] ) ) {            
-
+        if( isset( $giftInformation['rpgc_resend_email'] ) ) {            
             $email = new WPR_Giftcard_Email();
             $post = get_post( $_POST['ID'] );
             $email->sendEmail ( $post );
-        
         }
 
         update_post_meta( $_POST['ID'], '_wpr_giftcard', $giftCard );
 
     }
 
-    public function sendCard() {
 
-
-    }
 
     // Function to generate the gift card number for the card
     public function generateNumber( ){

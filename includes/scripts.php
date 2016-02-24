@@ -28,8 +28,8 @@ function wpr_giftcards_admin_scripts( $hook ) {
     wp_enqueue_script( 'jquery-ui-core' );
     wp_enqueue_script( 'jquery-ui-datepicker' );
     
-
     wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+
 
     if( $post_type == 'rp_shop_giftcard' ) {
         wp_register_script( 'wpr_giftcards_admin_js', RPWCGC_URL . '/assets/js/admin.js', array( 'jquery' ), RPWCGC_VERSION, false );

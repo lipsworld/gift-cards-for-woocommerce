@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 4.4
-Stable tag: 2.2.2
+Stable tag: 2.3.1
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -41,6 +41,15 @@ Q: Can I customize the email that is sent out?
 A: Unfortunately that is not a current feature.  The format of the email will match the email format of your site.  I will be looking into making it a feature in the future.
 
 == Changelog ==
+= 2.3.1 =
+* FIX: Page title changing when adding items to menu
+
+= 2.3.0 =
+* FIX: Some functionality with emails sending
+* FIX: Shortcode value return
+* FIX: Custom price not showing when no price is set
+
+
 = 2.2.2 =
 * ADD: Ability to customize email message text
 * ADD: Ability to edit the text for redeeming the gift card
