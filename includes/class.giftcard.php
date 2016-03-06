@@ -232,7 +232,7 @@ class WPR_Giftcard {
 
         $total -= $discount;
 
-        //WC()->session->discount_cart = $discount;
+        //WC()->session->discount_cart = $discount + WC()->session->discount_cart;
 
         return $total;
     }

@@ -50,6 +50,8 @@ function rpgc_process_meta( $post_id, $post ) {
 			if ( $want_physical == "no" ) {
 				update_post_meta( $post_id, '_virtual', $is_giftcard );
 			}
+		} else {
+			delete_post_meta( $post_id, '_giftcard' );
 		}
 	}
 }

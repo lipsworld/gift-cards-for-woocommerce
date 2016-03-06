@@ -319,17 +319,17 @@ class RPGC_Settings extends WC_Settings_Page {
 		<div style="margin: 0 0 100px 50px;">
 			<?php
 			if( isset( $updatedCards ) ) {
-				echo '<h3>Gift Cards Updated</h3>';
+				echo '<h3>' . __( 'Gift Cards Updated', 'rpgiftcards' ) . '</h3>';
 				echo '<table>';
 				foreach( $updatedCards as $card ) {
 					echo '<tr>';
 					echo '<td>' . $card . '</td>';
-					echo '<td>Updated</td>';
+					echo '<td>' . __( 'Updated', 'rpgiftcards' ) . '</td>';
 					echo '</tr>';
 				}
 				echo '</table>';
 			} else {
-				submit_button( 'Upgrade Now' );	
+				submit_button( __( 'Upgrade Now', 'rpgiftcards' ) );	
 			}
 			?>
 		</div>

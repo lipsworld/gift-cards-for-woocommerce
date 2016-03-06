@@ -78,3 +78,4 @@ function  make_gift_card_purchasable( $purchasable, $product ) {
 	return $purchasable;
 }
 add_filter ( 'woocommerce_is_purchasable', 'make_gift_card_purchasable', 10, 2);
+

@@ -48,7 +48,7 @@ function rpgc_create_post_type() {
         'exclude_from_search'       => false,
         'show_in_admin_all_list'    => true,
         'show_in_admin_status_list' => true,
-        'label_count'               => _n_noop( 'Zero Balance <span class="count">(%s)</span>', 'Zero Balance <span class="count">(%s)</span>' )
+        'label_count'               => _n_noop( 'Zero Balance <span class="count">(%s)</span>', 'Zero Balance <span class="count">(%s)</span>', 'rpgiftcards' )
     ) );
     
 }
@@ -136,7 +136,7 @@ function wpfstop_change_default_title( $title ){
     $screen = get_current_screen();
 
     if ( 'rp_shop_giftcard' == $screen->post_type ){
-        $title = 'Enter Gift Card Number Here';
+        $title = __( 'Enter Gift Card Number Here', 'rpgiftcards' );
     }
 
     return $title;

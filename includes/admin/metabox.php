@@ -239,7 +239,7 @@ class WPR_Gift_Card_Meta {
 			array(
 				'id'     					=> 'rpgc_amount',
 				'label'   					=> __( 'Gift Card Amount', 'rpgiftcards' ),
-				'placeholder'  				=> '0.00',
+				'placeholder'  				=> __( '0.00', 'rpgiftcards'),
 				'description'  				=> __( 'Value of the Gift Card.', 'rpgiftcards' ),
 				'type'    					=> 'number',
 				'custom_attributes' 		=> array( 'step' => 'any', 'min' => '0' ),
@@ -253,7 +253,7 @@ class WPR_Gift_Card_Meta {
 					array(
 						'id'    			=> 'rpgc_balance',
 						'label'    			=> __( 'Gift Card Balance', 'rpgiftcards' ),
-						'placeholder'  		=> '0.00',
+						'placeholder'  		=> __( '0.00', 'rpgiftcards'),
 						'description'  		=> __( 'Remaining Balance of the Gift Card.', 'rpgiftcards' ),
 						'type'    			=> 'number',
 						'custom_attributes' => array( 'step' => 'any', 'min' => '0' ),
@@ -428,7 +428,7 @@ class WPR_Gift_Card_Meta {
 		?>
 		<div class="misc-pub-section curtime misc-pub-cardnumber">
 			<span class="dashicons dashicons-cart" style="color: #82878c;"></span>
-			<span id="awards"><a class="showTitle" style="cursor: pointer; margin-left: 4px;">Manually Create Card Number</a></span>
+			<span id="awards"><a class="showTitle" style="cursor: pointer; margin-left: 4px;"><?php _e( 'Manually Create Card Number', 'rpgiftcards'); ?></a></span>
 		</div>
 		<?php
 	}

@@ -3,7 +3,7 @@ Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
 Tested up to: 4.4
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -41,6 +41,11 @@ Q: Can I customize the email that is sent out?
 A: Unfortunately that is not a current feature.  The format of the email will match the email format of your site.  I will be looking into making it a feature in the future.
 
 == Changelog ==
+= 2.3.2 =
+* FIX: Removing Gift card option on product
+* FIX: Discount calculations
+* ADD: Internationalize some additional lines of text
+
 = 2.3.1 =
 * FIX: Page title changing when adding items to menu
 

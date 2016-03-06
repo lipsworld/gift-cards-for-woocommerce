@@ -46,7 +46,7 @@ if ( ! function_exists( 'rpgc_checkout_form' ) ) {
 
 			do_action( 'wpr_before_checkout_form' );
 
-			$info_message = apply_filters( 'woocommerce_checkout_giftcard_message', __( 'Have a giftcard?', 'woocommerce' ) . ' <a href="#" class="showgiftcard">' . __( 'Click here to enter your code', 'woocommerce' ) . '</a>' );
+			$info_message = apply_filters( 'woocommerce_checkout_giftcard_message', __( 'Have a giftcard?', 'rpgiftcards' ) . ' <a href="#" class="showgiftcard">' . __( 'Click here to enter your code', 'rpgiftcards' ) . '</a>' );
 			wc_print_notice( $info_message, 'notice' );
 			?>
 
@@ -139,13 +139,11 @@ function woocommerce_apply_giftcard($giftcard_code) {
 		}
 
 		wc_print_notices();
-
+		
 		if ( defined('DOING_AJAX') && DOING_AJAX ) {
 			die();
 		}
-
 	}
-
 }
 add_action( 'wp_ajax_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard' );
 
@@ -154,6 +152,8 @@ add_action( 'wp_ajax_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard' )
 function woocommerce_apply_giftcard_ajax($giftcard_code) {
 
 	woocommerce_apply_giftcard( $giftcard_code );
+
+	WC()->cart->calculate_totals();
 
 }
 add_action( 'wp_ajax_nopriv_woocommerce_apply_giftcard', 'woocommerce_apply_giftcard_ajax' );
@@ -211,17 +211,6 @@ add_action( 'woocommerce_review_order_before_order_total', 'rpgc_order_giftcard'
 add_action( 'woocommerce_cart_totals_before_order_total', 'rpgc_order_giftcard' );
 
 
-
-function wpr_add_giftcard_discount( $cart ) {
-
-	$giftcard = new WPR_Giftcard();
-	$giftcardDiscount = $giftcard->wpr_get_payment_amount();
-
-	// Alter the cart discount total
-	wc()->cart->discount_cart = (float) $giftcardDiscount;
-
-}
-add_action('woocommerce_calculate_totals', 'wpr_add_giftcard_discount');
 
 
 /**
