@@ -5,7 +5,7 @@
  * Description: WooCommerce - Gift Cards allows you to offer gift cards to your customer and allow them to place orders using them.
  * Author: WP Ronin
  * Author URI: http://wp-ronin.com
- * Version:2.3.2
+ * Version: 2.3.2
  * License: GPL2
  * 
  * Text Domain:     rpgiftcards
