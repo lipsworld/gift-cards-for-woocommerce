@@ -2,8 +2,8 @@
 Contributors: rpletcher
 Tags: woocommerce, gift, gift card, payment, gift certificate, certificate
 Requires at least: 3.0
-Tested up to: 4.4
-Stable tag: 2.3.2
+Tested up to: 4.7.0
+Stable tag: 3.0.0b1
 Donate link: https://ryanpletcher.com/donate/
 License: GPLv2 or later
 
@@ -41,6 +41,49 @@ Q: Can I customize the email that is sent out?
 A: Unfortunately that is not a current feature.  The format of the email will match the email format of your site.  I will be looking into making it a feature in the future.
 
 == Changelog ==
+= 3.0.0 =
+* Updating majority of code to work better with additional plugins and to help with 3rd party enhancememts.
+
+
+= 2.5.6 =
+* FIX: Bug where verification of email address not showing when requiring email address
+
+= 2.5.5 =
+* FIX: Cards being created on failed order
+
+= 2.5.4 =
+* FIX: Prevent duplicate emails from being sent on a resend
+* FIX: Default option on when sending a gift card when option is not selected
+
+= 2.5.3 =
+* FIX: Order detail errors
+
+= 2.5.2 =
+* ADD: Ability to use multiple cards on one order
+* ADD: Language directories to save translated files
+* FIX: Issue with indicating that the email has been sent
+
+= 2.4.1 =
+* ADD: Additional changes for the physical cards
+* FIX: Change the link to Google Script to account for secure sites
+* FIX: Email validation on physical cards
+
+= 2.4.0 =
+* FIX: Changed test function name to avoid possibility of duplicate function
+* FIX: Issue with card not calculating on the site
+* ADD: Updated variation labels to match with what is selected in the admin
+* ADD: Additional gift card product options
+* ADD: Reload already existing gift cards
+* ADD: Disable coupons when gift card is in use
+* ADD: One time use gift cards
+
+= 2.3.4 =
+* FIX: Rounding issue with half cent values
+
+= 2.3.3 =
+* FIX: Issue with adding giftcards using AJAX
+* FIX: Gift card panel height
+
 = 2.3.2 =
 * FIX: Removing Gift card option on product
 * FIX: Discount calculations
@@ -53,7 +96,6 @@ A: Unfortunately that is not a current feature.  The format of the email will ma
 * FIX: Some functionality with emails sending
 * FIX: Shortcode value return
 * FIX: Custom price not showing when no price is set
-
 
 = 2.2.2 =
 * ADD: Ability to customize email message text

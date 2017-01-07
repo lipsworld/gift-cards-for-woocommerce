@@ -87,20 +87,80 @@ class WPR_Giftcard {
                 $wpdb->update( $wpdb->posts, array( 'post_title' => $newNumber ), array( 'ID' => $_POST['ID'] ) );
                 $wpdb->update( $wpdb->posts, array( 'post_name' => $newNumber ), array( 'ID' => $_POST['ID'] ) );
             }
-
         }
 
         if( isset( $giftInformation['rpgc_resend_email'] ) ) {            
             $email = new WPR_Giftcard_Email();
             $post = get_post( $_POST['ID'] );
-            $email->sendEmail ( $post );
+            //$email->sendEmail ( $post );
+        
+            $giftCard['sendTheEmail'] = 1;
         }
 
         update_post_meta( $_POST['ID'], '_wpr_giftcard', $giftCard );
 
     }
 
+    // Function to create the gift card
+    public function sendCard( $giftInformation ) {
 
+
+    }
+
+    public static function reload_card( $order_id ) {
+        global $wpdb, $current_user;
+        
+        $order = new WC_Order( $order_id ); 
+        $theItems = $order->get_items();
+
+        $numberofGiftCards = 0;
+
+        $rpw_reload_card_check = ( get_option( 'woocommerce_giftcard_reload_card' ) <> NULL ? get_option( 'woocommerce_giftcard_reload_card' ) : __('Reload Card', 'rpgiftcards' )  );
+
+        foreach( $theItems as $item ){
+                
+            $qty = (int) $item["item_meta"]["_qty"][0];
+                 
+            $theItem = (int) $item["item_meta"]["_product_id"][0];
+
+            $is_giftcard = get_post_meta( $theItem, '_giftcard', true );
+
+            if ( $is_giftcard == "yes" ) {
+                 
+                for ($i = 0; $i < $qty; $i++){
+                    
+                    if( ( $item["item_meta"][$rpw_reload_card_check][0] <> "NA") || ( $item["item_meta"][$rpw_reload_card_check][0] <> "") ) {
+                        $giftCardInfo[$numberofGiftCards]["Reload"] = $item["item_meta"][$rpw_reload_card_check][0];
+                    }
+
+                    $giftCardTotal = (float) $item["item_meta"]["_line_subtotal"][0];
+                    $giftCardInfo[$numberofGiftCards]["Amount"] = $giftCardTotal / $qty;
+
+                    $numberofGiftCards++;
+                }
+            }
+        }
+
+        $giftNumbers = array();
+
+        $giftcard = new WPR_Giftcard();
+        for ($i = 0; $i < $numberofGiftCards; $i++){
+            if ( isset( $giftCardInfo[$i]['Reload'] ) ) {
+                $giftCardID = wpr_get_giftcard_by_code( woocommerce_clean( $giftCardInfo[$i]['Reload'] ) );
+                $giftcard->wpr_increase_balance( $giftCardID, $giftCardInfo[$i]['Amount'] );
+
+                $reloads = get_post_meta( $giftCardID, '_wpr_card_reloads', true );
+                
+                $giftCardInfo[$i]['Order'] = $order_id;
+                
+                $reloads[] = $giftCardInfo[$i];
+
+                update_post_meta( $giftCardID, '_wpr_card_reloads', $reloads );        
+            }
+        } 
+
+
+    }
 
     // Function to generate the gift card number for the card
     public function generateNumber( ){
@@ -142,11 +202,16 @@ class WPR_Giftcard {
     }
 
     public function wpr_get_payment_amount( ){
-        $giftcard_id    = WC()->session->giftcard_post;
+        $giftcards      = WC()->session->giftcard_post;
         $cart           = WC()->session->cart;
 
-        if ( isset( $giftcard_id ) ) {
-            $balance = wpr_get_giftcard_balance( $giftcard_id );
+        if ( isset( $giftcards ) ) {
+
+            $balance = 0;
+
+            foreach ($giftcards as $key => $card_id) {
+                $balance += wpr_get_giftcard_balance( $card_id );
+            }
 
             $charge_shipping    = get_option('woocommerce_enable_giftcard_charge_shipping');
             $charge_tax         = get_option('woocommerce_enable_giftcard_charge_tax');
@@ -180,21 +245,21 @@ class WPR_Giftcard {
             }
 
             if( $charge_shipping == 'yes' ) {
-                $giftcardPayment += WC()->session->shipping_total;                
+                $giftcardPayment += WC()->cart->shipping_total;                
             }
 
             if( $charge_tax == "yes" ) {
                 if( $charge_shipping == 'yes' ) {
-                    $giftcardPayment += WC()->session->shipping_tax_total;
+                    $giftcardPayment += WC()->cart->shipping_tax_total;
                 }
             }
 
             if( $charge_fee == "yes" ) {
-                $giftcardPayment += WC()->session->fee_total;
+                $giftcardPayment += WC()->cart->fee_total;
             }
 
             if( $charge_gifts == "yes" ) {
-                $giftcardPayment += WC()->session->fee_total;
+                $giftcardPayment += WC()->cart->fee_total;
             }
 
             
@@ -212,29 +277,46 @@ class WPR_Giftcard {
 
     public function wpr_decrease_balance( $giftCard_id ) {
 
-        $newBalance = wpr_get_giftcard_balance( $giftCard_id ) - $this->wpr_get_payment_amount();
+        $payment = $this->wpr_get_payment_amount();
+
+        if ( $payment > wpr_get_giftcard_balance( $giftCard_id ) ) {
+            $newBalance = 0;
+        } else {
+            $newBalance = wpr_get_giftcard_balance( $giftCard_id ) - $payment;
+        }
 
         wpr_set_giftcard_balance( $giftCard_id, $newBalance );
+        
         // Check if the gift card ballance is 0 and if it is change the post status to zerobalance
-        if( wpr_get_giftcard_balance( $giftCard_id ) == 0 )
+        if( wpr_get_giftcard_balance( $giftCard_id ) == 0 ) {
             wpr_update_giftcard_status( $giftCard_id, 'zerobalance' );
+        }
 
 
 
     }
 
+    public function wpr_increase_balance( $giftCard_id, $amount ) {
 
-    public static function wpr_discount_total( $total, $cart ) {
+        $newBalance = wpr_get_giftcard_balance( $giftCard_id ) + $amount;
 
-        $giftcard = new WPR_Giftcard();
+        wpr_set_giftcard_balance( $giftCard_id, $newBalance );
+    }
 
+
+    public static function wpr_discount_total( $gift ) {
+        
+        //print_r( WC()->session->giftcard_post );
+
+        $giftcard = new WPR_Giftcard(  );
+        
         $discount = $giftcard->wpr_get_payment_amount();
+        //print_r( $discount );
+        $gift -= round( $discount, 2 );
 
-        $total -= $discount;
+        //WC()->cart->discount_cart = $discount + WC()->cart->discount_cart;
 
-        //WC()->session->discount_cart = $discount + WC()->session->discount_cart;
-
-        return $total;
+        return $gift;
     }
 
 

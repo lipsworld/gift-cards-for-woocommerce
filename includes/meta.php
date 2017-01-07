@@ -10,29 +10,10 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/**
- * Updates a giftcard's status from one status to another.
+/*******************************************************************
+ * Functions to get a gift card
  *
- * @since 1.0
- * @param int $code_id Giftcard ID (default: 0)
- * @param string $new_status New status (default: active)
- * @return bool
- */
-function wpr_update_giftcard_status( $code_id = 0, $new_status = 'active' ) {
-	$giftcard = wpr_get_giftcard( $code_id );
-
-	if ( $giftcard ) {
-		do_action( 'wpr_pre_update_giftcard_status', $code_id, $new_status, $giftcard->post_status );
-
-		wp_update_post( array( 'ID' => $code_id, 'post_status' => $new_status ) );
-
-		do_action( 'wpr_post_update_giftcard_status', $code_id, $new_status, $giftcard->post_status );
-
-		return true;
-	}
-
-	return false;
-}
+ *******************************************************************/
 
 /**
  * Retrieve the giftcard number
@@ -45,18 +26,6 @@ function wpr_get_giftcard_info( $code_id = null ) {
 	$giftcard = get_post_meta( $code_id, '_wpr_giftcard', true );
 
 	return apply_filters( 'wpr_get_giftcard_info', $giftcard, $code_id );
-}
-
-/**
- * Retrieve the giftcard number
- *
- * @since 1.4
- * @param int $code_id Giftcard ID
- * @return string $expiration Giftcard expiration
- */
-function wpr_set_giftcard_info( $code_id = null, $giftInfo ) {
-
-	update_post_meta( $code_id, '_wpr_giftcard', $giftInfo );
 }
 
 /**
@@ -100,6 +69,12 @@ function wpr_get_giftcard_by_code( $value = '' ) {
 	return $giftcard_found;
 
 }
+
+
+/*******************************************************************
+ * Functions to get Standard Meta information from a gift card
+ *
+ *******************************************************************/
 
 /**
  * Retrieve the giftcard number
@@ -220,6 +195,48 @@ function wpr_get_giftcard_balance( $code_id = null ) {
 	return (float) apply_filters( 'wpr_get_giftcard_balance', $giftcard['balance'], $code_id );
 }
 
+
+/*******************************************************************
+ * Functions to set Standard Meta information from a gift card
+ *
+ *******************************************************************/
+
+/**
+ * Updates a giftcard's status from one status to another.
+ *
+ * @since 1.0
+ * @param int $code_id Giftcard ID (default: 0)
+ * @param string $new_status New status (default: active)
+ * @return bool
+ */
+function wpr_update_giftcard_status( $code_id = 0, $new_status = 'active' ) {
+	$giftcard = wpr_get_giftcard( $code_id );
+
+	if ( $giftcard ) {
+		do_action( 'wpr_pre_update_giftcard_status', $code_id, $new_status, $giftcard->post_status );
+
+		wp_update_post( array( 'ID' => $code_id, 'post_status' => $new_status ) );
+
+		do_action( 'wpr_post_update_giftcard_status', $code_id, $new_status, $giftcard->post_status );
+
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Retrieve the giftcard number
+ *
+ * @since 1.4
+ * @param int $code_id Giftcard ID
+ * @return string $expiration Giftcard expiration
+ */
+function wpr_set_giftcard_info( $code_id = null, $giftInfo ) {
+
+	update_post_meta( $code_id, '_wpr_giftcard', $giftInfo );
+}
+
 /**
  * Set the giftcard balance
  *
@@ -232,20 +249,45 @@ function wpr_set_giftcard_balance( $code_id = null, $balance ) {
 	$giftcard = wpr_get_giftcard_info( $code_id );
 	
 	$giftcard['balance'] = (string) $balance;
+	
+	if ( get_option( 'woocommerce_enable_one_time_use' ) == 'yes' ){
+		$giftcard['balance'] = (string) 0;
+
+	}
 
 	wpr_set_giftcard_info( $code_id, $giftcard );
 }
 
+/*******************************************************************
+ * Order Gift Card Functions
+ *
+ *******************************************************************/
 
 
-// Order Gift Card Functions
-// ******************************************************************************************
+function wpr_get_order_card_ids ( $order_id = null ) {
+	$ids = get_post_meta( $order_id, 'rpgc_id', true );
+	
+
+	return apply_filters( 'wpr_get_order_card_ids', $ids, $order_id );
+}
 
 function wpr_get_order_card_number ( $order_id = null ) {
 	$id = get_post_meta( $order_id, 'rpgc_id', true );
 	$number = get_the_title( $id );
 
 	return apply_filters( 'wpr_get_order_card_number', $number, $order_id );
+}
+
+function wpr_get_order_card_numbers ( $order_id = null ) {
+	$ids = get_post_meta( $order_id, 'rpgc_id', true );
+	
+	$numbers = array();
+
+	foreach ($ids as $key => $id) {
+		$numbers[] = get_the_title( $id );
+	}
+
+	return apply_filters( 'wpr_get_order_card_numbers', $numbers, $order_id );
 }
 
 function wpr_get_order_card_balance ( $order_id = null ) {
@@ -266,9 +308,11 @@ function wpr_get_order_refund_status ( $order_id = null ) {
 	return apply_filters( 'wpr_get_order_refund_status', $refunded, $order_id );
 }
 
-// Get Gift Card messages
-// ******************************************************************************************
 
+/*******************************************************************
+ * Get Gift Card messages
+ *
+ *******************************************************************/
 
 function wpr_get_custom_message ( ) {
 	$message = get_option( 'woocommerce_enable_giftcard_custom_message' );
@@ -289,4 +333,8 @@ function wpr_get_custom_instructions ( ) {
 
 	return apply_filters( 'wpr_get_custom_instructions', $instructions );
 }
+
+
+
+
 

@@ -10,14 +10,18 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-
-
+/**
+ * Calls the class on the post edit screen.
+ */
+function call_WPR_Gift_Card_Meta() {
+    new WPR_Gift_Card_Meta();
+}
 
 if ( is_admin()  ) {
     add_action( 'load-post.php', 'call_WPR_Gift_Card_Meta' );
     add_action( 'load-post-new.php', 'call_WPR_Gift_Card_Meta' );
-
 }
+
 
 /** 
  * The Class.
@@ -99,22 +103,8 @@ class WPR_Gift_Card_Meta {
 			'high'
 		);
 
-		$data = get_post_meta( $post->ID );
 
-		if ( isset( $data['rpgc_id'] ) ) 
-			if ( $data['rpgc_id'][0] <> '' )
-				add_meta_box(
-					'rpgc-order-data',
-					__( 'Gift Card Informaiton', 'rpgiftcards' ),
-					array( $this, 'rpgc_info_meta_box'),
-					'shop_order',
-					'side',
-					'default'
-				);
 
-		//if ( ! isset( $_GET['action'] ) ) 
-		//	remove_post_type_support( 'rp_shop_giftcard', 'title' );
-		
 		if ( isset ( $_GET['action'] ) ) {
 			add_meta_box(
 				'rpgc-more-options',
@@ -133,6 +123,7 @@ class WPR_Gift_Card_Meta {
 				'side',
 				'low'
 			);
+
 		}
 
 		remove_meta_box( 'woothemes-settings', 'rp_shop_giftcard' , 'normal' );
@@ -246,6 +237,7 @@ class WPR_Gift_Card_Meta {
 				'value'						=> isset( $giftValue['amount'] ) ? $giftValue['amount'] : ''
 			)
 		);
+
 		if ( isset( $_GET['action']  ) ) {
 			if ( $_GET['action'] == 'edit' ) {
 				// Remaining Balance
@@ -262,6 +254,7 @@ class WPR_Gift_Card_Meta {
 				);
 			}
 		}
+
 		// Notes
 		woocommerce_wp_textarea_input(
 			array(
@@ -287,13 +280,11 @@ class WPR_Gift_Card_Meta {
 			)
 		);
 
-		do_action( 'rpgc_woocommerce_options_after_personalize' );
+		do_action( 'rpgc_woocommerce_options_after_personalize', $giftValue );
 
 
 		echo '</div>';
 	}
-
-
 
 	/**
 	 * Creates the Giftcard Regenerate Meta Box in the admin control panel when in the Giftcard Post Type.  Allows you to click a button regenerate the number.
@@ -328,100 +319,96 @@ class WPR_Gift_Card_Meta {
 
 	}
 
-
-
-	public function rpgc_info_meta_box( $post ) {
-		global $wpdb;
-		
-		$data = get_post_meta( $post->ID );
-
-		$orderCardNumber 	= wpr_get_order_card_number( $post->ID );
-		$orderCardBalance 	= wpr_get_order_card_balance( $post->ID );
-		$orderCardPayment 	= wpr_get_order_card_payment( $post->ID );
-		$isAlreadyRefunded	= wpr_get_order_refund_status( $post->ID );
-		
-		echo '<div id="giftcard_regenerate" class="panel woocommerce_options_panel">';
-		echo '    <div class="options_group">';
-			echo '<ul>';
-				if ( isset( $orderCardNumber ) )
-					echo '<li>' . __( 'Gift Card #:', 'rpgiftcards' ) . ' ' . esc_attr( $orderCardNumber ) . '</li>';
-
-				if ( isset( $orderCardPayment ) )
-					echo '<li>' . __( 'Payment:', 'rpgiftcards' ) . ' ' . woocommerce_price( $orderCardPayment ) . '</li>';
-
-				if ( isset( $orderCardBalance ) )
-					echo '<li>' . __( 'Balance remaining:', 'rpgiftcards' ) . ' ' . woocommerce_price( $orderCardBalance ) . '</li>';
-
-			echo '</ul>';
-
-			$giftcard_found = wpr_get_giftcard_by_code( $orderCardNumber );
-
-			if ( $giftcard_found ) {
-				echo '<div>';
-					$link = 'post.php?post=' . $giftcard_found . '&action=edit';
-					echo '<a href="' . admin_url( $link ) . '">' . __('Access Gift Card', 'rpgiftcards') . '</a>';
-					
-					if( ! empty( $isAlreadyRefunded ) )
-						echo  '<br /><span style="color: #dd0000;">' . __( 'Gift card refunded ', 'rpgiftcards' ) . ' ' . woocommerce_price( $orderCardPayment ) . '</span>';
-				echo '</div>';
-			
-			}
-
-		echo '    </div>';
-		echo '</div>';
-	}
-
-	
-
 	// Meta box with gift card used on the order
-	public function wpr_giftcard_usage_data( $post ) {
+	public function wpr_giftcard_usage_data( $post ) { ?>
+		<div id="giftcard_usage" class="panel woocommerce_options_panel">
+		<?php
+		$giftcardDecreaseIDs = get_post_meta( $post->ID, 'wpr_existingOrders_id', true );
+		$giftcardReloads = get_post_meta( $post->ID, '_wpr_card_reloads', true );
 
-		$giftcardIDs = get_post_meta( $post->ID, 'wpr_existingOrders_id', true );
+		$activity = 0;
 
-		if( ! empty($giftcardIDs) ) {
+		if( ! empty($giftcardDecreaseIDs) ) {
+			$activity = 1;
 		?>
-			<div id="giftcard_usage" class="panel woocommerce_options_panel">
-				<div class="options_group">
-			
-					<?php 
-					foreach ($giftcardIDs as $giftID ) { 
+			<div class="options_group">
+		
+				<?php 
+				foreach ($giftcardDecreaseIDs as $giftID ) { 
+					$giftcardIDS = wpr_get_order_card_ids( $giftID );
 
-						$giftcardPayment = wpr_get_order_card_payment( $giftID );
-						$giftcarBalance = wpr_get_order_card_balance( $giftID );
-						//$giftcarBalance -= $giftcardPayment;
-						$orederLink = admin_url( 'post.php?post=' . $giftID . '&action=edit' );
+				
+					$giftcardIDS = wpr_get_order_card_ids( $giftID );
+					$giftcardPayments = wpr_get_order_card_payment( $giftID );
+					$giftcardBalances = wpr_get_order_card_balance( $giftID );
+					//$giftcarBalance -= $giftcardPayment;
+					$orederLink = admin_url( 'post.php?post=' . $giftID . '&action=edit' );
 
-					?>
-
-						<div class="box-inside">
-							<p>
-								<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
-								<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftID ); ?></a></span>
-								<br />
-								<strong><?php _e( 'Amount Used:', 'rpgiftcards' ); ?></strong>&nbsp;
-								<span><?php echo woocommerce_price( $giftcardPayment ); ?></span>
-								<br />
-								<strong><?php _e( 'Card Balance After Order:', 'rpgiftcards' ); ?></strong>&nbsp;
-								<span><?php echo woocommerce_price( $giftcarBalance ); ?></span>
-							</p>
-						</div>
-
-					<?php } ?>
-
-				</div>
-			</div>
-			<?php
-		} else {
+				
+					foreach ($giftcardPayments as $key => $giftcardPayment) {
+						if ( $giftcardIDS[ $key ] == $post->ID ) {
 			?>
-			<div id="giftcard_usage" class="panel woocommerce_options_panel">
+
+							<div class="box-inside">
+								<p>
+									<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
+									<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftID ); ?></a></span>
+									<br />
+									<strong><?php _e( 'Amount Used:', 'rpgiftcards' ); ?></strong>&nbsp;
+									<span><?php echo woocommerce_price( $giftcardPayment ); ?></span>
+									<br />
+									<strong><?php _e( 'Card Balance After Order:', 'rpgiftcards' ); ?></strong>&nbsp;
+									<span><?php echo woocommerce_price( $giftcardBalances[ $key ] ); ?></span>
+								</p>
+							</div>
+
+				<?php 
+						}
+					}
+				} ?>
+
+			</div>
+		<?php
+		} 
+
+		if ( ! empty($giftcardReloads) ) {
+			$activity = 1;
+			?>
+			<div class="options_group">
+				<?php foreach ($giftcardReloads as $giftIncrease ) { 
+					$orederLink = admin_url( 'post.php?post=' . $giftIncrease["Order"] . '&action=edit' );
+					?>
+					
+					<div class="box-inside">
+						<p>
+							<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
+							<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftIncrease["Order"] ); ?></a></span>
+							<br />
+							<strong><?php _e( 'Card Balance Increased:', 'rpgiftcards' ); ?></strong>&nbsp;
+							<span><?php echo woocommerce_price( $giftIncrease["Amount"] ); ?></span>
+						</p>
+					</div>
+				<?php } ?>
+			</div>
+		<?php
+		
+
+		}
+
+		if ($activity == 0 ) {
+			?>
 				<div class="options_group" style="text-align: center;">
 				<strong><?php _e( 'Gift card has not been used.', 'rpgiftcards' ); ?></strong>
 
 				</div>
-			</div>
+			
 			<?php
 		}
+		?>
+		</div>
+		<?php
 	}
+
 
 	// Allows you to create a gift card number manually
 	public function wpr_giftcard_title( ) {
@@ -434,15 +421,3 @@ class WPR_Gift_Card_Meta {
 	}
 
 }
-
-
-
-/**
- * Calls the class on the post edit screen.
- */
-function call_WPR_Gift_Card_Meta() {
-    	new WPR_Gift_Card_Meta();
-}
-
-
-

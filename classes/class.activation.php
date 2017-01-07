@@ -12,7 +12,7 @@ if( !defined( 'ABSPATH' ) ) exit;
 
 
 /**
- * EDD Extension Activation Handler Class
+ * Giftcard Activation Handler Class
  *
  * @since       1.0.0
  */

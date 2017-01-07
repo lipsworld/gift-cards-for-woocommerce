@@ -74,8 +74,33 @@ function  make_gift_card_purchasable( $purchasable, $product ) {
 		$purchasable = true;
 	}
 
-
 	return $purchasable;
 }
 add_filter ( 'woocommerce_is_purchasable', 'make_gift_card_purchasable', 10, 2);
+
+function wpr_disable_coupons( $enabled ) {
+
+	$has_giftcard = "no";
+	foreach ( WC()->cart->get_cart() as $key => $product) {
+		$is_giftcard = get_post_meta( $product["product_id"], '_giftcard', true );
+		
+		if ( $is_giftcard == "yes" ) {
+			$has_giftcard = "yes";
+		}
+	}
+
+	if ( ( get_option( 'wpr_woocommerce_disable_coupons') == "yes" ) && ( $has_giftcard == "yes" ) ) {
+		$enabled = false;
+	}
+
+	return $enabled;
+}
+add_filter( 'woocommerce_coupons_enabled', 'wpr_disable_coupons', 10, 1 );
+
+function wpr_remove_hyphens( $cardNumber ){
+
+	$card_number = str_replace("-", "", $cardNumber);
+
+	return $card_number;
+}
 

@@ -11,7 +11,7 @@
 if( !defined( 'ABSPATH' ) ) exit;
 
 function rpgc_create_post_type() {
-    $show_in_menu = current_user_can( 'manage_woocommerce' ) ? 'woocommerce' : true;
+    $show_in_menu = current_user_can( 'manage_woocommerce' ) ? 'woocommerce' : false;
 
     register_post_type( 'rp_shop_giftcard',
         array(
@@ -42,14 +42,16 @@ function rpgc_create_post_type() {
         )
     );
 
-    register_post_status( 'zerobalance', array(
-        'label'                     => __( 'Zero Balance', 'rpgiftcards' ),
-        'public'                    => true,
-        'exclude_from_search'       => false,
-        'show_in_admin_all_list'    => true,
-        'show_in_admin_status_list' => true,
-        'label_count'               => _n_noop( 'Zero Balance <span class="count">(%s)</span>', 'Zero Balance <span class="count">(%s)</span>', 'rpgiftcards' )
-    ) );
+    register_post_status( 'zerobalance', 
+        array(
+            'label'                     => __( 'Zero Balance', 'rpgiftcards' ),
+            'public'                    => true,
+            'exclude_from_search'       => false,
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'label_count'               => _n_noop( 'Zero Balance <span class="count">(%s)</span>', 'Zero Balance <span class="count">(%s)</span>', 'rpgiftcards' )
+        )
+    );
     
 }
 add_action( 'init', 'rpgc_create_post_type' );
@@ -74,6 +76,7 @@ function rpgc_add_columns( $columns ) {
     $new_columns["buyer"]       = __( 'Buyer', 'rpgiftcards' );
     $new_columns["recipient"]   = __( 'Recipient', 'rpgiftcards' );
     $new_columns["expiry_date"] = __( 'Expiry date', 'rpgiftcards' );
+    $new_columns["sentEmail"]   = __( 'Sent?', 'rpgiftcards' );
 
     $new_columns['comments']    = $columns['comments'];
     $new_columns['date']        = __( 'Creation Date', 'rpgiftcards' );
@@ -115,6 +118,15 @@ function rpgc_custom_columns( $column ) {
         case "balance" :
             $price = isset( $giftcardInfo[ 'balance' ] ) ? $giftcardInfo[ 'balance' ] : '';
             echo woocommerce_price( $price );
+        break;
+
+        case "sentEmail" :
+            $sent = isset( $giftcardInfo[ 'sendTheEmail' ] ) ? $giftcardInfo[ 'sendTheEmail' ] : '';
+            if ( $sent == 1 ) {
+                echo "Yes";
+            } else {
+                echo "No";
+            }
         break;
 
         case "expiry_date" :

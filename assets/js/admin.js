@@ -16,9 +16,6 @@ jQuery(document).ready(function($) {
 	    var c = this.checked ? '1.00': '';
 
 		$('#_regular_price').val( c );
-			//$('#post-body-content').toggle();
-			//
-		console.log( 'Test' );
 	});
 
 });
