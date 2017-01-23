@@ -42,6 +42,10 @@ class WPR_Giftcard {
             $giftCard['description']    = woocommerce_clean( $giftInformation['rpgc_description'] );
             
         }
+        if ( isset( $giftInformation['rpgc_order_number'] ) ) {
+            $giftCard['order_number']    = woocommerce_clean( $giftInformation['rpgc_order_number'] );
+            
+        }
         if ( isset( $giftInformation['rpgc_to'] ) ) {
             $giftCard['to'] = woocommerce_clean( $giftInformation['rpgc_to'] );
             
@@ -92,13 +96,10 @@ class WPR_Giftcard {
         if( isset( $giftInformation['rpgc_resend_email'] ) ) {            
             $email = new WPR_Giftcard_Email();
             $post = get_post( $_POST['ID'] );
-            //$email->sendEmail ( $post );
-        
             $giftCard['sendTheEmail'] = 1;
         }
 
         update_post_meta( $_POST['ID'], '_wpr_giftcard', $giftCard );
-
     }
 
     // Function to create the gift card
