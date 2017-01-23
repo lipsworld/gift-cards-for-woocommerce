@@ -94,10 +94,14 @@ if( ! class_exists( 'WPRWooGiftcards' ) ) {
                 require_once RPWCGC_DIR . 'classes/class.giftcard.php';
             }
 
+            if( ! class_exists( 'WPR_Giftcard_Email' ) ) {
+                require_once RPWCGC_DIR . 'classes/class.giftcardemail.php';
+            }
+
             require_once RPWCGC_DIR . 'includes/post-type.php';
             require_once RPWCGC_DIR . 'includes/meta.php';
             require_once RPWCGC_DIR . 'includes/functions.php';
-            
+
             if( is_admin() ) {
                 // Load all admin files
                 require_once RPWCGC_DIR . 'admin/product.php';
@@ -105,28 +109,19 @@ if( ! class_exists( 'WPRWooGiftcards' ) ) {
                 require_once RPWCGC_DIR . 'admin/metabox-order.php';
                 require_once RPWCGC_DIR . 'admin/metabox-product.php';
 
-            } else {
-                // Load all frontend files
-                require_once RPWCGC_DIR . 'frontend/scripts.php';
-                require_once RPWCGC_DIR . 'frontend/cart.php';
-                require_once RPWCGC_DIR . 'frontend/checkout.php';
-                require_once RPWCGC_DIR . 'frontend/product.php';
-                require_once RPWCGC_DIR . 'frontend/shortcodes.php';
-
-            }
+            } 
             
-
-
-            /*
+            // Load all frontend files
+            require_once RPWCGC_DIR . 'frontend/scripts.php';
+            require_once RPWCGC_DIR . 'frontend/cart-form.php';
+            require_once RPWCGC_DIR . 'frontend/checkout-functions.php';
+            require_once RPWCGC_DIR . 'frontend/checkout-form.php';
+            require_once RPWCGC_DIR . 'frontend/product.php';
+            require_once RPWCGC_DIR . 'frontend/product-form.php';
+            require_once RPWCGC_DIR . 'frontend/shortcodes.php';
             
-            if( ! class_exists( 'WPR_Giftcard_Email' ) ) {
-                require_once RPWCGC_DIR . 'includes/class.giftcardemail.php';
-            }
-            
-            require_once RPWCGC_DIR . 'includes/giftcard-paypal.php';
-            require_once RPWCGC_DIR . 'includes/widgets.php';
-
-            */
+            //require_once RPWCGC_DIR . 'includes/giftcard-paypal.php';
+            //require_once RPWCGC_DIR . 'includes/widgets.php';
         }
 
 
@@ -182,17 +177,17 @@ if( ! class_exists( 'WPRWooGiftcards' ) ) {
             // Register settings
             $wpr_woo_giftcard_settings = get_option( 'wpr_wg_options' );
 
-            //add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
-            //add_filter( 'woocommerce_calculated_total', array( 'WPR_Giftcard', 'wpr_discount_total'), 10, 2 );
-            //add_filter( 'plugin_action_links_' . RPWCGC_FILE, array( __CLASS__, 'plugin_action_links' ) );
+            add_filter( 'woocommerce_get_settings_pages', array( $this, 'rpgc_add_settings_page'), 10, 1);
+            add_filter( 'woocommerce_calculated_total', array( 'WPR_Giftcard', 'wpr_discount_total'), 10, 2 );
+            add_filter( 'plugin_action_links_' . RPWCGC_FILE, array( __CLASS__, 'plugin_action_links' ) );
 
-            //add_action( 'woocommerce_checkout_order_processed', array( 'WPR_Giftcard', 'reload_card'), 10, 1);
+            add_action( 'woocommerce_checkout_order_processed', array( 'WPR_Giftcard', 'reload_card'), 10, 1);
         }
 
 
         public function rpgc_add_settings_page( $settings ) {
 
-            require_once RPWCGC_DIR . 'includes/class.settings.php';
+            require_once RPWCGC_DIR . 'classes/class.settings.php';
 
             $settings[] = new RPGC_Settings();
 

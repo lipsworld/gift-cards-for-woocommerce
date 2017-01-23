@@ -50,7 +50,6 @@ class WPR_Gift_Card_Order_Meta {
 	public function rpgc_meta_boxes() {
 		global $post;
 
-
 		$data = get_post_meta( $post->ID );
 
 		if ( isset( $data['rpgc_id'] ) ) {
@@ -65,10 +64,6 @@ class WPR_Gift_Card_Order_Meta {
 				);
 			}
 		}
-
-		
-
-		
 	}
 
 
@@ -83,7 +78,7 @@ class WPR_Gift_Card_Order_Meta {
 		$isAlreadyRefunded	= wpr_get_order_refund_status( $post->ID );
 
 		foreach ($orderCardNumbers as $key => $orderCardNumber ) {
-			echo '<div id="giftcard_regenerate" class="panel woocommerce_options_panel">';
+			echo '<div>';
 			echo '    <div class="options_group">';
 				echo '<ul>';
 					if ( isset( $orderCardNumber ) )

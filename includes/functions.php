@@ -11,9 +11,6 @@
 if( !defined( 'ABSPATH' ) ) exit;
 
 
-
-
-
 function wpr_upgrade_notice() {
 	$wpr_gift_version = get_option( 'wpr_gift_version' );
 

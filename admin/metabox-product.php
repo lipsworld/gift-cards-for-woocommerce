@@ -331,12 +331,14 @@ class WPR_Gift_Card_Meta {
 		if( ! empty($giftcardDecreaseIDs) ) {
 			$activity = 1;
 		?>
+
 			<div class="options_group">
 		
 				<?php 
 				foreach ($giftcardDecreaseIDs as $giftID ) { 
 					$giftcardIDS = wpr_get_order_card_ids( $giftID );
 
+					
 				
 					$giftcardIDS = wpr_get_order_card_ids( $giftID );
 					$giftcardPayments = wpr_get_order_card_payment( $giftID );
@@ -344,29 +346,45 @@ class WPR_Gift_Card_Meta {
 					//$giftcarBalance -= $giftcardPayment;
 					$orederLink = admin_url( 'post.php?post=' . $giftID . '&action=edit' );
 
-				
-					foreach ($giftcardPayments as $key => $giftcardPayment) {
-						if ( $giftcardIDS[ $key ] == $post->ID ) {
-			?>
+					
+					if ( is_array( $giftcardPayments ) ) {
+						foreach ($giftcardPayments as $key => $giftcardPayment) {
+							if ( $giftcardIDS[ $key ] == $post->ID ) {
+							?>
 
-							<div class="box-inside">
-								<p>
-									<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
-									<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftID ); ?></a></span>
-									<br />
-									<strong><?php _e( 'Amount Used:', 'rpgiftcards' ); ?></strong>&nbsp;
-									<span><?php echo woocommerce_price( $giftcardPayment ); ?></span>
-									<br />
-									<strong><?php _e( 'Card Balance After Order:', 'rpgiftcards' ); ?></strong>&nbsp;
-									<span><?php echo woocommerce_price( $giftcardBalances[ $key ] ); ?></span>
-								</p>
-							</div>
+								<div class="box-inside">
+									<p>
+										<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
+										<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftID ); ?></a></span>
+										<br />
+										<strong><?php _e( 'Amount Used:', 'rpgiftcards' ); ?></strong>&nbsp;
+										<span><?php echo woocommerce_price( $giftcardPayment ); ?></span>
+										<br />
+										<strong><?php _e( 'Card Balance After Order:', 'rpgiftcards' ); ?></strong>&nbsp;
+										<span><?php echo woocommerce_price( $giftcardBalances[ $key ] ); ?></span>
+									</p>
+								</div>
 
-				<?php 
+							<?php	
+							}
 						}
-					}
-				} ?>
+					} else { ?>
+						<div class="box-inside">
+							<p>
+								<strong><?php _e( 'Order Number:', 'rpgiftcards' ); ?></strong>&nbsp;
+								<span><a href="<?php echo $orederLink; ?>"><?php echo esc_attr( $giftID ); ?></a></span>
+								<br />
+								<strong><?php _e( 'Amount Used:', 'rpgiftcards' ); ?></strong>&nbsp;
+								<span><?php echo woocommerce_price( $giftcardPayments ); ?></span>
+								<br />
+								<strong><?php _e( 'Card Balance After Order:', 'rpgiftcards' ); ?></strong>&nbsp;
+								<span><?php echo woocommerce_price( $giftcardBalances ); ?></span>
+							</p>
+						</div>
 
+
+					<?php }
+				} ?>
 			</div>
 		<?php
 		} 
